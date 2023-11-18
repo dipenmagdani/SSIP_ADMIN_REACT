@@ -3,9 +3,6 @@ const redux = require('redux')
 const initialState = {
   sidebarShow: true,
 }
-const initalBatchesState = {
-  Batches: [],
-}
 const changeState = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'set':

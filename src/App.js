@@ -1,7 +1,7 @@
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
-import { StoreProvider } from './views/dashboard/Store'
 import './scss/style.scss'
+import { StoreProvider } from './views/forms/validation/store'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -23,7 +23,7 @@ class App extends Component {
     return (
       <>
       <StoreProvider>
-        <HashRouter>
+      <HashRouter>
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
@@ -35,9 +35,9 @@ class App extends Component {
         </Suspense>
       </HashRouter>
       </StoreProvider>
-       
+      
       </>
-    
+      
     )
   }
 }

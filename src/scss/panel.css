@@ -1,0 +1,21 @@
+/* RightPanelExample.css */
+
+.right-panel {
+    position: fixed;
+    top: 0;
+    right: -500px; /* Initial position off the screen */
+    width: 500px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease; /* Smooth transition effect */
+  }
+  
+  .right-panel.open {
+    right: 0; /* Move the panel into view when open */
+  }
+.pane-header{
+    margin-top: 120px;
+    color: black;
+    
+}

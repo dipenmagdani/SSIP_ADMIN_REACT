@@ -13,40 +13,29 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CTableDataCell,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CHeader,
-  CFormTextarea,
-  CFormSelect,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-} from '@coreui/icons'
-import CIcon from '@coreui/icons-react'
 
 const CustomStyles = () => {
   const [validated, setValidated] = useState(false)
+  const [SName, setSName] = useState("");
+  const [Scode, setScode] = useState("");
+  const [Scredit, setScredit] = useState("");
   const handleSubmit = (event) => {
     const form = event.currentTarget
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
     }
+    console.log(SName)
+    console.log(Scode)
+    console.log(Scredit);
     setValidated(true)
+    const body = {
+
+    }
   }
   return (
     <CForm
@@ -57,17 +46,17 @@ const CustomStyles = () => {
     >
       <CCol md={12}>
         <CFormLabel htmlFor="validationCustom01">Subject Name</CFormLabel>
-        <CFormInput type="text" id="validationCustom01" required />
+        <CFormInput type="text" id="validationCustom01" onChange={e => setSName(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom01">Subject Code</CFormLabel>
-        <CFormInput type="text" id="validationCustom02" required />
+        <CFormInput type="text" id="validationCustom02" onChange={e => setScode(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom02">Subject Credit</CFormLabel>
-        <CFormInput type="text" id="validationCustom02" required />
+        <CFormInput type="text" id="validationCustom02" onChange={e => setScredit(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>

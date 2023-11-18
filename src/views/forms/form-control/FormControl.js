@@ -1,5 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
+import { useContext } from 'react'
+import PropTypes from 'prop-types'
+import axios from 'axios'
+import { Store } from '../validation/store'
+import {base_url} from "src/base_url"
 import {
   CButton,
   CCard,
@@ -13,46 +18,78 @@ import {
   CRow,
   CTable,
   CTableBody,
-  CTableDataCell,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CHeader,
-  CFormTextarea,
   CFormSelect,
 } from '@coreui/react'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-} from '@coreui/icons'
-import { DocsExample } from 'src/components'
-import CIcon from '@coreui/icons-react'
-import avatar1 from 'src/assets/images/avatars/1.jpg'
-import avatar2 from 'src/assets/images/avatars/2.jpg'
-import avatar3 from 'src/assets/images/avatars/3.jpg'
-import avatar4 from 'src/assets/images/avatars/4.jpg'
-import avatar5 from 'src/assets/images/avatars/5.jpg'
-import avatar6 from 'src/assets/images/avatars/6.jpg'
 
 const CustomStyles = () => {
   const [validated, setValidated] = useState(false)
+  
+  const [Snumber, setSnumber] = useState("");
+  const [Sstatus, setSstatus] = useState("");
+  const [Ssdate, setSsdate] = useState("");
+  const [Sedate, setSedate] = useState("");
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo , semesters } = state
+  const [Semesters, setSemesters] = useState(semesters);
+
+  const token = localStorage.getItem('accessToken')
+  
+  // function to load semester
+  const load_sem = async() =>{
+      const headers = {
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${token}`, 
+      };
+      axios.get(`${base_url}/manage/get_semester/`,{headers})
+      .then((response)=>{
+        console.log(response);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+  }
+  //function to add sem
+
+  const add_sem = async (body) => {
+    const headers = {
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${token}`, 
+    };
+
+    axios.post(`${base_url}/manage/add_semeseter/`,body,{headers})
+    .then((response)=>{
+      console.log(response);
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+
+
+
+
+
   const handleSubmit = (event) => {
     const form = event.currentTarget
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
     }
+    // console.log(Snumber);
+    // console.log(Sstatus);
+    // console.log(Ssdate);
+    // console.log(Sedate);
     setValidated(true)
+    const body = {
+      semester_number: Snumber,
+      start_date: Ssdate,
+      end_date: Sedate
+    }
+    console.log(body);
   }
   return (
     <CForm
@@ -63,12 +100,12 @@ const CustomStyles = () => {
     >
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom01">Semester Number</CFormLabel>
-        <CFormInput type="number" id="validationCustom01" defaultValue="Mark" required />
+        <CFormInput type="number" id="validationCustom01" onChange={e => setSnumber(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom01">Term Status</CFormLabel>
-        <CFormSelect>
+        <CFormSelect onChange={e => setSstatus(e.target.value)}>
           <option value="odd">Odd</option>
           <option value="Even">Even</option>
         </CFormSelect>
@@ -76,12 +113,12 @@ const CustomStyles = () => {
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom02">Term Start Date</CFormLabel>
-        <CFormInput type="date" id="validationCustom02" defaultValue="Otto" required />
+        <CFormInput type="date" id="validationCustom02" onChange={e => setSsdate(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom02">Term End Date</CFormLabel>
-        <CFormInput type="date" id="validationCustom02" defaultValue="Otto" required />
+        <CFormInput type="date" id="validationCustom02" onChange={e => setSedate(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>
@@ -152,4 +189,7 @@ const FormControl = () => {
   )
 }
 
+FormControl.propTypes = {
+  nextForm: PropTypes.func.isRequired,
+}
 export default FormControl

@@ -1,13 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilCode, cilMediaPlay } from '@coreui/icons'
+import { CTabContent, CTabPane } from '@coreui/react'
 
 const DocsExample = (props) => {
-  const { children, href } = props
+  const { children} = props
 
-  const _href = `https://coreui.io/react/docs/${href}`
 
   return (
     <div className="example">
