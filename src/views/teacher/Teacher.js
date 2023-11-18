@@ -18,8 +18,13 @@ import {
     CTableHeaderCell,
     CTableRow,
     CTableDataCell,
-    CFormCheckbox, 
-    CCheckboxGroup,
+    COffcanvas,
+    COffcanvasHeader,
+    COffcanvasTitle,
+    CCloseButton,
+    COffcanvasBody,
+    CFormCheck,
+    
   } from '@coreui/react'
 
 
@@ -92,6 +97,7 @@ const Teacher = () => {
       : [...selectedOptions, option];
 
     setSelectedOptions(updatedOptions);
+    console.log(selectedOptions);
   };
 
   const checkboxOptions = [
@@ -99,6 +105,7 @@ const Teacher = () => {
     'Option 2',
     'Option 3'
   ];
+  
   return (
     <>
       <CRow>
@@ -152,7 +159,7 @@ const Teacher = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: '10px' }}>View Details</CButton>
-                        <CButton onClick={togglePanel}>Add Semester</CButton>
+                        <CButton onClick={() => setVisible(true)}>Add Semester</CButton>
                       </CTableDataCell>
                       </CTableRow>  
                   {/* {tableExample.map((item, index) => (
@@ -180,39 +187,18 @@ const Teacher = () => {
         </CCol>
       </CRow>
       
-      <div>
-
-      <div className={`right-panel ${isPanelOpen ? 'open' : ''}`}>
-        {/* Content of the right panel goes here */}
-        {/* <h3 className='pane-header'>Select subject</h3> */}
-        <CRow className='panel-header'>
-          <CCol x5>
-                  <CCard className='pane-header'>
-                    <CCardBody>
-                      <CCardHeader>
-                        select Subjects
-                      </CCardHeader>
-                      <CForm>
-                    {/* <CCheckboxGroup
-                      name="checkboxGroup"
-                      value={selectedOptions}
-                      onChange={handleCheckboxChange}
-                    >
-                      {checkboxOptions.map((option) => (
-                        <CFormCheckbox key={option} value={option}>
-                          {option}
-                        </CFormCheckbox>
+      <COffcanvas placement="end" visible={visible} onHide={() => setVisible(false)}>
+      <COffcanvasHeader>
+        <COffcanvasTitle>Offcanvas</COffcanvasTitle>
+        <CCloseButton className="text-reset" onClick={() => setVisible(false)} />
+      </COffcanvasHeader>
+      <COffcanvasBody>
+      {checkboxOptions.map((option) => (
+                        
+                        <CFormCheck id="flexCheckDefault" key={option} onSelect={selectedOptions}  label="Default checkbox"/>
                       ))}
-                    </CCheckboxGroup> */}
-                      </CForm>
-                    </CCardBody>
-                  </CCard>
-          </CCol>
-        </CRow>
-        {/* Add cart items, total, etc. */}
-        <button onClick={togglePanel}>Close Panel</button>
-      </div>
-    </div>
+      </COffcanvasBody>
+    </COffcanvas>
         
       
     </>

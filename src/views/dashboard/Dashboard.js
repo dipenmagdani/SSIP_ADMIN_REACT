@@ -7,28 +7,66 @@ import {
   CCol,
   CRow,
 } from '@coreui/react'
-// import { CChartLine } from '@coreui/react-chartjs'
-// import { getStyle, hexToRgba } from '@coreui/utils'
 
+import axios from 'axios'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import FormControl from '../forms/form-control/FormControl'
 import Select from '../forms/input-group/InputGroup'
 import Validation from '../forms/validation/Validation'
-
+import { jwtDecode } from "jwt-decode";
+import { useContext , useEffect } from 'react'
+import { Store } from 'src/views/forms/validation/store';
+import base_url from 'src/base_url'
 const Dashboard = () => {
-  const [steps, setsteps] = useState({ Steps: 1 })
-  const prevSteps = () => {
-    const { Steps } = steps
-    setsteps({ Steps: Steps - 1 })
+  const [steps, setsteps] = useState('batch')
+  const [Betchslug, setBetchslug] = useState("");
+  const [batchCount, setbatchCount] = useState(0);
+  const [semCount, setsemCount] = useState(0);
+  const [subCount, setsubCount] = useState(0);
+const [adminInfo, setadminInfo] = useState("");
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToke , refreshToken } = state
+
+  const decodeToken= () => {
+    // console.log(userInfo);
+    const decoded = jwtDecode(accessToke);
+    setadminInfo(decoded)
+    console.log(decoded);
   }
-  const nextSteps = () => {
-    const { Steps } = steps
-    setsteps({ Steps: Steps + 1 })
+  const getObjectCounts = () =>{
+    const header = {
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${accessToke}`,
+      'ngrok-skip-browser-warning':true
+    }
+    axios.get(`${base_url}/manage/get_object_counts`,{headers:header})
+    .then((response)=>{
+        console.log(response);
+        setbatchCount(response.data.batches)
+        setsemCount(response.data.semesters)
+        setsubCount(response.data.subjects)
+        console.log(batchCount);
+        console.log(semCount);
+        console.log(subCount);
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+  
+  
+  useEffect(() => {
+      decodeToken()
+      getObjectCounts()
+  }, []);
+  
+  const chageSteps = (currentStep) =>{
+      setsteps(currentStep)
   }
   const progressExample = [
-    { title: 'Batches', value: '29.703 Batches' },
-    { title: 'Semester', value: '24.093 Semester' },
-    { title: 'Subjects', value: '78.706 Subjects' },
+    { title: 'Batches', value: batchCount, nextStep:'batch'},
+    { title: 'Semester', value: semCount, nextStep:'semester' },
+    { title: 'Subjects', value: subCount, nextStep:'subject' },
   ]
 
   return (
@@ -39,7 +77,7 @@ const Dashboard = () => {
           <CRow xs={{ cols: 1 }} md={{ cols: 3 }} className="text-center">
             {progressExample.map((item, index) => (
               <CCol className="mb-sm-2 mb-0" key={index}>
-                <CButton style={{ backgroundColor: 'transparent', border: 'none' }}>
+                <CButton style={{ backgroundColor: 'transparent', border: 'none' }} onClick={() => {chageSteps(item.nextStep)}}>
                   <div className="text-medium-emphasis">{item.title}</div>
                   <strong style={{ color: 'black' }}>
                     {item.value} {item.percent}
@@ -51,14 +89,14 @@ const Dashboard = () => {
         </CCardFooter>
       </CCard>
       {(() => {
-        const { Steps } = steps
-        switch (Steps) {
-          case 1:
-            return <Validation nextForm={nextSteps} prevForm="prevSteps"></Validation>
-          case 2:
-            return <FormControl nextForm={nextSteps} prevForm={prevSteps}></FormControl>
-          case 3:
-            return <Select nextForm={nextSteps} prevForm={prevSteps}></Select>
+        
+        switch (steps) {
+          case 'batch':
+            return <Validation chageSteps={chageSteps}  setSlug={setBetchslug} setBatchCout={setbatchCount}></Validation>
+          case 'semester':
+            return <FormControl chageSteps={chageSteps}  batchSlug={Betchslug}></FormControl>
+          case 'subject':
+            return <Select chageSteps={chageSteps} ></Select>
           default:
             console.log(steps)
         }

@@ -1,25 +1,31 @@
 import React from 'react';
-// import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types'; // Import PropTypes
 import { createContext, useReducer } from 'react';
 
 export const Store = createContext();
 
 const initialState = {
-  userInfo: localStorage.getItem('accessToken')
+  accessToke: localStorage.getItem('accessToken')
     ? localStorage.getItem('accessToken')
+    : null,
+    refreshToken: localStorage.getItem('refreshToken')
+    ? localStorage.getItem('refreshToken')
     : null,
   batches: [],
   semesters: [],
+
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'USER_SIGNIN':
-      return { ...state, userInfo: action.payload };
+    case 'ACCESS_TOKEN':
+      return { ...state, accessToke: action.payload };
+    case 'REFRESH_TOKEN':
+      return { ...state,refreshToken: action.payload}
     case 'USER_SIGNOUT':
       return {
         ...state,
-        userInfo: null
+        accessToke: null
       };
     case 'GET_BATCHES':
       return {
@@ -53,7 +59,7 @@ export function StoreProvider(props) {
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
 }
 
-// // Add propTypes validation
-// StoreProvider.propTypes = {
-//   children: PropTypes.node.isRequired
-// };
+// Add propTypes validation
+StoreProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};

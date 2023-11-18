@@ -45,59 +45,37 @@ import avatar4 from 'src/assets/images/avatars/4.jpg'
 import avatar5 from 'src/assets/images/avatars/5.jpg'
 import avatar6 from 'src/assets/images/avatars/6.jpg'
 import { Store } from '../validation/store'
-import {base_url} from "src/base_url"
-const CustomStyles = () => {
-  
+import base_url from 'src/base_url'
+
+
+
+
+const CustomStyles = (Batches,setBatches,setBatchCout) => {
+  const token = localStorage.getItem('accessToken')
   const [validated, setValidated] = useState(false)
   const [Start, setStart] = useState("");
   const [End, setEnd] = useState("");
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo , batches } = state
-  const [Batches, setBatches] = useState(batches);
-  const token = localStorage.getItem('accessToken')
   
-  // function for the load batches
-  
-  const loadBatches = async() => {
-    const header = {
+  const addBatches = async(body) => {
+    const headers = {
       "Content-Type":"application/json",
       "Authorization": `Bearer ${token}`,
       'ngrok-skip-browser-warning':true
-    }
-    axios.get(`${base_url}/manage/get_batches`,{headers:header})
-    .then((response)=>{
-      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });
-      setBatches(response.data.data)
-      console.log(batches);
-      
-    })
-    .catch((error)=>{
-      console.log("error");
-    })
-  }
-
-  // function for add the batches
-  const addBatches = async(body) => {
-    const headers = {
-      'Content-Type': 'application/json', // Set the content type based on your API requirements
-      'Authorization': `Bearer ${token}`, // Include any authorization headers if needed
     };
-    axios.post(`${base_url}/manage/get_batches`,body,{headers})
+    axios.post(`${base_url}/manage/add_batch`,body,{headers})
     .then((response)=>{
-      console.log(response);
+      console.log(response.data.data);
+      setBatches(prevArray => [...prevArray, response.data.data]);
+      setBatchCout(preValue => preValue + 1);
     })
     .catch((error)=>{
       console.log(error);
     })
   }
 
-  
-  useEffect(() => {
-    loadBatches()
-  }, []);
-  
   const handleSubmit = (event) => {
     const form = event.currentTarget
+    event.preventDefault()
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
@@ -106,7 +84,7 @@ const CustomStyles = () => {
     const body = {
       batch_name: Start + "-" + End
     }
-    
+    addBatches(body)
   }
   return (
     <CForm
@@ -126,7 +104,7 @@ const CustomStyles = () => {
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>
-        <CButton color="primary" type="submit">
+        <CButton color="primary" type="submit" >
           Submit form
         </CButton>
       </CCol>
@@ -135,70 +113,44 @@ const CustomStyles = () => {
 }
 
 const Validation = (props) => {
- 
-  useEffect(() => {
-    return () => {
-          
-    };
-  }, []);
- 
- 
-  const { nextForm } = props
+  const {chageSteps} = props
+  const {setSlug} = props
+  const {setBatchCout} = props
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo , batches } = state
   
-  const tableExample = [
-    {
-      avatar: { src: avatar1, status: 'success' },
-      user: {
-        name: 'Yiorgos Avraamu',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'USA', flag: cifUs },
-      payment: { name: 'Mastercard', icon: cibCcMastercard },
-    },
-    {
-      avatar: { src: avatar2, status: 'danger' },
-      user: {
-        name: 'Avram Tarasios',
-        new: false,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Brazil', flag: cifBr },
-      payment: { name: 'Visa', icon: cibCcVisa },
-    },
-    {
-      avatar: { src: avatar3, status: 'warning' },
-      user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2021' },
-      country: { name: 'India', flag: cifIn },
-      payment: { name: 'Stripe', icon: cibCcStripe },
-    },
-    {
-      avatar: { src: avatar4, status: 'secondary' },
-      user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2021' },
-      country: { name: 'France', flag: cifFr },
-      payment: { name: 'PayPal', icon: cibCcPaypal },
-    },
-    {
-      avatar: { src: avatar5, status: 'success' },
-      user: {
-        name: 'Agapetus Tadeáš',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Spain', flag: cifEs },
-      payment: { name: 'Google Wallet', icon: cibCcApplePay },
-    },
-    {
-      avatar: { src: avatar6, status: 'danger' },
-      user: {
-        name: 'Friderik Dávid',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Poland', flag: cifPl },
-      payment: { name: 'Amex', icon: cibCcAmex },
-    },
-  ]
+  const [Batches, setBatches] = useState(batches);
+  const token = localStorage.getItem('accessToken')
+  
+  // function for the load batches
+  
+  const loadBatches = async() => {
+    const header = {
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${token}`,
+      'ngrok-skip-browser-warning':true
+    }
+    
+    axios.get(`${base_url}/manage/get_batches`,{headers:header})
+    .then((response)=>{
+      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });
+      //console.log(state.batches);
+      setBatches(response.data.data)
+    })
+    .catch((error)=>{
+      console.log("error");
+    })
+  }
+
+  useEffect(() => {
+    loadBatches()
+  }, []);
+
+  useEffect(() => {
+    console.log(Batches);
+  }, [Batches]);
+  
+  
   return (
     <>
       <CRow>
@@ -207,7 +159,7 @@ const Validation = (props) => {
             <CCardHeader>
               <strong>Batches</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles()}</CCardBody>
+            <CCardBody>{CustomStyles(Batches,setBatches,setBatchCout)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -218,7 +170,7 @@ const Validation = (props) => {
               <strong>Batches History</strong>
             </CCardHeader>
             <CCardBody>
-              <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTable align="middle" className="mb-0 border text-center" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
                     <CTableHeaderCell>Batches</CTableHeaderCell>
@@ -226,18 +178,14 @@ const Validation = (props) => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {tableExample.map((item, index) => (
+                  {Batches.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item.user.name}</div>
-                        <div className="small text-medium-emphasis">
-                          <span>{item.user.new ? 'New' : 'Recurring'}</span> | Registered:{' '}
-                          {item.user.registered}
-                        </div>
+                        <div>{item.batch_name}</div>   
                       </CTableDataCell>
                       <CTableDataCell>
                         <CButton style={{ marginRight: '10px' }}>View Details</CButton>
-                        <CButton onClick={nextForm}>Add Semester</CButton>
+                        <CButton onClick={() => {chageSteps('semester'); setSlug(item.slug);}} >Add Semester</CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -252,7 +200,9 @@ const Validation = (props) => {
 }
 
 Validation.propTypes = {
-  nextForm: PropTypes.func.isRequired,
+  chageSteps: PropTypes.func.isRequired,
+  setSlug: PropTypes.func.isRequired,
+  setBatchCout:PropTypes.func.isRequired
 }
 
 export default Validation

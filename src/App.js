@@ -1,7 +1,6 @@
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
-import { StoreProvider } from './views/forms/validation/store'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -21,8 +20,6 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 class App extends Component {
   render() {
     return (
-      <>
-      <StoreProvider>
       <HashRouter>
         <Suspense fallback={loading}>
           <Routes>
@@ -34,10 +31,6 @@ class App extends Component {
           </Routes>
         </Suspense>
       </HashRouter>
-      </StoreProvider>
-      
-      </>
-      
     )
   }
 }

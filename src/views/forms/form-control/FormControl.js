@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { Store } from '../validation/store'
-import {base_url} from "src/base_url"
+import base_url from 'src/base_url'
 import {
   CButton,
   CCard,
@@ -69,20 +69,12 @@ const CustomStyles = () => {
     })
   }
 
-
-
-
-
   const handleSubmit = (event) => {
     const form = event.currentTarget
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
     }
-    // console.log(Snumber);
-    // console.log(Sstatus);
-    // console.log(Ssdate);
-    // console.log(Sedate);
     setValidated(true)
     const body = {
       semester_number: Snumber,
@@ -130,7 +122,9 @@ const CustomStyles = () => {
   )
 }
 
-const FormControl = () => {
+const FormControl = (props) => {
+  const{batchSlug} = props
+  console.log(batchSlug);
   return (
     <>
       <CRow>
@@ -190,6 +184,6 @@ const FormControl = () => {
 }
 
 FormControl.propTypes = {
-  nextForm: PropTypes.func.isRequired,
+  batchSlug: PropTypes.string
 }
 export default FormControl

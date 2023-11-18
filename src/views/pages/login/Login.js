@@ -2,47 +2,34 @@ import React from 'react';
 import Axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useContext , useEffect} from 'react'
+import { useContext , useEffect } from 'react'
 import { Store } from 'src/views/forms/validation/store';
-import {base_url} from "src/base_url";
+import base_url from 'src/base_url';
 import styles from "../login/Login.module.css";
 import expireToken from 'src/global_function/unauthorizedToken';
 import PageAuth from 'src/global_function/PageAuth';
-import Dashboard from 'src/views/dashboard/Dashboard';
+
 
 export default function Login(){
 
      const navigate = useNavigate();
-
   
-  //    useEffect(()=>{
-
-        
-  //     if (PageAuth()){
-  //         navigate('/home')
-  //     }
-   
-      
-  // },[]);
-
-
-  useEffect(()=>{
-    if(PageAuth){
-      navigate("/Dashboard")
-    }
-  },[])
-
-   
-     
-    
-      
   
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
   
      const { state, dispatch: ctxDispatch } = useContext(Store);
-  
-   console.log(state);
+    const { accessToke } = state;
+    console.log(accessToke);
+    
+    
+    useEffect(()=>{
+      if(PageAuth){
+        navigate("/Dashboard")
+  }
+  },[])
+    
+    
     const submitHandler = async (e) => {
 
       e.preventDefault();
@@ -54,13 +41,14 @@ export default function Login(){
          "password":password        
       },{header})
       .then((response)=>{
-        ctxDispatch({ type: 'USER_SIGNIN', payload: response.data });
-      
+        ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
+        //ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.data.refresh });
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)
         navigate('/#')
       })
       .catch((error)=>{
+        console.log("error here");
         console.log(error);
         if(error.response.status === 401){
             expireToken(localStorage.getItem('refreshToken'),(error,result)=>{
@@ -75,12 +63,8 @@ export default function Login(){
 
     };
   
-    // useEffect(() => {
-    //   if (userInfo) {
-    //     console.log(localStorage.getItem('refreshToken'));
-    //   }
-    // }, [userInfo]);
-  
+    
+    
   return (
 
     <div className={styles.login}>
