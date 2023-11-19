@@ -1,0 +1,37 @@
+/* RightPanelExample.css */
+
+.right-panel {
+    position: fixed;
+    top: 0;
+    right: -500px; /* Initial position off the screen */
+    width: 500px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease; /* Smooth transition effect */
+  }
+  
+  .right-panel.open {
+    right: 0; /* Move the panel into view when open */
+  }
+.pane-header{
+    margin-top: 120px;
+    color: black;
+    
+}
+a.disabled {
+  pointer-events: none; /* This will prevent the link from being clickable */
+  color: grey;          /* Change the color to visually indicate it's disabled */
+  text-decoration: none; /* Remove any underline or styling */
+  cursor: not-allowed;   /* Show a 'not-allowed' cursor to indicate it's disabled */
+}
+.right-side-bar{
+  
+  right: 0 !important;
+}
+
+@media (min-width: 768px) {
+  html:not([dir=rtl]) .sidebar.sidebar-fixed:not(.sidebar-end) {
+    right: 0 !important; /* Your new left value */
+  }
+}
