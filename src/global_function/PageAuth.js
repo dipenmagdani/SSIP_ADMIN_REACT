@@ -5,22 +5,15 @@ const PageAuth =  ()=>{
 
     const response= localStorage.getItem('accessToken')
     console.log(response)
-    var value;
     if (response){
-        
-        value = true;
+        console.log("true");
         return true;
-    
     }
     else{
-    
-        value = false;
+        console.log("false");
         return false ;
-    
-    }
-     
-    
+    }    
     }
     
-    export default PageAuth;
+export default PageAuth;
     

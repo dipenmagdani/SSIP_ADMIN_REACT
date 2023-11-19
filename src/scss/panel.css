@@ -19,3 +19,19 @@
     color: black;
     
 }
+a.disabled {
+  pointer-events: none; /* This will prevent the link from being clickable */
+  color: grey;          /* Change the color to visually indicate it's disabled */
+  text-decoration: none; /* Remove any underline or styling */
+  cursor: not-allowed;   /* Show a 'not-allowed' cursor to indicate it's disabled */
+}
+.right-side-bar{
+  
+  right: 0 !important;
+}
+
+@media (min-width: 768px) {
+  html:not([dir=rtl]) .sidebar.sidebar-fixed:not(.sidebar-end) {
+    right: 0 !important; /* Your new left value */
+  }
+}

@@ -1,5 +1,10 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState , useContext,useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { Store } from '../validation/store'
+import axios from 'axios'
+import base_url from 'src/base_url'
+import expireToken from 'src/global_function/unauthorizedToken'
 import {
   CButton,
   CCard,
@@ -16,13 +21,48 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CTableDataCell,
 } from '@coreui/react'
 
-const CustomStyles = () => {
+const CustomStyles = (semSlug,setsubjects) => {
   const [validated, setValidated] = useState(false)
   const [SName, setSName] = useState("");
   const [Scode, setScode] = useState("");
   const [Scredit, setScredit] = useState("");
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken,refreshToken, semesters } = state
+  
+  const add_subject = async (body) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning': true
+    };
+
+    axios.post(`${base_url}/manage/add_subjects`, body, { headers })
+      .then((response) => {
+        console.log(response.data.subject);
+          setsubjects(prevArray => [...prevArray, response.data.subject])
+      })
+      .catch((error) => {
+        if(error.response.status === 401){
+          expireToken(refreshToken,(error,result)=>{
+            ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.data.access });
+            ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
+          })
+        }
+        console.log(error);
+        alert(error.response.data.data)
+      })
+  }
+  
+  
+  
+  
+  
+  
+  
+  
   const handleSubmit = (event) => {
     const form = event.currentTarget
     if (form.checkValidity() === false) {
@@ -34,8 +74,13 @@ const CustomStyles = () => {
     console.log(Scredit);
     setValidated(true)
     const body = {
-
+      semester_slug:semSlug,
+      subject_name:SName,
+      subject_code:Scode,
+      subject_credit:Scredit
     }
+    event.preventDefault()
+    add_subject(body)
   }
   return (
     <CForm
@@ -60,15 +105,52 @@ const CustomStyles = () => {
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>
-        <CButton color="primary" type="submit">
+        <button className='btn btn-outline-dark form-control' type="submit">
           Submit form
-        </CButton>
+        </button>
       </CCol>
     </CForm>
   )
 }
 
-const Select = () => {
+const Select = (props) => {
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken,refreshToken, semesters } = state
+
+  const {semSlug , chageSteps} = props
+  console.log(semSlug);
+  const [subjects, setsubjects] = useState([]);
+  
+  const load_subjects = async () => {
+    const header = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning': true
+    }
+
+    axios.get(`${base_url}/manage/get_subjects`, {
+      params: { semester_slug: semSlug },
+      headers: header
+    })
+      .then((response) => {
+        console.log(response.data.data);
+        setsubjects(response.data.data)
+        
+      })
+      .catch((error) => {
+        if(error.response.status === 401){
+          expireToken(refreshToken,(error,result)=>{
+            ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
+            ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
+          })
+        }
+      }) 
+  }
+
+  useEffect(() => {
+      load_subjects()
+  }, []);
   return (
     <>
       <CRow>
@@ -77,7 +159,7 @@ const Select = () => {
             <CCardHeader>
               <strong>Subjects</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles()}</CCardBody>
+            <CCardBody>{CustomStyles(semSlug,setsubjects)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -94,28 +176,22 @@ const Select = () => {
                     <CTableHeaderCell>Subject Name</CTableHeaderCell>
                     <CTableHeaderCell>Subject Code</CTableHeaderCell>
                     <CTableHeaderCell>Subject Credit</CTableHeaderCell>
-                    <CTableHeaderCell>Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {/* {tableExample.map((item, index) => (
+                  {subjects.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item.user.name}</div>
-                        <div className="small text-medium-emphasis">
-                          <span>{item.user.new ? 'New' : 'Recurring'}</span> | Registered:{' '}
-                          {item.user.registered}
-                        </div>
+                        <div>{item.subject_name}</div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <CIcon size="xl" icon={item.country.flag} title={item.country.name} />
+                        <div>{item.code}</div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <CButton style={{ marginRight: '10px' }}>View Details</CButton>
-                        <CButton>Add Semester</CButton>
+                        <div>{item.credit}</div>
                       </CTableDataCell>
                     </CTableRow>
-                  ))} */}
+                  ))}
                 </CTableBody>
               </CTable>
             </CCardBody>
@@ -125,5 +201,8 @@ const Select = () => {
     </>
   )
 }
-
+Select.prototype = {
+  chageSteps:PropTypes.func.isRequired,
+  semSlug: PropTypes.string
+}
 export default Select

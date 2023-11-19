@@ -1,16 +1,17 @@
 import React from 'react';
 import Axios from 'axios';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useContext , useEffect } from 'react'
+import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url';
 import styles from "../login/Login.module.css";
 import expireToken from 'src/global_function/unauthorizedToken';
-import PageAuth from 'src/global_function/PageAuth';
+
 
 
 export default function Login(){
+      
 
      const navigate = useNavigate();
   
@@ -19,17 +20,10 @@ export default function Login(){
     const [password, setPassword] = useState('');
   
      const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { accessToke } = state;
-    console.log(accessToke);
+     const { refreshToken } = state;
+
     
-    
-    useEffect(()=>{
-      if(PageAuth){
-        navigate("/Dashboard")
-  }
-  },[])
-    
-    
+  
     const submitHandler = async (e) => {
 
       e.preventDefault();
@@ -42,7 +36,8 @@ export default function Login(){
       },{header})
       .then((response)=>{
         ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
-        //ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.data.refresh });
+        ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.refresh });
+        
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)
         navigate('/#')
@@ -51,7 +46,7 @@ export default function Login(){
         console.log("error here");
         console.log(error);
         if(error.response.status === 401){
-            expireToken(localStorage.getItem('refreshToken'),(error,result)=>{
+            expireToken(refreshToken,(error,result)=>{
               if(error){
                 console.log("someting went worng");
               }

@@ -35,6 +35,8 @@ const Range = React.lazy(() => import('./views/forms/range/Range'))
 const Select = React.lazy(() => import('./views/forms/select/Select'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
 const Teacher = React.lazy(()=> import('./views/teacher/Teacher'))
+const Breadcrumbnav = React.lazy(()=> import('./views/breadcrum/Breadcrumbnav'))
+const TeacherSidebar = React.lazy(()=> import('./views/teacher/TeacherSidebar'))
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // Icons
@@ -95,7 +97,9 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/teacher',name:'Teacher',element:Teacher},
+  { path: '/manage-teachers',name:'Teacher',element:Teacher},
+  { path: '/breadcrumb',name:'Breadcrumbnav',element:Breadcrumbnav},
+  { path: '/TeacherSidebar',name:'TeacherSidebar',element:TeacherSidebar},
 ]
 
 export default routes

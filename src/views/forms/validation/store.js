@@ -5,7 +5,7 @@ import { createContext, useReducer } from 'react';
 export const Store = createContext();
 
 const initialState = {
-  accessToke: localStorage.getItem('accessToken')
+  accessToken: localStorage.getItem('accessToken')
     ? localStorage.getItem('accessToken')
     : null,
     refreshToken: localStorage.getItem('refreshToken')
@@ -13,19 +13,20 @@ const initialState = {
     : null,
   batches: [],
   semesters: [],
+  profileDetails: []
 
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case 'ACCESS_TOKEN':
-      return { ...state, accessToke: action.payload };
+      return { ...state, accessToken: action.payload };
     case 'REFRESH_TOKEN':
       return { ...state,refreshToken: action.payload}
     case 'USER_SIGNOUT':
       return {
         ...state,
-        accessToke: null
+        accessToken: null
       };
     case 'GET_BATCHES':
       return {
@@ -42,11 +43,17 @@ function reducer(state, action) {
         ...state,
         semesters: action.payload
       }
+    case 'SET_PROFILE':
+      return {
+        ...state,
+        profileDetails: action.payload
+      }
     case 'ADD_SEM':
       return {
         ...state,
         semesters: state.semesters.push(action.payload)
       }
+    
     default:
       return state;
   }

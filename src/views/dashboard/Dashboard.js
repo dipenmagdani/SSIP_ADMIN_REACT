@@ -17,48 +17,44 @@ import { jwtDecode } from "jwt-decode";
 import { useContext , useEffect } from 'react'
 import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url'
+import Breadcrumbnav from '../breadcrum/Breadcrumbnav';
 const Dashboard = () => {
   const [steps, setsteps] = useState('batch')
   const [Betchslug, setBetchslug] = useState("");
+  const [semSlug, setsemSlug] = useState("");
+  const [subSlug, setsubSlug] = useState("");
   const [batchCount, setbatchCount] = useState(0);
   const [semCount, setsemCount] = useState(0);
-  const [subCount, setsubCount] = useState(0);
-const [adminInfo, setadminInfo] = useState("");
+  const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToke , refreshToken } = state
-
+  const { accessToken , refreshToken , profileDetails } = state  
   const decodeToken= () => {
-    // console.log(userInfo);
-    const decoded = jwtDecode(accessToke);
-    setadminInfo(decoded)
-    console.log(decoded);
+    const decoded = jwtDecode(accessToken);
+    ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});
+    console.log(decoded.profile);
+    console.log(profileDetails);
+    //setadminInfo(decoded)
   }
+  useEffect(() => {  
+    decodeToken()
+    getObjectCounts()    
+  }, []);
   const getObjectCounts = () =>{
     const header = {
       "Content-Type":"application/json",
-      "Authorization": `Bearer ${accessToke}`,
+      "Authorization": `Bearer ${accessToken}`,
       'ngrok-skip-browser-warning':true
     }
     axios.get(`${base_url}/manage/get_object_counts`,{headers:header})
     .then((response)=>{
-        console.log(response);
         setbatchCount(response.data.batches)
         setsemCount(response.data.semesters)
         setsubCount(response.data.subjects)
-        console.log(batchCount);
-        console.log(semCount);
-        console.log(subCount);
     })
     .catch((error)=>{
-      console.log(error);
+      console.log(error.response);
     })
   }
-  
-  
-  useEffect(() => {
-      decodeToken()
-      getObjectCounts()
-  }, []);
   
   const chageSteps = (currentStep) =>{
       setsteps(currentStep)
@@ -71,6 +67,7 @@ const [adminInfo, setadminInfo] = useState("");
 
   return (
     <>
+      <Breadcrumbnav currentStep={steps} chageSteps={chageSteps}></Breadcrumbnav>
       <WidgetsDropdown />
       <CCard className="mb-4">
         <CCardFooter>
@@ -94,9 +91,9 @@ const [adminInfo, setadminInfo] = useState("");
           case 'batch':
             return <Validation chageSteps={chageSteps}  setSlug={setBetchslug} setBatchCout={setbatchCount}></Validation>
           case 'semester':
-            return <FormControl chageSteps={chageSteps}  batchSlug={Betchslug}></FormControl>
+            return <FormControl chageSteps={chageSteps}  batchSlug={Betchslug} setsemSlug={setsemSlug}></FormControl>
           case 'subject':
-            return <Select chageSteps={chageSteps} ></Select>
+            return <Select chageSteps={chageSteps} semSlug={semSlug} setsubSlug={setsubSlug}></Select>
           default:
             console.log(steps)
         }
