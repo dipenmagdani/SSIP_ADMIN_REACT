@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState  } from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import { useContext } from 'react'
 import {
   CButton,
   CCard,
@@ -17,40 +20,55 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CHeader,
 } from '@coreui/react'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-} from '@coreui/icons'
-import { DocsExample } from 'src/components'
-import CIcon from '@coreui/icons-react'
+import { Store } from '../validation/store'
+import base_url from 'src/base_url'
+import expireToken from 'src/global_function/unauthorizedToken'
 
-import avatar1 from 'src/assets/images/avatars/1.jpg'
-import avatar2 from 'src/assets/images/avatars/2.jpg'
-import avatar3 from 'src/assets/images/avatars/3.jpg'
-import avatar4 from 'src/assets/images/avatars/4.jpg'
-import avatar5 from 'src/assets/images/avatars/5.jpg'
-import avatar6 from 'src/assets/images/avatars/6.jpg'
-const CustomStyles = () => {
+const CustomStyles = (Batches,setBatches,setBatchCout) => {
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken, refreshToken, batches } = state
   const [validated, setValidated] = useState(false)
+  const currentYear = new Date().getFullYear() 
+  const [Start, setStart] = useState(currentYear);
+  const EndYear = (parseInt(Start, 10) + 1).toString();
+  
+  const addBatches = async(body) => {
+    const headers = {
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning':true
+    };
+    axios.post(`${base_url}/manage/add_batch`,body,{headers})
+    .then((response)=>{
+      console.log(response.data.data);
+      setBatches(prevArray => [...prevArray, response.data.data]);
+      setBatchCout(preValue => preValue + 1);
+    })
+    .catch((error)=>{
+      
+      if(error.response.status === 401){
+        expireToken(refreshToken,(error,result)=>{
+          ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
+          ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
+        })
+      }
+      alert(error.response.data.data)
+    })
+  }
+
   const handleSubmit = (event) => {
     const form = event.currentTarget
+    event.preventDefault()
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
     }
     setValidated(true)
+    const body = {
+      batch_name: Start + "-" + EndYear
+    }
+    addBatches(body)
   }
   return (
     <CForm
@@ -61,79 +79,69 @@ const CustomStyles = () => {
     >
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom01">Start Year</CFormLabel>
-        <CFormInput type="date" id="validationCustom01" defaultValue="Mark" required />
+        <CFormInput type="number" min={currentYear} max="2099" step="1" value={Start}  id="validationCustom01" onChange={e => setStart(e.target.value)} required maxLength={4} />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom02">End Year</CFormLabel>
-        <CFormInput type="date" id="validationCustom02" defaultValue="Otto" required />
+        <CFormInput type="number" value={EndYear}  readOnly step="1" id="validationCustom02"   required maxLength={4}/>
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>
-        <CButton color="primary" type="submit">
+        <button className='btn btn-outline-dark form-control' type="submit" >
           Submit form
-        </CButton>
+        </button>
       </CCol>
     </CForm>
   )
 }
 
 const Validation = (props) => {
-  const { nextForm } = props
-  const tableExample = [
-    {
-      avatar: { src: avatar1, status: 'success' },
-      user: {
-        name: 'Yiorgos Avraamu',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'USA', flag: cifUs },
-      payment: { name: 'Mastercard', icon: cibCcMastercard },
-    },
-    {
-      avatar: { src: avatar2, status: 'danger' },
-      user: {
-        name: 'Avram Tarasios',
-        new: false,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Brazil', flag: cifBr },
-      payment: { name: 'Visa', icon: cibCcVisa },
-    },
-    {
-      avatar: { src: avatar3, status: 'warning' },
-      user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2021' },
-      country: { name: 'India', flag: cifIn },
-      payment: { name: 'Stripe', icon: cibCcStripe },
-    },
-    {
-      avatar: { src: avatar4, status: 'secondary' },
-      user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2021' },
-      country: { name: 'France', flag: cifFr },
-      payment: { name: 'PayPal', icon: cibCcPaypal },
-    },
-    {
-      avatar: { src: avatar5, status: 'success' },
-      user: {
-        name: 'Agapetus Tadeáš',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Spain', flag: cifEs },
-      payment: { name: 'Google Wallet', icon: cibCcApplePay },
-    },
-    {
-      avatar: { src: avatar6, status: 'danger' },
-      user: {
-        name: 'Friderik Dávid',
-        new: true,
-        registered: 'Jan 1, 2021',
-      },
-      country: { name: 'Poland', flag: cifPl },
-      payment: { name: 'Amex', icon: cibCcAmex },
-    },
-  ]
+  const {chageSteps} = props
+  const {setSlug} = props
+  const {setBatchCout} = props
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken, refreshToken, batches } = state
+  
+  const [Batches, setBatches] = useState(batches);
+  
+  // function for the load batches
+  
+  const loadBatches = async() => {
+    const header = {
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning':true
+    }
+    
+    axios.get(`${base_url}/manage/get_batches`,{headers:header})
+    .then((response)=>{
+      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });
+      //console.log(state.batches);
+      console.log(response.data.data);
+      setBatches(response.data.data)
+    })
+    .catch((error)=>{
+        if(error.respons.status === 401){
+          expireToken(refreshToken,(error,result)=>{
+            ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
+            ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
+          })
+        }
+    })
+  }
+
+  useEffect(() => {
+    if(accessToken){
+      loadBatches()
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(Batches);
+  }, [Batches]);
+  
+  
   return (
     <>
       <CRow>
@@ -142,7 +150,7 @@ const Validation = (props) => {
             <CCardHeader>
               <strong>Batches</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles()}</CCardBody>
+            <CCardBody>{CustomStyles(Batches,setBatches,setBatchCout)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -153,31 +161,28 @@ const Validation = (props) => {
               <strong>Batches History</strong>
             </CCardHeader>
             <CCardBody>
-              <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTable align="middle" className="mb-0 border text-center" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell>Batch Start Year</CTableHeaderCell>
-                    <CTableHeaderCell>Batch End Year</CTableHeaderCell>
-                    <CTableHeaderCell>Actions</CTableHeaderCell>
+                    <CTableHeaderCell>Batches</CTableHeaderCell>
+                    <CTableHeaderCell>Activation Status</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {tableExample.map((item, index) => (
+                  {Batches.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item.user.name}</div>
-                        <div className="small text-medium-emphasis">
-                          <span>{item.user.new ? 'New' : 'Recurring'}</span> | Registered:{' '}
-                          {item.user.registered}
-                        </div>
+                        <div  onClick={() => {chageSteps('semester'); setSlug(item.slug);}}>{item.batch_name}</div>   
                       </CTableDataCell>
                       <CTableDataCell>
-                        <CIcon size="xl" icon={item.country.flag} title={item.country.name} />
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <CButton style={{ marginRight: '10px' }}>View Details</CButton>
-                        <CButton onClick={nextForm}>Add Semester</CButton>
-                      </CTableDataCell>
+                        <div  onClick={() => {chageSteps('semester'); setSlug(item.slug);}}>
+                          {item.active ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                          </svg>):<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                          </svg>}
+                        </div>   
+                      </CTableDataCell> 
                     </CTableRow>
                   ))}
                 </CTableBody>
@@ -191,7 +196,9 @@ const Validation = (props) => {
 }
 
 Validation.propTypes = {
-  nextForm: PropTypes.func.isRequired,
+  chageSteps: PropTypes.func.isRequired,
+  setSlug: PropTypes.func.isRequired,
+  setBatchCout:PropTypes.func.isRequired
 }
 
 export default Validation
