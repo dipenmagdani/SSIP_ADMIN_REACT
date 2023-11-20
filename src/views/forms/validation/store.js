@@ -18,7 +18,6 @@ const initialState = {
   objectCount:[],
 
   accessTokenActive:false
-
 };
 
 function reducer(state, action) {
@@ -63,6 +62,11 @@ function reducer(state, action) {
       return {
         ...state,
         profileDetails: action.payload
+      }
+      case 'CURRENT_BATCH_SLUG':
+      return {
+        ...state,
+        currentBatch: action.payload
       }
     case 'ADD_SEM':
       return {
