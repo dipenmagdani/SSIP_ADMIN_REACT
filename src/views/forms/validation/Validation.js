@@ -101,7 +101,7 @@ const Validation = (props) => {
   const {setSlug} = props
   const {setBatchCout} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches } = state
+  const { accessToken, refreshToken, batches, currentBatch} = state
   
   const [Batches, setBatches] = useState(batches);
   
