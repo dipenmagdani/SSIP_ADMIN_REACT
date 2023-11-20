@@ -127,12 +127,12 @@ export default function Login(){
       </div>
       
       <div className={styles.frame5}>
-        <div className={styles.button}>
-          <div className={styles.base}>
-            <img className={styles.maskedIcon} alt="" src="/images/masked-icon.svg" />
-            <button type='submit' className={styles.button1}>Login</button>
-            <img className={styles.maskedIcon} alt="" src="/images/masked-icon1.svg" />
-          </div>
+        <div className='w-100'>
+          {/* <div className={styles.base}> */}
+            {/* <img className={styles.maskedIcon} alt="" src="/images/masked-icon.svg" /> */}
+            <button type='submit' className='form-control btn btn-outline-primary'>Login</button>
+            {/* <img className={styles.maskedIcon} alt="" src="/images/masked-icon1.svg" /> */}
+          {/* </div> */}
         </div>
       </div>
 
