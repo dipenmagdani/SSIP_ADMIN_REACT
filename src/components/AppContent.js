@@ -5,6 +5,7 @@ import axios from 'axios'
 import base_url from 'src/base_url'
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store'
+import { jwtDecode } from "jwt-decode";
 
 // routes config
 import routes from '../routes'
@@ -12,6 +13,11 @@ import routes from '../routes'
 const AppContent = () => {
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { accessToken, refreshToken, batches } = state    
+
+    const decodeToken= () => {
+      const decoded = jwtDecode(accessToken);
+      ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});        
+    }
     const loadBatches = async() => {
       const header = {
         "Content-Type":"application/json",
@@ -40,6 +46,7 @@ const AppContent = () => {
     }
     useEffect(() => {
       if(accessToken){
+        decodeToken()
         loadBatches()
       }
     }, []);
