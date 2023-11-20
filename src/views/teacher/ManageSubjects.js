@@ -3,7 +3,10 @@ import { Store } from '../forms/validation/store'
 import axios from 'axios'
 import base_url from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
+<<<<<<< HEAD
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
+=======
+>>>>>>> cbb5b68 (everthin done)
 import {
     COffcanvas,
     COffcanvasHeader,
