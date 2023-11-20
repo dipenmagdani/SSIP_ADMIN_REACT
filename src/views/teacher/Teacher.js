@@ -6,6 +6,7 @@ import axios from 'axios'
 import base_url from 'src/base_url'
 import { useSelector, useDispatch } from 'react-redux'
 import expireToken from 'src/global_function/unauthorizedToken'
+import ManageSubjects from './ManageSubjects';
 import {
     CButton,
     CCard,
@@ -39,13 +40,13 @@ const CustomStyles = (setTeacherlist) => {
     const [validated, setValidated] = useState(false)
 
     const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { accessToken,refreshToken} = state
+    const { accessToken,refreshToken , currentBatch} = state
 
     const [Teacher_name, setTeacher_name] = useState("");
     const [Teacher_email, setTeacher_email] = useState("");
     const [Teacher_ph, setTeacher_ph] = useState("");
     const [Teacher_password, setTeacher_password] = useState("");
-    
+    console.log(currentBatch);
     const add_Teacher = async(body)=>{
       const headers = {
         'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ const CustomStyles = (setTeacherlist) => {
   
       axios.post(`${base_url}/manage/add_teacher`, body, { headers })
         .then((response) => {
-          console.log(response.data.teacher);
+          
           setTeacherlist(prevArray => [...prevArray, response.data.teacher])
         })
         .catch((error) => {
@@ -65,7 +66,7 @@ const CustomStyles = (setTeacherlist) => {
               ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
             })
           }
-          console.log(error);
+          
           alert(error.response.data.data)
         })
     }
@@ -125,6 +126,7 @@ const CustomStyles = (setTeacherlist) => {
 const Teacher = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [visible, setVisible] = useState(false)
+  const [SelectedTeacher,setSelectedTeacher] = useState(null)
   
   const dispatch = useDispatch()
     
@@ -132,7 +134,6 @@ const Teacher = () => {
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken} = state
-
   const load_teacher = async () =>{
     const header = {
       "Content-Type": "application/json",
@@ -144,7 +145,7 @@ const Teacher = () => {
       headers: header
     })
       .then((response) => {
-        console.log(response.data.teachers);
+        
         setTeacherlist(response.data.teachers)
       })
       .catch((error) => {
@@ -198,7 +199,7 @@ const Teacher = () => {
                 </CTableHead>
                 <CTableBody>
                   {Teacherlist.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" onClick={() => setVisible(true)} key={index}>
+                    <CTableRow v-for="item in tableItems" onClick={() => {setSelectedTeacher(item); setVisible(true)}} key={index}>
                       <CTableDataCell>
                         <div>{item.profile.name}</div>
                       </CTableDataCell>
@@ -217,17 +218,7 @@ const Teacher = () => {
         </CCol>
       </CRow>
       
-      <COffcanvas placement="end" visible={visible} onHide={() => setVisible(false)} data-coreui-backdrop="static">
-      <COffcanvasHeader>
-        <COffcanvasTitle>Select Subject</COffcanvasTitle>
-        <CCloseButton className="text-reset" onClick={() => setVisible(false)} />
-      </COffcanvasHeader>
-      <COffcanvasBody>
-      {checkboxOptions.map((option) => (  
-          <CFormCheck id="flexCheckDefault" key={option}  label="Default checkbox"/>
-      ))}
-      </COffcanvasBody>
-    </COffcanvas>
+      {SelectedTeacher?(<ManageSubjects visible={visible} setVisible={setVisible} SelectedTeacher={SelectedTeacher}/>):null}
         
     </>
   );

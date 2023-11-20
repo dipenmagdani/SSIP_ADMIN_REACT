@@ -13,8 +13,9 @@ const initialState = {
     : null,
   batches: [],
   semesters: [],
-  profileDetails: []
-
+  profileDetails: [],
+  currentBatch: [],
+  objectCount:[]
 };
 
 function reducer(state, action) {
@@ -33,6 +34,11 @@ function reducer(state, action) {
         ...state,
         batches : action.payload
       };
+      case 'GET_OBJECTS':
+        return {
+          ...state,
+          objectCount : action.payload
+        };
     case 'ADD_BATCHES':
       return{
         ...state,
@@ -53,7 +59,11 @@ function reducer(state, action) {
         ...state,
         semesters: state.semesters.push(action.payload)
       }
-    
+      case 'CURRENT_BATCH_SLUG':
+              return{
+                ...state,
+                currentBatch:action.payload
+              }
     default:
       return state;
   }
