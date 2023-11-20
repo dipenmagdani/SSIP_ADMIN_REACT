@@ -26,7 +26,7 @@ const Dashboard = () => {
   const [semCount, setsemCount] = useState(0);
   const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken , profileDetails } = state  
+  const { accessToken , refreshToken , profileDetails, objectCount} = state  
 
  
   useEffect(() => {      
@@ -40,9 +40,11 @@ const Dashboard = () => {
     }
     axios.get(`${base_url}/manage/get_object_counts`,{headers:header})
     .then((response)=>{
-        setbatchCount(response.data.batches)
-        setsemCount(response.data.semesters)
-        setsubCount(response.data.subjects)
+      ctxDispatch({ type: 'GET_OBJECTS', payload: response.data });
+        // setbatchCount(response.data.batches)
+        // setsemCount(response.data.semesters)
+        // setsubCount(response.data.subjects)
+
     })
     .catch((error)=>{
       console.log(error.response);
@@ -53,9 +55,9 @@ const Dashboard = () => {
       setsteps(currentStep)
   }
   const progressExample = [
-    { title: 'Batches', value: batchCount, nextStep:'batch'},
-    { title: 'Semester', value: semCount, nextStep:'semester' },
-    { title: 'Subjects', value: subCount, nextStep:'subject' },
+    { title: 'Batches', value: objectCount.batches, nextStep:'batch'},
+    { title: 'Semester', value: objectCount.semesters, nextStep:'semester' },
+    { title: 'Subjects', value: objectCount.subjects, nextStep:'subject' },
   ]
 
   return (

@@ -14,12 +14,9 @@ const initialState = {
   batches: [],
   semesters: [],
   profileDetails: [],
-<<<<<<< HEAD
-  currentBatch: []
+  currentBatch: [],
+  objectCount:[]
 
-=======
-  currentBatch : {}
->>>>>>> 857e81b (some changes 20/11)
 };
 
 function reducer(state, action) {
@@ -38,6 +35,11 @@ function reducer(state, action) {
         ...state,
         batches : action.payload
       };
+      case 'GET_OBJECTS':
+        return {
+          ...state,
+          objectCount : action.payload
+        };
     case 'ADD_BATCHES':
       return{
         ...state,
