@@ -27,7 +27,7 @@ import expireToken from 'src/global_function/unauthorizedToken'
 
 const CustomStyles = (Batches,setBatches,setBatchCout) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
+  const { accessToken, refreshToken, batches, currentBatch} = state
   const [validated, setValidated] = useState(false)
   const currentYear = new Date().getFullYear() 
   const [Start, setStart] = useState(currentYear);
@@ -104,7 +104,7 @@ const Validation = (props) => {
   const {setSlug} = props
   const {setBatchCout} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches , currentBatch } = state
+  const { accessToken, refreshToken, batches } = state
   
   const [Batches, setBatches] = useState(batches);
   

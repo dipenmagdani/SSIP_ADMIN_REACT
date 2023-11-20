@@ -16,7 +16,6 @@ const initialState = {
   profileDetails: [],
   currentBatch: [],
   objectCount:[]
-
 };
 
 function reducer(state, action) {
