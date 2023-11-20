@@ -13,7 +13,6 @@ import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import FormControl from '../forms/form-control/FormControl'
 import Select from '../forms/input-group/InputGroup'
 import Validation from '../forms/validation/Validation'
-import { jwtDecode } from "jwt-decode";
 import { useContext , useEffect } from 'react'
 import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url'
@@ -28,15 +27,9 @@ const Dashboard = () => {
   const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken , profileDetails } = state  
-  const decodeToken= () => {
-    const decoded = jwtDecode(accessToken);
-    ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});
-    console.log(decoded.profile);
-    console.log(profileDetails);
-    //setadminInfo(decoded)
-  }
-  useEffect(() => {  
-    decodeToken()
+
+ 
+  useEffect(() => {      
     getObjectCounts()    
   }, []);
   const getObjectCounts = () =>{
