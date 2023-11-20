@@ -27,7 +27,7 @@ import expireToken from 'src/global_function/unauthorizedToken'
 
 const CustomStyles = (Batches,setBatches,setBatchCout) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches, currentBatch} = state
+  const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
   const [validated, setValidated] = useState(false)
   const currentYear = new Date().getFullYear() 
   const [Start, setStart] = useState(currentYear);
@@ -41,7 +41,10 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
     };
     axios.post(`${base_url}/manage/add_batch`,body,{headers})
     .then((response)=>{
-      console.log(response.data.data);
+      let batchCount = {...objectCount}
+      batchCount.batches += 1
+      console.log(batchCount);
+      ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
       setBatches(prevArray => [...prevArray, response.data.data]);
       setBatchCout(preValue => preValue + 1);
     })

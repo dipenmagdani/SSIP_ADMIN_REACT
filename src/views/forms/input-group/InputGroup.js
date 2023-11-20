@@ -30,7 +30,7 @@ const CustomStyles = (semSlug,setsubjects) => {
   const [Scode, setScode] = useState("");
   const [Scredit, setScredit] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken,refreshToken, semesters } = state
+  const { accessToken,refreshToken, objectCount } = state
   
   const add_subject = async (body) => {
     const headers = {
@@ -41,7 +41,10 @@ const CustomStyles = (semSlug,setsubjects) => {
 
     axios.post(`${base_url}/manage/add_subjects`, body, { headers })
       .then((response) => {
-        console.log(response.data.subject);
+          let changeSubjectCount = {...objectCount}
+          changeSubjectCount.subjects += 1
+          console.log(changeSubjectCount);
+          ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
           setsubjects(prevArray => [...prevArray, response.data.subject])
       })
       .catch((error) => {

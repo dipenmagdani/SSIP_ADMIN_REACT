@@ -33,9 +33,9 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
   const [Sstatus, setSstatus] = useState("");
   const [Ssdate, setSsdate] = useState("");
   const [Sedate, setSedate] = useState("");
-
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken,refreshToken, semesters } = state
+  const { accessToken,refreshToken, semesters , objectCount } = state
+  const [semCount, setsemCount] = useState(objectCount);
 
 
 
@@ -50,6 +50,10 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
     axios.post(`${base_url}/manage/add_semester`, body, { headers })
       .then((response) => {
         console.log(response.data.data);
+        let changeCount = {...objectCount}
+        changeCount.semesters += 1
+        console.log(changeCount);
+        ctxDispatch({ type: 'GET_OBJECTS', payload: changeCount });
         if(response.data.data.status)
         {
           setSemesters(prevArray => [...prevArray, response.data.data])
