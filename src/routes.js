@@ -19,7 +19,7 @@ const Progress = React.lazy(() => import('./views/base/progress/Progress'))
 const Spinners = React.lazy(() => import('./views/base/spinners/Spinners'))
 const Tables = React.lazy(() => import('./views/base/tables/Tables'))
 const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'))
-
+const Timetable = React.lazy(() => import('./views/timetable/Timetable'))
 // Buttons
 const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'))
 const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
@@ -101,6 +101,7 @@ const routes = [
   { path: '/breadcrumb',name:'Breadcrumbnav',element:Breadcrumbnav},
   { path: '/TeacherSidebar',name:'TeacherSidebar',element:TeacherSidebar},
   { path: '/logout',name:'Logout',element:Logout},
+  { path: '/timetable',name:'Timetable',element:Timetable},
 ]
 
 export default routes
