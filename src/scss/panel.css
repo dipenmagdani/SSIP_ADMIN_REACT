@@ -35,3 +35,19 @@ a.disabled {
     right: 0 !important; /* Your new left value */
   }
 }
+
+.diagonal-line {
+  position: relative;
+}
+
+.diagonal-line::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #000; /* Change the color as needed */
+  transform: translateY(-50%) rotate(-45deg);
+  transform-origin: 100% 0;
+}
