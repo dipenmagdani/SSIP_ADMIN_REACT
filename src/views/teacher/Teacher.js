@@ -39,13 +39,13 @@ const CustomStyles = (setTeacherlist) => {
     const [validated, setValidated] = useState(false)
 
     const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { accessToken,refreshToken} = state
+    const { accessToken,refreshToken , currentBatch} = state
 
     const [Teacher_name, setTeacher_name] = useState("");
     const [Teacher_email, setTeacher_email] = useState("");
     const [Teacher_ph, setTeacher_ph] = useState("");
     const [Teacher_password, setTeacher_password] = useState("");
-    
+    console.log(currentBatch);
     const add_Teacher = async(body)=>{
       const headers = {
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const CustomStyles = (setTeacherlist) => {
   
       axios.post(`${base_url}/manage/add_teacher`, body, { headers })
         .then((response) => {
-          console.log(response.data.teacher);
+          
           setTeacherlist(prevArray => [...prevArray, response.data.teacher])
         })
         .catch((error) => {
@@ -65,7 +65,7 @@ const CustomStyles = (setTeacherlist) => {
               ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
             })
           }
-          console.log(error);
+          
           alert(error.response.data.data)
         })
     }
@@ -144,7 +144,7 @@ const Teacher = () => {
       headers: header
     })
       .then((response) => {
-        console.log(response.data.teachers);
+        
         setTeacherlist(response.data.teachers)
       })
       .catch((error) => {
