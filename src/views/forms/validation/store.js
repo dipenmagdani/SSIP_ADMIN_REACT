@@ -13,8 +13,7 @@ const initialState = {
     : null,
   batches: [],
   semesters: [],
-  profileDetails: [],
-  currentBatch: [],
+  profileDetails: []
 
 };
 
@@ -53,11 +52,6 @@ function reducer(state, action) {
       return {
         ...state,
         semesters: state.semesters.push(action.payload)
-      }
-    case 'CURRENT_BATCH_SLUG':
-      return{
-        ...state,
-        currentBatch:action.payload
       }
     
     default:

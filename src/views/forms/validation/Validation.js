@@ -101,13 +101,45 @@ const Validation = (props) => {
   const {setSlug} = props
   const {setBatchCout} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches, currentBatch} = state
+  const { accessToken, refreshToken, batches } = state
+  
   const [Batches, setBatches] = useState(batches);
-
+  
+  // function for the load batches
+  
+  const loadBatches = async() => {
+    const header = {
+      "Content-Type":"application/json",
+      "Authorization": `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning':true
+    }
+    
+    axios.get(`${base_url}/manage/get_batches`,{headers:header})
+    .then((response)=>{
+      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });
+      //console.log(state.batches);
+      console.log(response.data.data);
+      setBatches(response.data.data)
+    })
+    .catch((error)=>{
+        if(error.respons.status === 401){
+          expireToken(refreshToken,(error,result)=>{
+            ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
+            ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
+          })
+        }
+    })
+  }
 
   useEffect(() => {
-    setBatches(batches)
-  }, [batches]);
+    if(accessToken){
+      loadBatches()
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(Batches);
+  }, [Batches]);
   
   
   return (
