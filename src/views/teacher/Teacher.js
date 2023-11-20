@@ -6,6 +6,7 @@ import axios from 'axios'
 import base_url from 'src/base_url'
 import { useSelector, useDispatch } from 'react-redux'
 import expireToken from 'src/global_function/unauthorizedToken'
+import ManageSubjects from './ManageSubjects';
 import {
     CButton,
     CCard,
@@ -125,6 +126,7 @@ const CustomStyles = (setTeacherlist) => {
 const Teacher = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [visible, setVisible] = useState(false)
+  const [SelectedTeacher,setSelectedTeacher] = useState(null)
   
   const dispatch = useDispatch()
     
@@ -132,7 +134,6 @@ const Teacher = () => {
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken} = state
-
   const load_teacher = async () =>{
     const header = {
       "Content-Type": "application/json",
@@ -198,7 +199,7 @@ const Teacher = () => {
                 </CTableHead>
                 <CTableBody>
                   {Teacherlist.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" onClick={() => setVisible(true)} key={index}>
+                    <CTableRow v-for="item in tableItems" onClick={() => {setSelectedTeacher(item); setVisible(true)}} key={index}>
                       <CTableDataCell>
                         <div>{item.profile.name}</div>
                       </CTableDataCell>
@@ -217,17 +218,7 @@ const Teacher = () => {
         </CCol>
       </CRow>
       
-      <COffcanvas placement="end" visible={visible} onHide={() => setVisible(false)} data-coreui-backdrop="static">
-      <COffcanvasHeader>
-        <COffcanvasTitle>Select Subject</COffcanvasTitle>
-        <CCloseButton className="text-reset" onClick={() => setVisible(false)} />
-      </COffcanvasHeader>
-      <COffcanvasBody>
-      {checkboxOptions.map((option) => (  
-          <CFormCheck id="flexCheckDefault" key={option}  label="Default checkbox"/>
-      ))}
-      </COffcanvasBody>
-    </COffcanvas>
+      {SelectedTeacher?(<ManageSubjects visible={visible} setVisible={setVisible} SelectedTeacher={SelectedTeacher}/>):null}
         
     </>
   );
