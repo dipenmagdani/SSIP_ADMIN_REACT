@@ -1,52 +1,198 @@
-import React, { useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
-    COffcanvas,
-    COffcanvasHeader,
-    COffcanvasTitle,    
-    COffcanvasBody,       
-    CCard,
-    CCardBody,
-    CCardHeader,
-    CCol,    
-    CRow,
-    CTable,
-    CTableBody,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CFormCheck,
-    CTableDataCell,
-    CToast,
-    CToastHeader,
-    CToastBody
-  } from '@coreui/react'
+  COffcanvas,
+  COffcanvasHeader,
+  COffcanvasTitle,
+  COffcanvasBody,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CFormCheck,
+  CTableDataCell,
+  CToast,
+  CToastHeader,
+  CToastBody,
+  CForm,
+  CFormInput,
+  CFormFeedback,
+  CFormLabel,
+  CFormSelect,
+} from '@coreui/react'
+import axios from 'axios';
+import base_url from 'src/base_url';
+import { Store } from '../forms/validation/store';
 
-function SetLecture({visible,setVisible,scheduleObj,lectureObj}) {
-    useEffect( () => {        
-        if(visible){     
+function SetLecture({ visible, setVisible, scheduleObj, lectureObj , currentSelectSemester , setupdate_timetable }) {
+  
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
+
+  const [classroom, setclassroom] = useState([]);
+  const [subjects, setsubjects] = useState([]);
+  const [teacher, setteacher] = useState([]);
+  const [classroom_slug, setclassroom_slug] = useState(null);
+  const [subject_slug, setsubject_slug] = useState(null);
+  const [teacher_slug, setteacher_slug] = useState(null);
+
+
+  useEffect(() => {
+    console.log(teacher_slug);
+  }, [teacher_slug]);
+  const load_object_for_lecture = async()=>{
+    const header = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+      'ngrok-skip-browser-warning': true,
+    }
+    axios.get(`${base_url}/manage/timetable/get_objects_for_lecture`,{
+      params: {semester_slug : currentSelectSemester},
+      headers:header
+    })
+    .then((response)=>{
+        console.log(response.data);
+        setclassroom(response.data.classrooms)
+        setsubjects(response.data.subjects)
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+  const selectTeacher = (subjectslug) =>{
+      subjects.map((item,index)=>{
+        if(item.slug === subjectslug){
+          console.log(item.teachers);
+          setteacher(item.teachers)
+        } 
+      })
+  }
+
+  const handelsubmit = async () =>{
+    if(classroom_slug !== ""  && subject_slug !== "" && teacher_slug !== ""){
+        console.log("call");
+        const header = {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': true,
         }
-    },[visible])      
+        const body = {
+          lecture_slug: lectureObj.slug,
+          teacher_id:teacher_slug,
+          subject_slug:subject_slug,
+          classroom_slug: classroom_slug,
+        }
+
+        axios.post(`${base_url}/manage/timetable/set_lecture_attributes`,body,{
+          headers:header
+        })
+        .then((response)=>{
+          console.log(response.data);
+          setupdate_timetable(preval=> preval+1)
+          setVisible(false)
+        })
+        .catch((error)=>{
+          console.log(error);
+        })
+      }
+  }
+  const setDefaultValue = ()=>{
+     document.getElementById('teacher_select').options[0].selected=true
+     document.getElementById('subject_select').options[0].selected=true
+    document.getElementById('classroom_select').options[0].selected=true
+  }
+
+  useEffect( () => {
+    if (visible) {
+        setDefaultValue()
+       load_object_for_lecture()
+    }
+  }, [visible])
   return (
     <>
-    <COffcanvas className='card w-100' style={{background:'#3c4b64'}} placement="end" visible={visible} onHide={() => setVisible(false)} data-coreui-backdrop="static">
-    <COffcanvasHeader className='card-header text-light' style={{background:'#303c54'}}>
-      <COffcanvasTitle>Manage Lecture</COffcanvasTitle>
-      <button className='btn btn-outline-light' onClick={() => setVisible(false)} >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
-        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-        </svg>
-      </button>      
-    </COffcanvasHeader>
-    <COffcanvasHeader className='card-header text-light' style={{background:'#303c54'}}>
-      <COffcanvasTitle>Day: {scheduleObj.day} | Slot: {lectureObj.start_time} - {lectureObj.end_time}</COffcanvasTitle>      
-    </COffcanvasHeader>
-    <COffcanvasBody>    
-    <CRow>
-    <CCol xs style={{}}></CCol>
-    </CRow>
-    </COffcanvasBody>
-  </COffcanvas>
-  </>
+      <COffcanvas className='card w-100' style={{ background: '#3c4b64' }} placement="end" visible={visible} onHide={() => setVisible(false)} data-coreui-backdrop="static">
+        <COffcanvasHeader className='card-header text-light' style={{ background: '#303c54' }}>
+          <COffcanvasTitle>Manage Lecture</COffcanvasTitle>
+          <button className='btn btn-outline-light' onClick={() => setVisible(false)} >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+          </button>
+        </COffcanvasHeader>
+        <COffcanvasHeader className='card-header text-light' style={{ background: '#303c54' }}>
+          <COffcanvasTitle>Day: {scheduleObj.day} | Slot: {lectureObj.start_date} - {lectureObj.end_time}</COffcanvasTitle>
+        </COffcanvasHeader>
+        <COffcanvasBody>
+          <CRow>
+            <CCol xs>
+              <CCard>
+                <CCardHeader>
+                  Add Lecture
+                </CCardHeader>
+                <CCardBody>
+                  <CForm
+                    className="row g-3 needs-validation"
+                    noValidate
+                  >
+                    <CCol md={12}>
+                      <CFormLabel htmlFor="validationCustom02">Select Classroom</CFormLabel>
+                      <CFormSelect autoComplete='off' id='classroom_select' aria-label="Default select example" onChange={e => setclassroom_slug(e.target.value)}>
+                      <option value="">Select classroom</option>
+                        {
+                          classroom.length> 0 ? (classroom.map((item,index)=>(
+                            <option key={index} value={item.slug}>
+                              {item.class_name}
+                            </option>
+                          ))
+                          ):null}
+                      </CFormSelect>
+                    </CCol>
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="validationCustom01">Select Subject</CFormLabel>
+                      <CFormSelect autoComplete='off'id='subject_select' aria-label="Default select example"  onChange={(e)=>{selectTeacher(e.target.value); setsubject_slug(e.target.value)}}>
+                      <option value="">Select Subject</option>
+                      {
+                          subjects.length > 0 ? (subjects.map((item,index)=>(
+                            <option key={index} value={item.slug}>
+                              {item.subject_name}
+                            </option>
+                          ))
+                        ):null}
+                      </CFormSelect>
+                    </CCol>
+                    <CCol md={6}>
+                      <CFormLabel htmlFor="validationCustom02">Select Teacher</CFormLabel>
+                      <CFormSelect autoComplete='off' id='teacher_select' aria-label="Default select example" onChange={e => setteacher_slug(e.target.value)}>
+                      <option value="">Select Teacher</option>
+                        {
+                          teacher.length > 0 ? (teacher.map((item, index) => (
+                            <option key={index} value={item.id}>
+                               {item.profile.name}
+                            </option>
+                          ))
+                          ) : null
+                        }
+                      </CFormSelect>
+                    </CCol>
+                    <CCol xs={12}>
+                      <button className='btn btn-outline-dark form-control'  onClick={e => {handelsubmit(e)}}>
+                        Submit form
+                      </button>
+                    </CCol>
+                  </CForm>
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+        </COffcanvasBody>
+      </COffcanvas>
+    </>
   )
 }
 
