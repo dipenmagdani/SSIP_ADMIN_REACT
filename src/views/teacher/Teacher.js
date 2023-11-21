@@ -7,6 +7,7 @@ import base_url from 'src/base_url'
 import { useSelector, useDispatch } from 'react-redux'
 import expireToken from 'src/global_function/unauthorizedToken'
 import ManageSubjects from './ManageSubjects';
+import { useNavigate } from 'react-router-dom';
 import {
     CButton,
     CCard,
@@ -38,7 +39,7 @@ import {
 
 const CustomStyles = (setTeacherlist) => {
     const [validated, setValidated] = useState(false)
-
+    const navigate = useNavigate()
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { accessToken,refreshToken , currentBatch} = state
 
@@ -60,14 +61,15 @@ const CustomStyles = (setTeacherlist) => {
           setTeacherlist(prevArray => [...prevArray, response.data.teacher])
         })
         .catch((error) => {
+          if(error){
+            navigate("/404")
+          }
           if(error.response.status === 401){
             expireToken(refreshToken,(error,result)=>{
               ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.data.access });
               ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
             })
           }
-          
-          alert(error.response.data.data)
         })
     }
 
@@ -127,7 +129,7 @@ const Teacher = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [visible, setVisible] = useState(false)
   const [SelectedTeacher,setSelectedTeacher] = useState(null)
-  
+  const navigate = useNavigate()
   const dispatch = useDispatch()
     
   const [Teacherlist, setTeacherlist] = useState([]);
@@ -149,6 +151,9 @@ const Teacher = () => {
         setTeacherlist(response.data.teachers)
       })
       .catch((error) => {
+        if(error){
+          navigate("/404")
+        }
         if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
