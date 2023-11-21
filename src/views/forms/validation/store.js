@@ -64,6 +64,11 @@ function reducer(state, action) {
         ...state,
         profileDetails: action.payload
       }
+      case 'CURRENT_BATCH_SLUG':
+      return {
+        ...state,
+        currentBatch: action.payload
+      }
     case 'ADD_SEM':
       return {
         ...state,
