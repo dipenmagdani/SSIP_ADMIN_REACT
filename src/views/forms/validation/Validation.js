@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import {
   CButton,
   CCard,
@@ -35,32 +36,24 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
   const EndYear = (parseInt(Start, 10) + 1).toString();
   const navigate = useNavigate()
   const addBatches = async(body) => {
-    const headers = {
-      "Content-Type":"application/json",
-      "Authorization": `Bearer ${accessToken}`,
+    const header = {
+      "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
-    };
-    axios.post(`${base_url}/manage/add_batch`,body,{headers})
-    .then((response)=>{
-      let batchCount = {...objectCount}
-      batchCount.batches += 1
-      console.log(batchCount);
-      ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
-      setBatches(prevArray => [...prevArray, response.data.data]);
-      setBatchCout(preValue => preValue + 1);
-    })
-    .catch((error)=>{
-      if(error){
-          navigate("/404")   
-      }
-      if(error.response.status === 401){
-        expireToken(refreshToken,(error,result)=>{
-          ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
-          ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
-        })
-      }
-      
-    })
+    }
+    const axiosInstance = axios.create()
+    let endpoint = `/manage/add_batch`;let method='post';let headers = header;
+    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,body,null)
+    if(response_obj.error == false){
+        let response = response_obj.response
+        let batchCount = {...objectCount}
+        batchCount.batches += 1
+        console.log(batchCount);
+        ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
+        setBatches(prevArray => [...prevArray, response.data.data]);
+        setBatchCout(preValue => preValue + 1);
+      }else{  
+        console.log(response_obj.error)
+      }    
   }
 
   const handleSubmit = (event) => {
