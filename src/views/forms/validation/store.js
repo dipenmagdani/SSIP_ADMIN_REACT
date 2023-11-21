@@ -15,7 +15,8 @@ const initialState = {
   semesters: [],
   profileDetails: [],
   currentBatch: [],
-  objectCount:[]
+  objectCount:[],
+  set404: false
 };
 
 function reducer(state, action) {
@@ -33,6 +34,11 @@ function reducer(state, action) {
       return {
         ...state,
         batches : action.payload
+      };
+      case 'SET_404':
+      return {
+        ...state,
+        set404 : action.payload
       };
       case 'GET_OBJECTS':
         return {
