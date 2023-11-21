@@ -186,7 +186,7 @@ function SetLecture({ visible, setVisible, scheduleObj, lectureObj , currentSele
                     </CCol>
                     <CCol xs={12}>
                       <button className='btn btn-outline-dark form-control'  onClick={e => {handelsubmit(e)}}>
-                        Submit form
+                          Set
                       </button>
                     </CCol>
                   </CForm>
