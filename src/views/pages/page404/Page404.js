@@ -1,4 +1,7 @@
-import React from 'react'
+import {React, useState, useEffect} from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import base_url from 'src/base_url'
 import {
   CButton,
   CCol,
@@ -12,6 +15,30 @@ import CIcon from '@coreui/icons-react'
 import { cilMagnifyingGlass } from '@coreui/icons'
 
 const Page404 = () => {
+
+  const [_404,set404] = useState(true)
+
+  const navigate = useNavigate();  
+  const checkServerAvaibility = ()=> {
+    const header = {
+      "Content-Type":"application/json",      
+      'ngrok-skip-browser-warning':true
+    }
+    axios.get(`${base_url}/check_server_avaibility/`,{headers:header})
+    .then((response)=>{
+      set404(false) 
+      navigate('/')
+    })
+    .catch((error)=>{             
+      navigate("/404")
+    })
+  }
+  useEffect(() => {
+    if(_404){      
+      checkServerAvaibility()
+    }
+  },[])
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>

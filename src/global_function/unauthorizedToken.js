@@ -11,7 +11,7 @@ const expireToken = async (refreshToken,next)=>{
     .then((response)=>{
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)
-        return next(null,response)
+        return next(null,response.data)
     })
     .catch((error)=>{
         return next(error)
