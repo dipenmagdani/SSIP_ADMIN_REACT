@@ -21,7 +21,6 @@ export default function Login(){
   
      const { state, dispatch: ctxDispatch } = useContext(Store);
      const { refreshToken , set404 } = state;
-
     
   
     const submitHandler = async (e) => {
@@ -40,7 +39,7 @@ export default function Login(){
         
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)
-        navigate('/#')
+        navigate('/')
       })
       .catch((error)=>{
         console.log(error.code);
@@ -49,13 +48,15 @@ export default function Login(){
         }
         else{
           if(error.response.status === 401){
-            expireToken(refreshToken,(error,result)=>{
-              if(error){
-                console.log("someting went worng");
-              }
-              ctxDispatch({ type: 'USER_SIGNIN', payload: result });
+            console.log(error.response)
+            alert(error.response.data.detail)
+            // expireToken(refreshToken,(error,result)=>{
+            //   if(error){
+            //     console.log("someting went worng");
+            //   }
+            //   ctxDispatch({ type: 'USER_SIGNIN', payload: result });
               
-            })
+            // })
         }
         }
         
@@ -63,9 +64,8 @@ export default function Login(){
 
     };
   
-    useEffect(()=>{
+    useEffect(()=>{      
       if(set404){
-
         navigate("/404")
         ctxDispatch({ type: 'SET_404', payload: false });
         console.log(set404);
