@@ -16,7 +16,9 @@ const initialState = {
   profileDetails: [],
   currentBatch: [],
   objectCount:[],
+
   accessTokenActive:false
+
 };
 
 function reducer(state, action) {
