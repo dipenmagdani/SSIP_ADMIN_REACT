@@ -25,7 +25,7 @@ import {
   CTableDataCell
 } from '@coreui/react'
 import expireToken from 'src/global_function/unauthorizedToken'
-
+import { useNavigate } from 'react-router-dom'
 const CustomStyles = (Semesters, setSemesters, batchSlug) => {
   const [validated, setValidated] = useState(false)
 
@@ -36,7 +36,7 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters , objectCount } = state
   const [semCount, setsemCount] = useState(objectCount);
-
+  const navigate = useNavigate()
 
 
 
@@ -61,13 +61,16 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
         
       })
       .catch((error) => {
+        if(error){
+          navigate("/404")
+        }
         if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
             ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
           })
         }
-        alert(error.response.data.data)
+        
       })
   }
 
@@ -123,7 +126,7 @@ const FormControl = (props) => {
   const [Semesters, setSemesters] = useState([]);
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
-
+  const navigate = useNavigate()
   const load_sem = async () => {
     console.log(batchSlug);
     console.log(accessToken);
@@ -143,6 +146,9 @@ const FormControl = (props) => {
         console.log(Semesters);
       })
       .catch((error) => {
+        if(error){
+          navigate("/404")
+        }
         if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });

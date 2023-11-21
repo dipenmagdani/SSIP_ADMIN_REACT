@@ -23,7 +23,7 @@ import {
   CTableRow,
   CTableDataCell,
 } from '@coreui/react'
-
+import { useNavigate } from 'react-router-dom'
 const CustomStyles = (semSlug,setsubjects) => {
   const [validated, setValidated] = useState(false)
   const [SName, setSName] = useState("");
@@ -31,7 +31,7 @@ const CustomStyles = (semSlug,setsubjects) => {
   const [Scredit, setScredit] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, objectCount } = state
-  
+  const navigate = useNavigate()
   const add_subject = async (body) => {
     const headers = {
       'Content-Type': 'application/json',
@@ -48,23 +48,18 @@ const CustomStyles = (semSlug,setsubjects) => {
           setsubjects(prevArray => [...prevArray, response.data.subject])
       })
       .catch((error) => {
+        if(error){
+          navigate("/404")
+        }
         if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.data.access });
             ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
           })
         }
-        console.log(error);
-        alert(error.response.data.data)
+        
       })
   }
-  
-  
-  
-  
-  
-  
-  
   
   const handleSubmit = (event) => {
     const form = event.currentTarget
@@ -120,7 +115,7 @@ const Select = (props) => {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
-
+  const navigate = useNavigate()
   const {semSlug , chageSteps} = props
   console.log(semSlug);
   const [subjects, setsubjects] = useState([]);
@@ -142,6 +137,9 @@ const Select = (props) => {
         
       })
       .catch((error) => {
+        if(error){
+          navigate("/404")
+        }
         if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
