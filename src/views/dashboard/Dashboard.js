@@ -26,12 +26,13 @@ const Dashboard = () => {
   const [semCount, setsemCount] = useState(0);
   const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken , profileDetails, objectCount} = state  
+  const { accessToken , refreshToken , profileDetails, objectCount ,accessTokenActive} = state  
 
- 
-  useEffect(() => {      
-    getObjectCounts()    
-  }, []);
+  useEffect(() => {           
+    if(accessTokenActive){
+      getObjectCounts()
+    }
+  }, [accessTokenActive]);
   const getObjectCounts = () =>{
     const header = {
       "Content-Type":"application/json",

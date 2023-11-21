@@ -132,7 +132,7 @@ const Validation = (props) => {
       setBatches(response.data.data)
     })
     .catch((error)=>{
-        if(error.respons.status === 401){
+        if(error.response.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
             ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
@@ -141,14 +141,14 @@ const Validation = (props) => {
     })
   }
 
-  useEffect(() => {
-    if(accessToken){
-      loadBatches()
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(accessToken){
+  //     loadBatches()
+  //   }
+  // }, []);
 
   useEffect(() => {
-    console.log(Batches);
+    setBatches(batches)
   }, [batches]);
   
   
