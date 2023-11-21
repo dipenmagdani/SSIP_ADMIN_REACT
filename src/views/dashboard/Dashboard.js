@@ -17,6 +17,8 @@ import { useContext , useEffect } from 'react'
 import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url'
 import Breadcrumbnav from '../breadcrum/Breadcrumbnav';
+import { Navigate, useNavigate } from 'react-router-dom'
+import expireToken from 'src/global_function/unauthorizedToken'
 const Dashboard = () => {
   const [steps, setsteps] = useState('batch')
   const [Betchslug, setBetchslug] = useState("");
@@ -26,9 +28,8 @@ const Dashboard = () => {
   const [semCount, setsemCount] = useState(0);
   const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken , profileDetails, objectCount} = state  
-
- 
+  const { accessToken , refreshToken , profileDetails, objectCount , set404} = state  
+  const navigate = useNavigate()
   useEffect(() => {      
     getObjectCounts()    
   }, []);
@@ -47,10 +48,30 @@ const Dashboard = () => {
 
     })
     .catch((error)=>{
-      console.log(error.response);
+      if(error.code === "ERR_NETWORK"){
+        ctxDispatch({ type: 'SET_404', payload: true });
+      }
+      else{
+        if(error.response.status === 401){
+          expireToken(refreshToken,(error,result)=>{
+            if(error){
+              console.log("someting went worng");
+            }
+            ctxDispatch({ type: 'USER_SIGNIN', payload: result });
+            
+          })
+      }
+      }
+      
     })
   }
-  
+  useEffect(()=>{
+      if(set404){
+          navigate("/404")
+          ctxDispatch({ type: 'SET_404', payload: 404 });
+      }
+  },[set404])
+
   const chageSteps = (currentStep) =>{
       setsteps(currentStep)
   }

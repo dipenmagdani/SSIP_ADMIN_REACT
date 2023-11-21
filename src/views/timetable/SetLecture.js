@@ -28,13 +28,13 @@ import {
 import axios from 'axios';
 import base_url from 'src/base_url';
 import { Store } from '../forms/validation/store';
-
+import { useNavigate } from 'react-router-dom';
 function SetLecture({ visible, setVisible, scheduleObj, lectureObj , currentSelectSemester , setupdate_timetable }) {
   
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
-
+  const navigate = useNavigate()
   const [classroom, setclassroom] = useState([]);
   const [subjects, setsubjects] = useState([]);
   const [teacher, setteacher] = useState([]);
@@ -62,7 +62,9 @@ function SetLecture({ visible, setVisible, scheduleObj, lectureObj , currentSele
         setsubjects(response.data.subjects)
     })
     .catch((error)=>{
-      console.log(error);
+      if(error){
+        navigate("/404")
+      }
     })
   }
   const selectTeacher = (subjectslug) =>{
@@ -98,7 +100,9 @@ function SetLecture({ visible, setVisible, scheduleObj, lectureObj , currentSele
           setVisible(false)
         })
         .catch((error)=>{
-          console.log(error);
+          if(error){
+            navigate("/404")
+          }
         })
       }
   }

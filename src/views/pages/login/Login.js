@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , redirect } from 'react-router-dom';
 import { useState } from 'react';
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store';
@@ -20,7 +20,7 @@ export default function Login(){
     const [password, setPassword] = useState('');
   
      const { state, dispatch: ctxDispatch } = useContext(Store);
-     const { refreshToken } = state;
+     const { refreshToken , set404 } = state;
 
     
   
@@ -43,9 +43,12 @@ export default function Login(){
         navigate('/#')
       })
       .catch((error)=>{
-        console.log("error here");
-        console.log(error);
-        if(error.response.status === 401){
+        console.log(error.code);
+        if(error.code === "ERR_NETWORK"){
+          ctxDispatch({ type: 'SET_404', payload: true });
+        }
+        else{
+          if(error.response.status === 401){
             expireToken(refreshToken,(error,result)=>{
               if(error){
                 console.log("someting went worng");
@@ -54,11 +57,20 @@ export default function Login(){
               
             })
         }
+        }
+        
       })
 
     };
   
-    
+    useEffect(()=>{
+      if(set404){
+
+        navigate("/404")
+        ctxDispatch({ type: 'SET_404', payload: false });
+        console.log(set404);
+      }
+    },[set404])
     
   return (
 
