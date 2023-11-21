@@ -32,7 +32,7 @@ import base_url from 'src/base_url'
 import Breadcrumbnav from '../breadcrum/Breadcrumbnav'
 import expireToken from 'src/global_function/unauthorizedToken'
 import SetLecture from './SetLecture'
-
+import { useNavigate } from 'react-router-dom'
 const Timetable = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store)
   const [visible, setVisible] = useState(false)
@@ -43,6 +43,7 @@ const Timetable = () => {
   const [lectureObj,setLectureObj] = useState(null)
   const [scheduleObj,setscheduleObj] = useState(null)
   const [update_timetabel,setupdate_timetable] = useState(0)
+  const naivgate = useNavigate()
   useEffect(() => {
     if (currentBatch.slug) {
       load_semester(currentBatch.slug)
@@ -65,6 +66,9 @@ const Timetable = () => {
         setSemesters(response.data.data)
       })
       .catch((error) => {
+        if(error){
+          naivgate("/404")
+        }
         if (error.response.status === 401) {
           expireToken(refreshToken, (error, result) => {
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access })
@@ -91,7 +95,9 @@ const Timetable = () => {
         settimeTable(response.data.timetable)
       })
       .catch((error) => {
-        console.log(error)
+        if(error){
+          naivgate("/404")
+        }
       })
   }
   useEffect(() => {

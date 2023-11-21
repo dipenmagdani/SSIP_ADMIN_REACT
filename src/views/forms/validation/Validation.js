@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useContext } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -32,7 +33,7 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
   const currentYear = new Date().getFullYear() 
   const [Start, setStart] = useState(currentYear);
   const EndYear = (parseInt(Start, 10) + 1).toString();
-  
+  const navigate = useNavigate()
   const addBatches = async(body) => {
     const headers = {
       "Content-Type":"application/json",
@@ -49,14 +50,16 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
       setBatchCout(preValue => preValue + 1);
     })
     .catch((error)=>{
-      
+      if(error){
+          navigate("/404")   
+      }
       if(error.response.status === 401){
         expireToken(refreshToken,(error,result)=>{
           ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
           ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.refresh });
         })
       }
-      alert(error.response.data.data)
+      
     })
   }
 
@@ -104,8 +107,8 @@ const Validation = (props) => {
   const {setSlug} = props
   const {setBatchCout} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches } = state
-  
+  const { accessToken, refreshToken, batches, currentBatch} = state
+  const navigate = useNavigate()
   const [Batches, setBatches] = useState(batches);
   
   // function for the load batches
@@ -132,6 +135,9 @@ const Validation = (props) => {
       setBatches(response.data.data)
     })
     .catch((error)=>{
+      if(error){
+        navigate("/404")
+      }
         if(error.respons.status === 401){
           expireToken(refreshToken,(error,result)=>{
             ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });

@@ -24,12 +24,12 @@ import {
     CToastHeader,
     CToastBody
   } from '@coreui/react'
-
+import { useNavigate } from 'react-router-dom'
 function ManageSubjects({visible,setVisible,SelectedTeacher}) {           
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { accessToken,refreshToken,currentBatch} = state                
     const [subjectsToRender,setSubjectsToRender] = useState([])    
-
+    const navigate = useNavigate()
     const load_subjects_of_current_batch = async () =>{        
         const header = {
           "Content-Type": "application/json",
@@ -48,6 +48,9 @@ function ManageSubjects({visible,setVisible,SelectedTeacher}) {
                 setSubjectsToRender(response.data.data)                
           })
           .catch((error) => {
+            if (error) {
+              navigate("/404")
+            }
             if(error.response.status === 401){
               expireToken(refreshToken,(error,result)=>{
                 ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.access });
@@ -80,14 +83,17 @@ function ManageSubjects({visible,setVisible,SelectedTeacher}) {
                 console.log(response.data);
           })
           .catch((error) => {
+            if (error) {
+              console.log(error);
+              navigate("/404")
+            }
             if(error.response.status === 401){
               expireToken(refreshToken,(error,result)=>{
                 ctxDispatch({ type: 'ACCESS_TOKEN', payload: result.data.access });
                 ctxDispatch({ type: 'REFRESH_TOKEN', payload: result.data.refresh });
               })
             }
-            console.log(error);
-            alert(error.response.data.data)
+            
           })
       }
 
