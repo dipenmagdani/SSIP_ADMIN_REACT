@@ -15,7 +15,10 @@ const initialState = {
   semesters: [],
   profileDetails: [],
   currentBatch: [],
-  objectCount:[]
+  objectCount:[],
+
+  accessTokenActive:false
+
 };
 
 function reducer(state, action) {
@@ -24,6 +27,8 @@ function reducer(state, action) {
       return { ...state, accessToken: action.payload };
     case 'REFRESH_TOKEN':
       return { ...state,refreshToken: action.payload}
+    case 'SET_ACCESS_TOKEN_ACTIVE':
+        return { ...state,accessTokenActive: action.payload}
     case 'USER_SIGNOUT':
       return {
         ...state,
@@ -33,6 +38,11 @@ function reducer(state, action) {
       return {
         ...state,
         batches : action.payload
+      };
+      case 'SET_404':
+      return {
+        ...state,
+        set404 : action.payload
       };
       case 'GET_OBJECTS':
         return {
