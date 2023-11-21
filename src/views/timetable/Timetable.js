@@ -42,6 +42,7 @@ const Timetable = () => {
   const [timeTable, settimeTable] = useState([])
   const [lectureObj,setLectureObj] = useState(null)
   const [scheduleObj,setscheduleObj] = useState(null)
+  const [update_timetabel,setupdate_timetable] = useState(0)
   useEffect(() => {
     if (currentBatch.slug) {
       load_semester(currentBatch.slug)
@@ -97,7 +98,7 @@ const Timetable = () => {
     if (currentSelectSemester) {
       load_time_tale()
     }
-  }, [currentSelectSemester])
+  }, [currentSelectSemester,update_timetabel])
     
   const editLecture = (lecture, schedule) => {
       console.log(lecture)
@@ -186,7 +187,7 @@ const Timetable = () => {
                                 key={lecture.slug}                                
                                 onClick={(e) => {editLecture(lecture, schedule); setVisible(true)}}
                                 >
-                                {lecture.subject ? lecture.subject : '-'}
+                                {lecture.subject ? (<div><strong>{lecture.subject.subject_name}</strong> <br/> {lecture.teacher.profile.name}<br/>{lecture.classroom.class_name}</div>) : '-'}
                               </CTableDataCell>
                             ))}
                           </CTableRow>
@@ -199,7 +200,7 @@ const Timetable = () => {
           </CCard>
         </CCol>
       </CRow>
-      {lectureObj && scheduleObj ?(<SetLecture visible={visible} setVisible={setVisible} scheduleObj={scheduleObj} lectureObj={lectureObj} />):null}
+      {lectureObj && scheduleObj ?(<SetLecture visible={visible} setupdate_timetable={setupdate_timetable} setVisible={setVisible} scheduleObj={scheduleObj} lectureObj={lectureObj} currentSelectSemester={currentSelectSemester} />):null}
     </>
   )
 }
