@@ -74,21 +74,21 @@ const Student = () => {
                 .then((response) => {
                     setSteps(response.data.steps)
                     let steps = response.data.steps
-                    console.log(steps);
+                    
                     let steps_obj = btn_disabled_steps.steps
-                    for(let i = 1;i<steps-1;i++)
+                    for(let i = 1;i<steps;i++)
                     {
                            steps_obj[i] = true
                     }
-                    console.log(steps_obj);
+
                     setbtn_disabled_steps(prevState => ({
                         ...prevState,
                         ["steps"]: steps_obj
                       }));
+
+                    console.log(btn_disabled_steps);
                     setBranches(response.data.branches)
                     setcurrent_student(response.data.student_slug)
-                    
-                      console.log(btn_disabled_steps);
                 })
                 .catch((error) => {
                     if (error.response.status === 401) {
@@ -121,7 +121,7 @@ const Student = () => {
             .then((response) => {
                 console.log(response.data);
                 setSteps(response.data.steps)
-                // setBranches(response.data.branches)
+                //setBranches(response.data.branches)
                 // setSemensters(response.data.semesters)
             })
             .catch((error) => {
@@ -192,7 +192,7 @@ const Student = () => {
                                 Steps >= 3 ? (
                                     <CCol md={12}>
                                         <CFormLabel htmlFor="validationCustom01">Select Semester</CFormLabel>
-                                        <CFormSelect disabled="false" autoComplete='off' id='subject_select' aria-label="Default select example" >
+                                        <CFormSelect autoComplete='off' id='subject_select' aria-label="Default select example" >
                                             <option value="">Select Subject</option>
 
                                         </CFormSelect>
