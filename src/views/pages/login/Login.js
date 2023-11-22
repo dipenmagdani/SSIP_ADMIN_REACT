@@ -42,12 +42,11 @@ export default function Login(){
         "email":  email,
          "password":password        
       },{header})
-      .then((response)=>{
+      .then((response)=>{        
         ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
         ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.refresh });
-        
         localStorage.setItem('accessToken',response.data.access)
-        localStorage.setItem('refreshToken',response.data.refresh)
+        localStorage.setItem('refreshToken',response.data.refresh)        
         navigate('/')
       })
       .catch((error)=>{
@@ -57,15 +56,7 @@ export default function Login(){
         }
         else{
           if(error.response.status === 401){
-            console.log(error.response)
-            alert(error.response.data.detail)
-            // expireToken(refreshToken,(error,result)=>{
-            //   if(error){
-            //     console.log("someting went worng");
-            //   }
-            //   ctxDispatch({ type: 'USER_SIGNIN', payload: result });
-              
-            // })
+            expireToken(refresh)            
         }
         }
         
