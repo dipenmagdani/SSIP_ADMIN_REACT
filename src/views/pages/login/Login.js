@@ -5,8 +5,17 @@ import { useState } from 'react';
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url';
-import styles from "../login/Login.module.css";
+import "./LoginForm.css";
 import expireToken from 'src/global_function/unauthorizedToken';
+import meet_illustration from './remote-meet.png'
+import {
+  MDBBtn,  
+  MDBCard,
+  MDBCardBody,
+  MDBInput,  
+  MDBIcon,  
+}
+from 'mdb-react-ui-kit';  
 
 
 
@@ -63,93 +72,29 @@ export default function Login(){
       })
 
     };
-  
     useEffect(()=>{      
       if(set404){
         navigate("/404")
         ctxDispatch({ type: 'SET_404', payload: false });
         console.log(set404);
       }
-    },[set404])
-    
+    },[set404])    
+
   return (
-
-    <div className={styles.login}>
-      <div className={styles.illustration}>
-        <img
-          className={styles.mobileLoginRafiki1}
-          alt=""
-          src="/images/mobile-loginrafiki-1.svg"
-        />
-      </div>
-      <div className={styles.frame} />
-      {/* <div className={styles.login1}>Login</div> */}
-
-<form onSubmit={submitHandler}>
-
-<div className={styles.frame1}>
-        <div className={styles.email}>
-          <div className={styles.password}>Email</div>
-          <div className={styles.content}>
-            <img className={styles.vectorIcon} alt="" src="/images/vector.svg" />
-            <div className={styles.adornStartContainer}>
-              <div className={styles.icon}>
-                <img
-                  className={styles.starsharpIcon}
-                  alt=""
-                  src="/images/starsharp.svg"
-                />
-              </div>
-            </div>
-            <div className={styles.placeholder}>Placeholder</div>
-            <div className={styles.adornEndContainer}>
-              <img
-                className={styles.removeredeyefilledIcon}
-                alt=""
-                src="/images/removeredeyefilled.svg"
-              />
-            </div>
-            <div> <input type="text" id="usermail "name="email" onChange={e => setEmail(e.target.value)} className={[styles.examplegmailcom]} placeholder="example@gmail.com"></input></div>
-          </div>
-          
-        </div>
-      </div>
-   
-      <div className={styles.frame2}>
-        <div className={styles.input}>
-          <div className={styles.password}>Password</div>
-          <div className={styles.content}>
-            <img
-              className={styles.iconlockround}
-              alt=""
-              src="/images/iconlockround.svg"
-            />
-            <div className={styles.adornStartContainer}>
-              <div className={styles.icon}>
-                <img
-                  className={styles.starsharpIcon}
-                  alt=""
-                  src="/images/starsharp.svg"
-                />
-              </div>
-            </div>
-            <div className={styles.div}><input type="password" onChange={e => setPassword(e.target.value)} className={styles.examplegmailcom} placeholder="Password" name="password"></input></div>
-          </div>
-        </div>
-      </div>
-      
-      <div className={styles.frame5}>
-        <div className='w-100'>
-          {/* <div className={styles.base}> */}
-            {/* <img className={styles.maskedIcon} alt="" src="/images/masked-icon.svg" /> */}
-            <button type='submit' className='form-control btn btn-outline-primary'>Login</button>
-            {/* <img className={styles.maskedIcon} alt="" src="/images/masked-icon1.svg" /> */}
-          {/* </div> */}
-        </div>
-      </div>
-
-</form>
-
+    <div className='d-flex justify-content-center align-items-center' style={{height:'100vh',flexWrap:'wrap'}}>
+    <div className="illustration-auth container" style={{flex:'1', minWidth:'300px'}}>
+      <img src={meet_illustration} alt="" style={{width:'100%',height:'auto'}}/>
+    </div>
+    <div id="login-form" style={{marginLeft:'2rem',marginRight:'2rem',flex:'1'}}>
+      <h1>Login</h1>
+      <form onSubmit={submitHandler}>
+        <label htmlFor="username">Email:</label>
+        <input type="text" id="usermail "name="email" onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"></input>
+        <label htmlFor="password">Password:</label>
+        <input type="password" onChange={e => setPassword(e.target.value)} placeholder="Password" name="password"></input>
+        <button className="form-control btn btn-outline-dark" type="submit" value="Submit">Login</button>
+      </form>
+    </div>    
     </div>
   );
 };
