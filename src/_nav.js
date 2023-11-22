@@ -27,12 +27,6 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Teachers',
-    to: '/manage-teachers',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: 'Timetable',
     to: '/timetable',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
