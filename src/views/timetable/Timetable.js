@@ -44,7 +44,10 @@ const Timetable = () => {
   const [lectureObj,setLectureObj] = useState(null)
   const [scheduleObj,setscheduleObj] = useState(null)
   const [update_timetabel,setupdate_timetable] = useState(0)
+
   const [visibleLectureToast,setVisibleLectureToast] = useState(false)
+
+
   const naivgate = useNavigate()
   useEffect(() => {
     if (currentBatch.slug) {
@@ -196,8 +199,10 @@ const Timetable = () => {
                                 onMouseEnter={(e) => {onMouseEnterHandel(lecture.slug)}}
                                 onMouseLeave={(e) => {onMouseLeaveHandel(lecture.slug)}}
                                 >
+
                                   <CToaster placement="top-start">
                                   <CToast autohide={false} visible={visibleLectureToast[lecture.slug]}>
+
                                     <CToastHeader closeButton>
                                       <svg
                                         className="rounded me-2"

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import base_url from 'src/base_url'
 
+import Swal from 'sweetalert';
+
 // Used for handling expired tokens
 const APIMiddleware = async (reqInstance, endpoint, method, headers, body = null, params = null) => {
     // Get the access and refresh tokens
