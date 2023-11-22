@@ -1,10 +1,11 @@
-import React, { useState  } from 'react'
+import React, { useState  ,Component } from 'react'
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { useContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
+
 import {
   CButton,
   CCard,
@@ -26,8 +27,10 @@ import {
 import { Store } from '../validation/store'
 import base_url from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
+import { showAlert } from 'src/global_function/GlobalFunctions'
 
 const CustomStyles = (Batches,setBatches,setBatchCout) => {
+  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
   const [validated, setValidated] = useState(false)
@@ -68,8 +71,11 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
       batch_name: Start + "-" + EndYear
     }
     addBatches(body)
+    showAlert("success","Bactch Added successfully...!")
+    
   }
   return (
+    <>
     <CForm
       className="row g-3 needs-validation"
       noValidate
@@ -92,6 +98,7 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
         </button>
       </CCol>
     </CForm>
+    </>
   )
 }
 

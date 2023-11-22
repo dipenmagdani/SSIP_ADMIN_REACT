@@ -52,4 +52,15 @@ const expireToken = async (refreshToken) => {
         .catch((error) => { throw error; });
 };
 
-export {APIMiddleware}
+const showAlert = (title,text) => {
+    console.log("helo");
+    Swal({
+        title: title,
+        text: text,
+        icon: 'success',
+        button: 'OK',
+      });
+  
+  };
+
+export {APIMiddleware , showAlert}

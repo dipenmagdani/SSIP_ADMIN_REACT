@@ -3,10 +3,8 @@ import { Store } from '../forms/validation/store'
 import axios from 'axios'
 import base_url from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
-<<<<<<< HEAD
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
-=======
->>>>>>> cbb5b68 (everthin done)
+import { showAlert } from 'src/global_function/GlobalFunctions'
 import {
     COffcanvas,
     COffcanvasHeader,
@@ -72,6 +70,7 @@ function ManageSubjects({visible,setVisible,SelectedTeacher}) {
         }else{  
           console.log(response_obj.error)
         }
+        showAlert("success","Subject Added successfully...!")
       }
 
       const add_subjects_to_teacher = async () =>{          

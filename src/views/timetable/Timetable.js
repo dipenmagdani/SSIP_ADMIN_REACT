@@ -81,6 +81,14 @@ const Timetable = () => {
       let response = response_obj.response      
       console.log(response)
       settimeTable(response.data.timetable)
+      const setVisibleTost = {}
+        response.data.timetable.schedules.map((item,index)=>{
+            item.lectures.map((lecture,index)=>{
+              setVisibleTost[lecture.slug] = false
+            })
+        })
+        console.log(setVisibleTost);
+        setVisibleLectureToast(setVisibleTost)
     }else{  
       console.log(response_obj.error)
     }
@@ -96,6 +104,20 @@ const Timetable = () => {
       console.log(schedule)
       setLectureObj(lecture)
       setscheduleObj(schedule)
+    }
+
+    const onMouseEnterHandel = (lecture_slug)=>{
+      console.log("enter");
+      setVisibleLectureToast(prevState => ({
+        ...prevState,
+        [lecture_slug]: true
+      }));
+    }
+    const onMouseLeaveHandel = (lecture_slug)=>{
+      setVisibleLectureToast(prevState => ({
+        ...prevState,
+        [lecture_slug]: false
+      }));
     }
   return (
     <>
