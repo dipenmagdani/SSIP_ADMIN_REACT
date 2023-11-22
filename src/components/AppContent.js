@@ -7,7 +7,10 @@ import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store'
 import { jwtDecode } from "jwt-decode";
 import expireToken from 'src/global_function/unauthorizedToken'
+<<<<<<< HEAD
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
+=======
+>>>>>>> cbb5b68 (everthin done)
 
 // routes config
 import routes from '../routes'

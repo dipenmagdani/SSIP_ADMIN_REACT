@@ -1,5 +1,5 @@
 import React, { Component, Suspense } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 
 const loading = (
@@ -22,7 +22,7 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
@@ -34,7 +34,7 @@ class App extends Component {
 
           </Routes>
         </Suspense>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }
