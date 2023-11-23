@@ -8,14 +8,6 @@ import base_url from 'src/base_url';
 import "./LoginForm.css";
 import expireToken from 'src/global_function/unauthorizedToken';
 import meet_illustration from './remote-meet.png'
-import {
-  MDBBtn,  
-  MDBCard,
-  MDBCardBody,
-  MDBInput,  
-  MDBIcon,  
-}
-from 'mdb-react-ui-kit';  
 
 
 
@@ -56,7 +48,7 @@ export default function Login(){
         }
         else{
           if(error.response.status === 401){
-            expireToken(refresh)            
+            expireToken(refreshToken)            
         }
         }
         

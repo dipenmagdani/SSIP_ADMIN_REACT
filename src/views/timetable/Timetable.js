@@ -199,8 +199,8 @@ const Timetable = () => {
                                 onMouseEnter={(e) => {onMouseEnterHandel(lecture.slug)}}
                                 onMouseLeave={(e) => {onMouseLeaveHandel(lecture.slug)}}
                                 >
-
-                                  <CToaster placement="top-start">
+                                        {lecture.classroom && lecture.teacher?(
+                                          <CToaster placement="top-start">
                                   <CToast autohide={false} visible={visibleLectureToast[lecture.slug]}>
 
                                     <CToastHeader closeButton>
@@ -227,6 +227,8 @@ const Timetable = () => {
                                     </CToastBody>
                                   </CToast>
                                 </CToaster>
+                                        ):null}
+
                                 {lecture.subject ? (<div><strong style={{color:'gray'}}>{lecture.subject.subject_name}</strong></div>) : '-'}
                               </CTableDataCell>
                             ))}
