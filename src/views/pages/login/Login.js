@@ -37,6 +37,7 @@ export default function Login(){
       .then((response)=>{        
         ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
         ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.refresh });
+
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)        
         navigate('/')
@@ -55,6 +56,8 @@ export default function Login(){
       })
 
     };
+  
+
     useEffect(()=>{      
       if(set404){
         navigate("/404")
