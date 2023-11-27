@@ -22,6 +22,9 @@ const AppSidebar = () => {
   const { accessToken, refreshToken, profileDetails } = state
   console.log("here")
   console.log(profileDetails)
+  const getProfile = () => {
+    return profileDetails
+  }
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)

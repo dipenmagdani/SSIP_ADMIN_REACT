@@ -1,4 +1,4 @@
-const base_url= "https://025f-14-139-122-139.ngrok-free.app";
+const base_url= "https://1a25-2405-201-2024-b862-23a4-a2ed-46a3-ad69.ngrok-free.app";
 // const token = localStorage.getItem('accessToken')
 // const header = {
 //     "Content-Type":"application/json",

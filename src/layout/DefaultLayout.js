@@ -58,8 +58,11 @@ const DefaultLayout = () => {
   }
 
   const decodeToken= () => {
-    const decoded = jwtDecode(accessToken);      
-    ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});        
+    const decoded = jwtDecode(accessToken);              
+    // if (typeof window !== 'undefined') {      
+        window.user_profile = decoded.profile;
+    // }
+    ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});    
   }
   
   useEffect(() => {
@@ -75,7 +78,7 @@ const DefaultLayout = () => {
     if(!accessToken){
         navigate("/login")
     }
-    else{
+    else{      
       decodeToken()
     }    
   }, [accessToken]);    

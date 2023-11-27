@@ -107,8 +107,7 @@ const routes = [
   { path: '/breadcrumb',name:'Breadcrumbnav',element:Breadcrumbnav},
   { path: '/TeacherSidebar',name:'TeacherSidebar',element:TeacherSidebar},
   { path: '/logout',name:'Logout',element:Logout},
-  { path: '/timetable',name:'Timetable',element:Timetable},
-  { path: '/teacherview',name:'Teacherview',element:Teacherview},
+  { path: '/timetable',name:'Timetable',element:Timetable},  
   
 ]
 
