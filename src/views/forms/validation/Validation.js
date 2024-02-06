@@ -32,7 +32,7 @@ import { showAlert } from 'src/global_function/GlobalFunctions'
 const CustomStyles = (Batches,setBatches,setBatchCout) => {
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches, currentBatch} = state
+  const { accessToken, refreshToken, batches, currentBatch, objectCount} = state
   const [validated, setValidated] = useState(false)
   const currentYear = new Date().getFullYear() 
   const [Start, setStart] = useState(currentYear);
