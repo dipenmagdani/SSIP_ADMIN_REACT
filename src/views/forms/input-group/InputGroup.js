@@ -26,15 +26,15 @@ import {
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
-const CustomStyles = (semSlug,setsubjects) => {
+import { batch } from 'react-redux'
+const CustomStyles = (division_slug,set_batches) => {
   const [validated, setValidated] = useState(false)
-  const [SName, setSName] = useState("");
-  const [Scode, setScode] = useState("");
-  const [Scredit, setScredit] = useState("");
+  const [batch_name, set_batch_name] = useState("");
+  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, objectCount } = state
   const navigate = useNavigate()
-  const add_subject = async (body) => {
+  const add_batch = async (body) => {
     const header = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
@@ -48,7 +48,7 @@ const CustomStyles = (semSlug,setsubjects) => {
         changeSubjectCount.subjects += 1
         console.log(changeSubjectCount);
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
-        setsubjects(prevArray => [...prevArray, response.data.subject])
+        set_batches(prevArray => [...prevArray, response.data.subject])
       }else{  
         console.log(response_obj.error)
       }    
@@ -60,18 +60,13 @@ const CustomStyles = (semSlug,setsubjects) => {
       event.preventDefault()
       event.stopPropagation()
     }
-    console.log(SName)
-    console.log(Scode)
-    console.log(Scredit);
     setValidated(true)
     const body = {
-      semester_slug:semSlug,
-      subject_name:SName,
-      subject_code:Scode,
-      subject_credit:Scredit
+      division_slug:division_slug,
+      subject_name:batch_name,
     }
     event.preventDefault()
-    add_subject(body)
+    add_batch(body)
     showAlert("success","Subject Added successfully...!")
   }
   return (
@@ -82,18 +77,8 @@ const CustomStyles = (semSlug,setsubjects) => {
       onSubmit={handleSubmit}
     >
       <CCol md={12}>
-        <CFormLabel htmlFor="validationCustom01">Subject Name</CFormLabel>
-        <CFormInput type="text" id="validationCustom01" onChange={e => setSName(e.target.value)} required />
-        <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
-      <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom01">Subject Code</CFormLabel>
-        <CFormInput type="text" id="validationCustom02" onChange={e => setScode(e.target.value)} required />
-        <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
-      <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom02">Subject Credit</CFormLabel>
-        <CFormInput type="text" id="validationCustom02" onChange={e => setScredit(e.target.value)} required />
+        <CFormLabel htmlFor="validationCustom01">Batch Name</CFormLabel>
+        <CFormInput type="text" id="validationCustom01" onChange={e => set_batch_name(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol xs={12}>
@@ -110,28 +95,27 @@ const Select = (props) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
   const navigate = useNavigate()
-  const {semSlug , chageSteps} = props
-  console.log(semSlug);
-  const [subjects, setsubjects] = useState([]);
+  const {division_slug , chageSteps} = props
+  const [batches, set_batches] = useState([]);
   
-  const load_subjects = async () => {
+  const load_batches = async () => {
     const header = {
       "Content-Type":"application/json",        
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_subjects`;let method='get';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,{ semester_slug: semSlug })
+    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,{ division_slug: division_slug })
     if(response_obj.error == false){
       let response = response_obj.response
-      setsubjects(response.data.data)
+      set_batches(response.data.data)
     }else{  
       console.log(response_obj.error)
     }
   }
 
   useEffect(() => {
-      load_subjects()
+      load_batches()
   }, []);
   return (
     <>
@@ -141,7 +125,7 @@ const Select = (props) => {
             <CCardHeader>
               <strong>Subjects</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(semSlug,setsubjects)}</CCardBody>
+            <CCardBody>{CustomStyles(division_slug,set_batches)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -149,10 +133,10 @@ const Select = (props) => {
         <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>Subjects History</strong>
+              <strong>Batches History</strong>
             </CCardHeader>
             <CCardBody>
-              <CTable align="middle" className="mb-0 border" hover responsive>
+              {/* <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
                     <CTableHeaderCell>Subject Name</CTableHeaderCell>
@@ -175,7 +159,7 @@ const Select = (props) => {
                     </CTableRow>
                   ))}
                 </CTableBody>
-              </CTable>
+              </CTable> */}
             </CCardBody>
           </CCard>
         </CCol>

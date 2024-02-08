@@ -21,10 +21,7 @@ const AppSidebar = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, profileDetails } = state
   console.log("here")
-  console.log(profileDetails)
-  const getProfile = () => {
-    return profileDetails
-  }
+  
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -42,7 +39,10 @@ const AppSidebar = () => {
       <img className="p-3" src={smartrollicon}></img>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={profileDetails["role"] === "admin" ? navigation.admin_role : navigation.teacher_role} />
+          {
+            console.log(profileDetails.admin_obj.profile.role,"nes")
+          }
+          <AppSidebarNav items={profileDetails.admin_obj.profile.role == "admin" ? navigation.admin_role : navigation.teacher_role} />
         </SimpleBar>
       </CSidebarNav>
     </CSidebar>

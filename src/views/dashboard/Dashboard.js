@@ -18,8 +18,10 @@ import { Store } from 'src/views/forms/validation/store';
 import base_url from 'src/base_url'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import Breadcrumbnav from '../breadcrum/Breadcrumbnav';
+import useAPI from 'src/global_function/useApi'
+
 const Dashboard = () => {
-  const [steps, setsteps] = useState('batch')
+  const [steps, setsteps] = useState('semester')
   const [Betchslug, setBetchslug] = useState("");
   const [semSlug, setsemSlug] = useState("");
   const [subSlug, setsubSlug] = useState("");
@@ -29,12 +31,16 @@ const Dashboard = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken , profileDetails, objectCount } = state  
 
+  const [StoredTokens,CallAPI] = useAPI()
+
+
   useEffect(() => {               
-    if(profileDetails["role"] === "admin"){
-      getObjectCounts()    
+    if(profileDetails.admin_obj.profile.role === "admin"){
+      getObjectCounts()
+        
     }
   }, []);
-  
+
   const getObjectCounts = async () =>{
     const header = {
       "Content-Type":"application/json",        
@@ -42,10 +48,9 @@ const Dashboard = () => {
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_object_counts`;let method='get';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers)
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
     if(response_obj.error == false){
       let response = response_obj.response
-      console.log(response)
       ctxDispatch({ type: 'GET_OBJECTS', payload: response.data });
     }else{  
       console.log(response_obj.error)
@@ -56,9 +61,9 @@ const Dashboard = () => {
       setsteps(currentStep)
   }
   const progressExample = [
-    { title: 'Batches', value: objectCount.batches, nextStep:'batch'},
     { title: 'Semester', value: objectCount.semesters, nextStep:'semester' },
-    { title: 'Subjects', value: objectCount.subjects, nextStep:'subject' },
+    { title: 'divison', value: objectCount.divisons, nextStep:'subject' },
+    { title: 'Batches', value: objectCount.batches, nextStep:'batch'},
   ]
 
   return (
@@ -81,14 +86,17 @@ const Dashboard = () => {
           </CRow>
         </CCardFooter>
       </CCard>
+      {console.log(steps)}
       {(() => {
         
         switch (steps) {
-          case 'batch':
-            return <Validation chageSteps={chageSteps}  setSlug={setBetchslug} setBatchCout={setbatchCount}></Validation>
+
           case 'semester':
+            return <Validation chageSteps={chageSteps}  setSlug={setBetchslug} setBatchCout={setbatchCount}></Validation>
+            
+          case 'division':
             return <FormControl chageSteps={chageSteps}  batchSlug={Betchslug} setsemSlug={setsemSlug}></FormControl>
-          case 'subject':
+          case 'batch':
             return <Select chageSteps={chageSteps} semSlug={semSlug} setsubSlug={setsubSlug}></Select>
           default:
             console.log(steps)

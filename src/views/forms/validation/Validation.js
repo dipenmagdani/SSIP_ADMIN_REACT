@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
-
+import useAPI from 'src/global_function/useApi'
 import {
   CButton,
   CCard,
@@ -38,6 +38,9 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
   const [Start, setStart] = useState(currentYear);
   const EndYear = (parseInt(Start, 10) + 1).toString();
   const navigate = useNavigate()
+  const [semester_no, set_semester_no] = useState("")
+  
+  
   const addBatches = async(body) => {
     const header = {
       "Content-Type":"application/json",      
@@ -82,6 +85,11 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
       validated={validated}
       onSubmit={handleSubmit}
     >
+      <CCol md={12}>
+        <CFormLabel htmlFor="validationCustom01">Semester Number</CFormLabel>
+        <CFormInput type="number" min={1} max={8} step="1"   id="validationCustom01" onChange={e => set_semester_no(e.target.value)} required maxLength={1} />
+        <CFormFeedback valid>Looks good!</CFormFeedback>
+      </CCol>
       <CCol md={6}>
         <CFormLabel htmlFor="validationCustom01">Start Year</CFormLabel>
         <CFormInput type="number" min={currentYear} max="2099" step="1" value={Start}  id="validationCustom01" onChange={e => setStart(e.target.value)} required maxLength={4} />
@@ -110,41 +118,44 @@ const Validation = (props) => {
   const { accessToken, refreshToken, batches, currentBatch} = state
   const navigate = useNavigate()
   const [Batches, setBatches] = useState(batches);
-  
+  const [StoredTokens,CallAPI] = useAPI()
   // function for the load batches
   
 const loadBatches = async() => {
     const header = {
       "Content-Type":"application/json",        
-      'ngrok-skip-browser-warning':true
+      'ngrok-skip-browser-warning':true,
+      'Access-Control-Allow-Oriign':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/get_batches`;let method='get';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,null)
-    if(response_obj.error == false){
-      let response = response_obj.response
-      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });      
-      response.data.data.map((item)=>{
-          if(item.active){
-            console.log(item);
-            ctxDispatch({ type: 'CURRENT_BATCH_SLUG', payload: item });    
-          }
-      })
-      setBatches(response.data.data)
-    }else{  
-      console.log(response_obj.error)
-    }    
+    let endpoint = `/manage/get_semesters`;let method='get';let headers = header;
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
+    console.log(response_obj)
+    // if(response_obj.error == false){
+    //   let response = response_obj.response
+    //   ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });      
+    //   response.data.data.map((item)=>{
+    //       if(item.active){
+    //         console.log(item);
+    //         ctxDispatch({ type: 'CURRENT_BATCH_SLUG', payload: item });    
+    //       }
+    //   })
+    //   setBatches(response.data.data)
+    // }else{  
+    //   console.log(response_obj.error)
+    // }    
   }
 
-  // useEffect(() => {
-  //   if(accessToken){
-  //     loadBatches()
-  //   }
-  // }, []);
-
   useEffect(() => {
-    setBatches(batches)
-  }, [batches]);
+    if(accessToken){
+      loadBatches()
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   setBatches(batches)
+    
+  // }, [batches]);
   
   
   return (
@@ -177,7 +188,7 @@ const loadBatches = async() => {
                   {Batches.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div  onClick={() => {chageSteps('semester'); setSlug(item.slug);}}>{item.batch_name}</div>   
+                        <div  onClick={() => {chageSteps('division'); setSlug(item.slug);}}>{item.batch_name}</div>   
                       </CTableDataCell>
                       <CTableDataCell>
                         <div  onClick={() => {chageSteps('semester'); setSlug(item.slug);}}>

@@ -44,8 +44,8 @@ const AppContent = () => {
       if(accessToken){        
         
         console.log(profileDetails['role'])
-        if(profileDetails["role"] === "admin"){
-          loadBatches()
+        if(profileDetails.admin_obj.profile.role === "admin"){
+          // loadBatches()
         }
       }
     }, []);
@@ -70,8 +70,8 @@ const AppContent = () => {
             console.log(profileDetails["role"])
           }
           {
-            profileDetails["role"] === "admin" ? (<Route path="/" element={<Navigate to="dashboard" replace />} />) : <Route path="/" element={<Navigate to="teacherview" replace />}/>
-            
+            profileDetails.admin_obj.profile.role === "admin" ? (<Route path="/" element={<Navigate to="dashboard" replace />} />) : <Route path="/" element={<Navigate to="teacherview" replace />}/>
+           
           }
 
           
