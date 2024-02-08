@@ -23,11 +23,13 @@ import {
   CTableHeaderCell,
   CTableRow,
   CTableDataCell,
+  CFormSelect
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
+import useAPI from 'src/global_function/useApi'
 
-const CustomStyles = (set_Subjects) => {
+const CustomStyles = (set_Subjects,semester) => {
     const [validated, setValidated] = useState(false)
     const [subject_name, set_subject_name] = useState("")
     const [subject_code, set_subject_code] = useState("")
@@ -75,10 +77,26 @@ const CustomStyles = (set_Subjects) => {
         validated={validated}
         onSubmit={handleSubmit}
       >
-        <CCol md={12}>
+        <CCol md={6}>
           <CFormLabel htmlFor="validationCustom01">Subjcet Name</CFormLabel>
           <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_name(e.target.value)} required />
           <CFormFeedback valid>Looks good!</CFormFeedback>
+        </CCol>
+        <CCol md={6}>
+        <CFormLabel htmlFor="validationCustom01">Semester Number</CFormLabel>
+        <CFormSelect
+                aria-label="Default select example"
+                onChange={(e) => {
+                  //setcurrentSelectSemester(e.target.value)
+                }}
+              >
+                <option value="">Select Semester</option>
+                {semester.map((item, index) => (
+                  <option key={index} value={item.slug}>
+                    Semester - {item.no}
+                  </option>
+                ))}
+              </CFormSelect>
         </CCol>
         <CCol md={6}>
           <CFormLabel htmlFor="validationCustom01">Subjcet Code</CFormLabel>
@@ -100,22 +118,51 @@ const CustomStyles = (set_Subjects) => {
   }
 
 const Subject = () => {
+
     const [Subjects, set_Subjects] = useState([])
+    const [semester,set_semester] = useState([])
+    //costom hook to call the API
+
+    const [StoredTokens,CallAPI] = useAPI()
+
     const load_subject = async()=>{
         const header = {
             "Content-Type":"application/json",      
             'ngrok-skip-browser-warning':true
           }
           const axiosInstance = axios.create()
-          let endpoint = `/manage/add_subjects`;let method='get';let headers = header;
-          let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,null)
+          let endpoint = `/manage/get_subjects`;let method='get';let headers = header;
+          let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,null)
           if(response_obj.error == false){
           let response = response_obj.response
-          set_Subjects(response.data.data)
+          //console.log(response.data.data)
+          // set_Subjects(response.data.data)
         }else{  
           console.log(response_obj.error)
         }   
     }
+    const load_semester = async()=>{
+      const headers = {
+        "Content-Type":"application/json",
+        'ngrok-skip-browser-warning':true
+      }
+      const axiosInstance = axios.create()
+      const response_obje = await CallAPI(StoredTokens,axios,"/manage/get_semesters","get",headers,null,null)
+      if(response_obje.error == false){
+        const response = response_obje.response
+        console.log(response.data)
+        set_semester(response.data.data)
+      }
+      else{
+        console.log(response_obje.errorMessage.message)
+      }
+    }
+
+    useEffect(() => {
+        //load_subject()
+        load_semester()
+    }, [])
+    
   return (
     <>
     <>
@@ -125,7 +172,7 @@ const Subject = () => {
             <CCardHeader>
               <strong>Subjects</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(set_Subjects)}</CCardBody>
+            <CCardBody>{CustomStyles(set_Subjects,semester)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>

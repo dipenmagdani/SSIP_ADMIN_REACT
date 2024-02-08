@@ -27,6 +27,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 import { batch } from 'react-redux'
+import useAPI from 'src/global_function/useApi'
 const CustomStyles = (division_slug,set_batches) => {
   const [validated, setValidated] = useState(false)
   const [batch_name, set_batch_name] = useState("");
@@ -34,21 +35,29 @@ const CustomStyles = (division_slug,set_batches) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, objectCount } = state
   const navigate = useNavigate()
+
+  //custom hook to call the API
+
+  const [StoredTokens,CallAPI] = useAPI()
+
+
   const add_batch = async (body) => {
     const header = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/add_subjects`;let method='post';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,body,null)
+    let endpoint = `/manage/add_batch/`;let method='post';let headers = header;
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
     if(response_obj.error == false){
         let response = response_obj.response
+        console.log(response.data.data)
         let changeSubjectCount = {...objectCount}
         changeSubjectCount.subjects += 1
         console.log(changeSubjectCount);
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
-        set_batches(prevArray => [...prevArray, response.data.subject])
+        set_batches(prevArray => [...prevArray, response.data.data])
+        showAlert("success","Batch Added successfully...!")
       }else{  
         console.log(response_obj.error)
       }    
@@ -63,11 +72,11 @@ const CustomStyles = (division_slug,set_batches) => {
     setValidated(true)
     const body = {
       division_slug:division_slug,
-      subject_name:batch_name,
+      batch_name:batch_name,
     }
     event.preventDefault()
     add_batch(body)
-    showAlert("success","Subject Added successfully...!")
+    
   }
   return (
     <CForm
@@ -92,6 +101,7 @@ const CustomStyles = (division_slug,set_batches) => {
 
 const Select = (props) => {
 
+  const [StoredTokens, CallAPI] = useAPI()
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
   const navigate = useNavigate()
@@ -104,7 +114,7 @@ const Select = (props) => {
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/get_subjects`;let method='get';let headers = header;
+    let endpoint = `/manage/get_batches`;let method='get';let headers = header;
     let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,{ division_slug: division_slug })
     if(response_obj.error == false){
       let response = response_obj.response
@@ -123,7 +133,7 @@ const Select = (props) => {
         <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
-              <strong>Subjects</strong>
+              <strong>Batches</strong>
             </CCardHeader>
             <CCardBody>{CustomStyles(division_slug,set_batches)}</CCardBody>
           </CCard>
@@ -133,33 +143,26 @@ const Select = (props) => {
         <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>Batches History</strong>
+              <strong>division History</strong>
             </CCardHeader>
             <CCardBody>
-              {/* <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell>Subject Name</CTableHeaderCell>
-                    <CTableHeaderCell>Subject Code</CTableHeaderCell>
-                    <CTableHeaderCell>Subject Credit</CTableHeaderCell>
+                    <CTableHeaderCell>Batch Name</CTableHeaderCell>
+                    
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {subjects.map((item, index) => (
+                  {batches.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item.subject_name}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item.code}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item.credit}</div>
+                        <div>{item.batch_name}</div>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
-              </CTable> */}
+              </CTable>
             </CCardBody>
           </CCard>
         </CCol>

@@ -41,7 +41,7 @@ const useAPI = () => {
             return { error: true, result };
           }
         } else {
-          return { error: true, errorMessage: error.message || 'Unknown error' };
+          return { error: true, errorMessage: error.response.data || 'Unknown error' };
         }      
     }
   }
