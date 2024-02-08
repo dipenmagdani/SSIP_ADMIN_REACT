@@ -58,11 +58,13 @@ const DefaultLayout = () => {
   }
 
   const decodeToken= () => {
-    const decoded = jwtDecode(accessToken);              
+    console.log(accessToken,"decode")
+    const decoded = jwtDecode(accessToken); 
+    console.log("decode",decoded)
     // if (typeof window !== 'undefined') {      
-        window.user_profile = decoded.profile;
+        window.user_profile = decoded.admin_obj.profile;
     // }
-    ctxDispatch({ type: 'SET_PROFILE', payload: decoded.profile});    
+    ctxDispatch({ type: 'SET_PROFILE', payload: decoded});    
   }
   
   useEffect(() => {

@@ -13,7 +13,7 @@ const initialState = {
     : null,
   batches: [],
   semesters: [],
-  profileDetails: [],
+  profileDetails: {},
   currentBatch: [],
   objectCount:[],
   role: "",

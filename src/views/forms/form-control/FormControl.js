@@ -29,13 +29,9 @@ import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 
-const CustomStyles = (Semesters, setSemesters, batchSlug) => {
+const CustomStyles = (set_divisions, semester_slug) => {
   const [validated, setValidated] = useState(false)
-
-  const [Snumber, setSnumber] = useState("");
-  const [Sstatus, setSstatus] = useState("");
-  const [Ssdate, setSsdate] = useState("");
-  const [Sedate, setSedate] = useState("");
+  const [division_name, set_division_name] = useState("")
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters , objectCount } = state
   const [semCount, setsemCount] = useState(objectCount);
@@ -44,7 +40,7 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
 
 
 
-  const add_sem = async (body) => {
+  const add_division = async (body) => {
     const header = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
@@ -60,7 +56,7 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
       ctxDispatch({ type: 'GET_OBJECTS', payload: changeCount });
       if(response.data.data.status)
       {
-        setSemesters(prevArray => [...prevArray, response.data.data])
+        set_divisions(prevArray => [...prevArray, response.data.data])
       }
     }else{  
       console.log(response_obj.error)
@@ -76,12 +72,10 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
     event.preventDefault()
     setValidated(true)
     const body = {
-      batch_slug: batchSlug,
-      semester_number: Snumber,
-      start_date: Ssdate,
-      end_date: Sedate
+      semester_slug: semester_slug,
+      division_name: division_name,
     }
-    add_sem(body);
+    add_division(body);
     showAlert("success","Semester Added successfully...!")
   }
   return (
@@ -92,20 +86,10 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
       onSubmit={handleSubmit}
     >
       <CCol md={12}>
-        <CFormLabel htmlFor="validationCustom01">Semester Number</CFormLabel>
-        <CFormInput type="number" id="validationCustom01" onChange={e => setSnumber(e.target.value)} required />
+        <CFormLabel htmlFor="validationCustom01">Division Name</CFormLabel>
+        <CFormInput type="text" id="validationCustom01" onChange={e => set_division_name(e.target.value)} required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
-      <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom02">Term Start Date</CFormLabel>
-        <CFormInput type="date" id="validationCustom02" onChange={e => setSsdate(e.target.value)} required />
-        <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
-      <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom02">Term End Date</CFormLabel>
-        <CFormInput type="date" id="validationCustom02" onChange={e => setSedate(e.target.value)} required />
-        <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
+      </CCol>      
       <CCol xs={12}>
         <button className='btn btn-outline-dark form-control' type="submit">
           Submit form
@@ -116,31 +100,30 @@ const CustomStyles = (Semesters, setSemesters, batchSlug) => {
 }
 
 const FormControl = (props) => {
-  const { batchSlug ,chageSteps , setsemSlug } = props
-  const [Semesters, setSemesters] = useState([]);
+  const { semester_slug ,chageSteps , setsemSlug } = props
+  const [divisions, set_divisions] = useState([]);
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
   const navigate = useNavigate()
-  const load_sem = async () => {    
+  const load_division = async () => {    
     const header = {
       "Content-Type":"application/json",        
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_semesters`;let method='get';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,{batch_slug: batchSlug })
+    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,null,{semester_slug: semester_slug })
     if(response_obj.error == false){
       let response = response_obj.response      
-        setSemesters(response.data.data)
+        set_divisions(response.data.data)
         console.log(response.data.data);
-        console.log(Semesters);
     }else{  
       console.log(response_obj.error)
     }
   }
 
   useEffect(() => {
-    load_sem()
+    load_division()
   }, []);
 
 
@@ -150,9 +133,9 @@ const FormControl = (props) => {
         <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
-              <strong>Semesters</strong>
+              <strong>Divison</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(Semesters, setSemesters, batchSlug)}</CCardBody>
+            <CCardBody>{CustomStyles(set_divisions, semester_slug)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -160,36 +143,38 @@ const FormControl = (props) => {
         <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>Semester History</strong>
+              <strong>Division History</strong>
             </CCardHeader>
             <CCardBody>
-              <CTable align="middle" className="mb-0 border" hover responsive>
+              {/* <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
-                  <CTableRow onClick={() => {chageSteps('subject');}}>
+                  <CTableRow onClick={() => {chageSteps('batch');}} style={{textAlign:"center"}}>
                     <CTableHeaderCell>Semester</CTableHeaderCell>
-                    <CTableHeaderCell>Term Start Date</CTableHeaderCell>
-                    <CTableHeaderCell>Term End Date</CTableHeaderCell>
+                    <CTableHeaderCell>Activation Status</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
-                <CTableBody>
-                  {Semesters.map((item, index) => (
+                <CTableBody style={{textAlign:"center"}}>
+                  {divisions.map((item, index) => (
                     item.status ? (
-                      <CTableRow key={index} onClick={() => {chageSteps('subject'); setsemSlug(item.slug);}}>
+                      <CTableRow key={index} onClick={() => {chageSteps('batch'); setsemSlug(item.slug);}}>
                         <CTableDataCell>
                           <div>{item.no}</div>
                         </CTableDataCell>
-                        {/* <CTableDataCell>
-                          <div>{item.start_date}</div>
+                         <CTableDataCell>
+                          <div>{item.status ? (<div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                          </svg>{}
+                          </div>):(<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                          </svg>)}</div>
                         </CTableDataCell>
-                        <CTableDataCell>
-                          <div>{item.end_date}</div>
-                        </CTableDataCell> */}
+                        
                       </CTableRow>
                     ) : null
                   ))}
                 </CTableBody>
 
-              </CTable>
+              </CTable> */}
             </CCardBody>
           </CCard>
         </CCol>

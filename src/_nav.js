@@ -28,6 +28,12 @@ const _nav = {
     },
     {
       component: CNavItem,
+      name: 'Subject',
+      to: '/subject',    
+      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
       name: 'Teachers',
       to: '/manage-teachers',
       icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
@@ -44,6 +50,7 @@ const _nav = {
       to: '/logout',    
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
     },  
+      
   ],
   teacher_role:[
     {
