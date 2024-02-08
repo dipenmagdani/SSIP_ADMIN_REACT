@@ -65,7 +65,7 @@ const CustomStyles = (set_semester,setBatchCout) => {
         setBatchCout(preValue => preValue + 1);
       }else{  
         console.log(response_obj.error)
-      }    
+      }
   }
 
   const handleSubmit = (event) => {
