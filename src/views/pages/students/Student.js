@@ -13,7 +13,6 @@ import {
   CFormInput,
   CFormFeedback,
 } from '@coreui/react'
-import SignatureCanvas from 'react-signature-canvas'
 import base_url from 'src/base_url'
 import Swal from 'sweetalert';
 import './canvasstyle.css'
@@ -47,15 +46,15 @@ const Student = () => {
   const [btn_disabled_steps, setbtn_disabled_steps] = useState({
     steps: { 1: false, 2: false, 3: false, 4: false, 5: false },
   })
-  const [studentSignature,setStudentSignature] = useState(false)
-  const signatureRef = useRef()
+  // const [studentSignature,setStudentSignature] = useState(false)
+  // const signatureRef = useRef()
 
   const [Steps, setSteps] = useState(1)
 
-  const handelClear = (e) => {
-    e.preventDefault()
-    signatureRef.current.clear()
-  }  
+  // const handelClear = (e) => {
+  //   e.preventDefault()
+  //   signatureRef.current.clear()
+  // }  
 
   const handleEnrollment = (e) => {
     e.preventDefault()
@@ -111,7 +110,7 @@ const Student = () => {
             setDefaultBranchVal(response.data.branch.branch_name)
             SetDefaultSemesterVal(response.data.semester.no)
             setSubjects(response.data.subjects)
-            setStudentSignature(`${base_url}${response.data.signature}`)            
+            // setStudentSignature(`${base_url}${response.data.signature}`)            
             showAlert()
           }
           setcurrent_student(response.data.student_slug)
@@ -263,14 +262,14 @@ const Student = () => {
     if(Password == '' || Confirm == '' || Password !== Confirm){
       alert("Please provide a valid password")
     }
-    let signatureb64 = signatureRef.current.toDataURL()    
+    // let signatureb64 = signatureRef.currclent.toDataURL()    
     const header = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': true,
     }    
     const body = {
       student_slug: current_student,
-      signatureb64:signatureb64,
+      // signatureb64:signat  ureb64,
       password: Password
     }
 
@@ -291,7 +290,7 @@ const Student = () => {
               ...prevState,
               ['steps']: steps_obj,
           }))
-          setStudentSignature(`${base_url}${response.data.signature}`)
+          // setStudentSignature(`${base_url}${response.data.signature}`)
           showAlert()
         }
       })
@@ -452,22 +451,6 @@ const Student = () => {
                 <CCardHeader>Step 5:</CCardHeader>
                 {Steps >= 5 ? (
                   <>
-                    <CCol md={12}>
-                      <CFormLabel htmlFor="validationCustom02" style={{ display: 'block' }}>
-                        Signature
-                      </CFormLabel>
-                      <button onClick={(e) => handelClear(e)} className={`btn btn-outline-dark form-control mb-2 ${btn_disabled_steps.steps[6] || Steps[6] ? 'd-none': ''}`}>Clear</button>
-                      {btn_disabled_steps.steps[6] && studentSignature ? (
-                          <img style={{width:'100%',height:'auto'}} src={studentSignature}></img>
-                      ):(
-                        <SignatureCanvas
-                        ref={signatureRef}
-                        penColor="green"
-                        canvasProps={{ className: 'sigCanvas w-100 border border-2 border-success' }}
-                        className="text-center"                        
-                      />
-                      )}
-                    </CCol>
                     <CCol md={12} 
                     className={`${btn_disabled_steps.steps[6] || Steps[6] ? 'd-none': ''}`}
                     >

@@ -13,10 +13,10 @@ const initialState = {
     : null,
   batches: [],
   semesters: [],
-  profileDetails: [],
+  profileDetails: {},
   currentBatch: [],
   objectCount:[],
-
+  role: "",
   accessTokenActive:false
 };
 
@@ -78,6 +78,11 @@ function reducer(state, action) {
                 ...state,
                 currentBatch:action.payload
               }
+      case 'ADD_ROLE':
+                return{
+                  ...state,
+                  role:action.payload
+                }
     default:
       return state;
   }
