@@ -30,7 +30,7 @@ const Dashboard = () => {
   const [subCount, setsubCount] = useState(0);  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken , profileDetails, objectCount } = state  
-
+  const [division_slug, set_division_slug] = useState("")
   const [StoredTokens,CallAPI] = useAPI()
 
 
@@ -95,9 +95,9 @@ const Dashboard = () => {
             return <Validation chageSteps={chageSteps}  set_semester_slug={set_semester_slug} setBatchCout={setbatchCount}></Validation>
             
           case 'division':
-            return <FormControl chageSteps={chageSteps}  semester_slug={semester_slug} setsemSlug={setsemSlug}></FormControl>
+            return <FormControl chageSteps={chageSteps}  semester_slug={semester_slug} set_division_slug={set_division_slug}></FormControl>
           case 'batch':
-            return <Select chageSteps={chageSteps} semSlug={semSlug} setsubSlug={setsubSlug}></Select>
+            return <Select chageSteps={chageSteps} division_slug={division_slug} setsubSlug={setsubSlug}></Select>
           default:
             console.log(steps)
         }
