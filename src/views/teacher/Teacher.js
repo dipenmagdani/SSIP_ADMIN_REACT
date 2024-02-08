@@ -158,7 +158,6 @@ const Teacher = () => {
   
   return (
     <>
-    
       <CRow>
         <CCol xs={12}>
           <CCard className="mb-3">
