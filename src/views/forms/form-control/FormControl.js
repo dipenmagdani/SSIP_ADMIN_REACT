@@ -178,12 +178,12 @@ const FormControl = (props) => {
                         <CTableDataCell>
                           <div>{item.no}</div>
                         </CTableDataCell>
-                        <CTableDataCell>
+                        {/* <CTableDataCell>
                           <div>{item.start_date}</div>
                         </CTableDataCell>
                         <CTableDataCell>
                           <div>{item.end_date}</div>
-                        </CTableDataCell>
+                        </CTableDataCell> */}
                       </CTableRow>
                     ) : null
                   ))}
