@@ -22,7 +22,7 @@ import useAPI from 'src/global_function/useApi'
 
 const Dashboard = () => {
   const [steps, setsteps] = useState('semester')
-  const [Betchslug, setBetchslug] = useState("");
+  const [semester_slug, set_semester_slug] = useState("");
   const [semSlug, setsemSlug] = useState("");
   const [subSlug, setsubSlug] = useState("");
   const [batchCount, setbatchCount] = useState(0);
@@ -92,10 +92,10 @@ const Dashboard = () => {
         switch (steps) {
 
           case 'semester':
-            return <Validation chageSteps={chageSteps}  setSlug={setBetchslug} setBatchCout={setbatchCount}></Validation>
+            return <Validation chageSteps={chageSteps}  set_semester_slug={set_semester_slug} setBatchCout={setbatchCount}></Validation>
             
           case 'division':
-            return <FormControl chageSteps={chageSteps}  batchSlug={Betchslug} setsemSlug={setsemSlug}></FormControl>
+            return <FormControl chageSteps={chageSteps}  semester_slug={semester_slug} setsemSlug={setsemSlug}></FormControl>
           case 'batch':
             return <Select chageSteps={chageSteps} semSlug={semSlug} setsubSlug={setsubSlug}></Select>
           default:

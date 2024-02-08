@@ -133,7 +133,7 @@ const FormControl = (props) => {
         <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
-              <strong>Semesters</strong>
+              <strong>Divison</strong>
             </CCardHeader>
             <CCardBody>{CustomStyles(set_divisions, semester_slug)}</CCardBody>
           </CCard>

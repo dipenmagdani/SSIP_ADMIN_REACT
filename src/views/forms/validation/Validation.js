@@ -29,17 +29,23 @@ import base_url from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 
-const CustomStyles = (Batches,setBatches,setBatchCout) => {
+const CustomStyles = (set_semester,setBatchCout) => {
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch, objectCount} = state
   const [validated, setValidated] = useState(false)
   const currentYear = new Date().getFullYear() 
+  const [semester_no, set_semester_no] = useState("")
   const [Start, setStart] = useState(currentYear);
   const EndYear = (parseInt(Start, 10) + 1).toString();
   const navigate = useNavigate()
-  const [semester_no, set_semester_no] = useState("")
   
+
+  // custom hook for api calling 
+
+  const [StoredTokens,CallAPI] = useAPI()
+
+
   
   const addBatches = async(body) => {
     const header = {
@@ -47,15 +53,15 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/add_batch`;let method='post';let headers = header;
-    let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers,body,null)
+    let endpoint = `/manage/add_semester/`;let method='post';let headers = header;
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
     if(response_obj.error == false){
         let response = response_obj.response
         let batchCount = {...objectCount}
-        batchCount.batches += 1
+        batchCount.semesters += 1
         console.log(batchCount);
         ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
-        setBatches(prevArray => [...prevArray, response.data.data]);
+        set_semester(prevArray => [...prevArray, response.data.data]);
         setBatchCout(preValue => preValue + 1);
       }else{  
         console.log(response_obj.error)
@@ -71,7 +77,9 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
     }
     setValidated(true)
     const body = {
-      batch_name: Start + "-" + EndYear
+      "no": semester_no,
+      "start_year": Start,
+      "end_year":EndYear
     }
     addBatches(body)
     showAlert("success","Bactch Added successfully...!")
@@ -112,38 +120,31 @@ const CustomStyles = (Batches,setBatches,setBatchCout) => {
 
 const Validation = (props) => {
   const {chageSteps} = props
-  const {setSlug} = props
+  const {set_semester_slug} = props
   const {setBatchCout} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch} = state
   const navigate = useNavigate()
-  const [Batches, setBatches] = useState(batches);
+  const [semester, set_semester] = useState([]);
   const [StoredTokens,CallAPI] = useAPI()
   // function for the load batches
   
 const loadBatches = async() => {
     const header = {
       "Content-Type":"application/json",        
-      'ngrok-skip-browser-warning':true,
-      'Access-Control-Allow-Oriign':true
+      'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_semesters`;let method='get';let headers = header;
     let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
     console.log(response_obj)
-    // if(response_obj.error == false){
-    //   let response = response_obj.response
-    //   ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });      
-    //   response.data.data.map((item)=>{
-    //       if(item.active){
-    //         console.log(item);
-    //         ctxDispatch({ type: 'CURRENT_BATCH_SLUG', payload: item });    
-    //       }
-    //   })
-    //   setBatches(response.data.data)
-    // }else{  
-    //   console.log(response_obj.error)
-    // }    
+    if(response_obj.error == false){
+      let response = response_obj.response
+      
+      set_semester(response.data.data)
+    }else{  
+      console.log(response_obj.error)
+    }    
   }
 
   useEffect(() => {
@@ -164,9 +165,9 @@ const loadBatches = async() => {
         <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
-              <strong>Batches</strong>
+              <strong>Semesters</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(Batches,setBatches,setBatchCout)}</CCardBody>
+            <CCardBody>{CustomStyles(set_semester,setBatchCout)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -174,25 +175,33 @@ const loadBatches = async() => {
         <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>
-              <strong>Batches History</strong>
+              <strong>Semester History</strong>
             </CCardHeader>
             <CCardBody>
               <CTable align="middle" className="mb-0 border text-center" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell>Batches</CTableHeaderCell>
+                    <CTableHeaderCell>Smester No</CTableHeaderCell>
+                    <CTableHeaderCell>Start Year</CTableHeaderCell>
+                    <CTableHeaderCell>End Year</CTableHeaderCell>
                     <CTableHeaderCell>Activation Status</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {Batches.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
+                  {semester.map((item, index) => (
+                    <CTableRow v-for="item in tableItems" key={index} onClick={() => {chageSteps('division'); set_semester_slug(item.slug);}}>
                       <CTableDataCell>
-                        <div  onClick={() => {chageSteps('division'); setSlug(item.slug);}}>{item.batch_name}</div>   
+                        <div>{item.no}</div>   
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div  onClick={() => {chageSteps('semester'); setSlug(item.slug);}}>
-                          {item.active ? (<div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <div>{item.start_year}</div>   
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item.end_year}</div>   
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>
+                          {item.status ? (<div><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                           </svg>{}
                           </div>):<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
@@ -215,7 +224,7 @@ const loadBatches = async() => {
 
 Validation.propTypes = {
   chageSteps: PropTypes.func.isRequired,
-  setSlug: PropTypes.func.isRequired,
+  set_semester_slug: PropTypes.func.isRequired,
   setBatchCout:PropTypes.func.isRequired
 }
 
