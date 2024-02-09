@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import useAPI from 'src/global_function/useApi'
 import axios from 'axios'
 
-function SetLecture({ visible, setVisible, sechedule, lectureConfigs }) {    
+function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_list}) {    
   const [Classrooms, setClassroom] = useState(lectureConfigs.classrooms)
   const [Subjects, setSubjects] = useState(lectureConfigs.subjects)
   const [Teachers, setTeachers] = useState(lectureConfigs.teachers)
@@ -28,8 +28,17 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs }) {
       }
       const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/add_lecture_to_schedule/","post",headers,body,null)
       if(response_obj.error === false){
-        // const response = response_obj.response
-        // console.log(response.data.data)
+        const response = response_obj.response
+        schedule_list(prevItems => {
+          return prevItems.map(item => {
+            if (item.slug === sechedule.slug) {
+              // Update the value array of the first item
+              return { ...item, lectures: [...item.lectures, response.data.data] };
+            }
+            return item; // Return unchanged item for other items
+          });
+        });
+         console.log(response.data.data)
       }else{
         alert(response_obj.errorMessage.message)
       }
@@ -124,7 +133,7 @@ useEffect(() => {
             </div>
             <div className="mb-3">
               <label className="form-label">Select Batch</label>
-              <select multiple class="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
+              <select multiple className="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
                 {Batches &&
                   Batches.map((item, index) => (
                     <option key={index} value={item.slug}>

@@ -8,6 +8,7 @@ import base_url from 'src/base_url';
 import "./LoginForm.css";
 import expireToken from 'src/global_function/unauthorizedToken';
 import meet_illustration from './remote-meet.png'
+import { CCol, CRow } from '@coreui/react';
 
 
 
@@ -73,6 +74,12 @@ export default function Login(){
     </div>
     <div id="login-form" style={{marginLeft:'2rem',marginRight:'2rem',flex:'1'}}>
       <h1>Login</h1>
+      <div>
+      <CRow>
+        <CCol>Admin</CCol>
+        <CCol>Teacher</CCol>
+      </CRow>
+      </div>
       <form onSubmit={submitHandler}>
         <label htmlFor="username">Email:</label>
         <input type="text" id="usermail "name="email" onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"></input>
