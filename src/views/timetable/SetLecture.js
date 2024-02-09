@@ -8,50 +8,22 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CFormCheck,
-  CTableDataCell,
-  CToast,
-  CToastHeader,
-  CToastBody,
+  CRow,  
   CForm,
-  CFormInput,
-  CFormFeedback,
+  CFormInput,  
   CFormLabel,
   CFormSelect,
 } from '@coreui/react'
 import axios from 'axios';
-import base_url from 'src/base_url';
-import { Store } from '../forms/validation/store';
 import { useNavigate } from 'react-router-dom';
 import { APIMiddleware } from 'src/global_function/GlobalFunctions';
-import { showAlert } from 'src/global_function/GlobalFunctions'
-function SetLecture({ visible, setVisible , sechedule}) {
-  
-
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken, refreshToken, batches, currentBatch , objectCount } = state
-  const navigate = useNavigate()
-  const [start_time,set_start_time] = useState("")
-  const [end_time,set_end_time] = useState("")
-  const [lecture_type,set_lecture_type] = useState("")
-  const [batch,set_batch] = useState("")
+function SetLecture({ visible, setVisible , sechedule}) {      
   const [classroom, setclassroom] = useState([]);
   const [subjects, setsubjects] = useState([]);
   const [teacher, setteacher] = useState([]);
   const [classroom_slug, setclassroom_slug] = useState(null);
   const [subject_slug, setsubject_slug] = useState(null);
   const [teacher_slug, setteacher_slug] = useState(null);
-  
-
-  useEffect(() => {
-    console.log(teacher_slug);
-  }, [teacher_slug]);
   const load_object_for_lecture = async()=>{
     const header = {
       "Content-Type":"application/json",        
