@@ -14,41 +14,39 @@ import routes from '../routes'
 import { cilFace } from '@coreui/icons'
 
 const AppContent = () => {
-    const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { accessToken, refreshToken, batches,accessTokenActive , profileDetails} = state 
-    const navigate = useNavigate();     
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { accessToken, refreshToken, batches, accessTokenActive, profileDetails } = state
+  const navigate = useNavigate();
 
-    
-    const loadBatches = async() => {
-      const header = {
-        "Content-Type":"application/json",        
-        'ngrok-skip-browser-warning':true
-      }
-      const axiosInstance = axios.create()
-      let endpoint = `/manage/get_batches`;let method='get';let headers = header;
-      let response_obj = await APIMiddleware(axiosInstance,endpoint,method,headers)
-      if(response_obj.error == false){
-        let response = response_obj.response
-        ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });        
-        response.data.data.map((item) => {
-          if(item.active){
-            ctxDispatch({ type: 'CURRENT_BATCH_SLUG', payload: item });
-          }
-        })
-      }else{  
-        console.log(response_obj.error)
+
+  const loadBatches = async () => {
+    const header = {
+      "Content-Type": "application/json",
+      'ngrok-skip-browser-warning': true
+    }
+    const axiosInstance = axios.create()
+    let endpoint = `/manage/get_batches`; let method = 'get'; let headers = header;
+    let response_obj = await APIMiddleware(axiosInstance, endpoint, method, headers)
+    if (response_obj.error == false) {
+      let response = response_obj.response
+      ctxDispatch({ type: 'GET_BATCHES', payload: response.data.data });
+      response.data.data.map((item) => {
+        if (item.active) {
+          ctxDispatch({ type: 'CURRENT_BATCH_SLUG', payload: item });
+        }
+      })
+    } else {
+      console.log(response_obj.error)
+    }
+  }
+
+  useEffect(() => {
+    if (accessToken) {
+      if (profileDetails.obj.profile.role === "admin") {
+        // loadBatches()
       }
     }
-
-    useEffect(() => {      
-      if(accessToken){        
-        
-        console.log(profileDetails['role'])
-        if(profileDetails.admin_obj.profile.role === "admin"){
-          // loadBatches()
-        }
-      }
-    }, []);
+  }, []);
   return (
     <CContainer lg>
       <Suspense fallback={<CSpinner color="primary" />}>
@@ -66,16 +64,22 @@ const AppContent = () => {
               )
             )
           })}
+          
           {
-            console.log(profileDetails["role"])
-          }
-          {
-            profileDetails.admin_obj.profile.role === "admin" ? (<Route path="/" element={<Navigate to="dashboard" replace />} />) : <Route path="/" element={<Navigate to="teacherview" replace />}/>
-           
+            (() => {
+              if (profileDetails.obj.profile.role === "admin") {
+                return <Route path="/" element={<Navigate to="dashboard" replace />} />;
+              } else if (profileDetails.obj.profile.role === "teacher") {
+                return <Route path="/" element={<Navigate to="teacherdashboard" replace />} />;
+              }
+              else if (profileDetails.obj.profile.role === "student") {
+                return <Route path="/" element={<Navigate to="teacherview" replace />} />;
+              }
+            })()
           }
 
-          
-          
+
+
         </Routes>
       </Suspense>
     </CContainer>

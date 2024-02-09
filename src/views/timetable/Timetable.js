@@ -28,7 +28,7 @@ const Timetable = () => {
   const [lectureConfigs,setLectureConfigs] = useState(null)  
 
   const [schedules, set_sechedules] = useState(null)
-
+  const [term,set_term] = useState(null)
 
   const load_semester = async (batchslug) => {
     const header = {
@@ -95,6 +95,23 @@ const Timetable = () => {
     }
   }
 
+  const load_term = async()=>{
+    const header = {
+      "Content-Typle" :"application/json"
+    }
+    const axiosInstance = axios.create()
+    let endpoint = `/manage/get_terms`;let method='get';let headers = header;
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
+    if(response_obj.error === false)
+    {
+      const response = response_obj.response
+      set_term(response.data.data)
+    }
+    else{
+      alert(response_obj.errorMessage.message)
+    }
+  }
+
   const load_time_talbe = async (division_slug) => {
     if (division_slug != ' ') {
       const headers = {
@@ -132,12 +149,35 @@ const Timetable = () => {
 
 
   useEffect(() => {
-    load_semester()
+    load_term()
+    //load_semester()
   }, [])
   return (
     <>
       <CRow className="mb-3">
         <CCol>
+        {term && (
+            <>
+              <CCard className={`mb-3`}>
+                <CCardHeader>select term</CCardHeader>
+                <CCardBody>
+                  <CFormSelect
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      load_division(e.target.value)
+                    }}
+                  >
+                    <option value="">Select Semester</option>
+                    {term.map((item, index) => (
+                      <option key={index} value={item.slug}>
+                        term - {item.start_time} : {item.end_time}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </CCardBody>
+              </CCard>
+            </>
+          )}
           {Semesters && (
             <>
               <CCard className={`mb-3`}>
