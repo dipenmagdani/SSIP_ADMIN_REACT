@@ -26,6 +26,10 @@ const Timetable = () => {
   const [time_table, set_time_table] = useState(null)
   const [visible, setVisible] = useState(false)
   const [lectureConfigs,setLectureConfigs] = useState(null)  
+
+  const [schedules, set_sechedules] = useState(null)
+
+
   const load_semester = async (batchslug) => {
     const header = {
       'Content-Type': 'application/json',
@@ -112,6 +116,7 @@ const Timetable = () => {
       if (response_obj.error === false) {
         const response = response_obj.response
         set_time_table(response.data.data)
+        set_sechedules(response.data.data.schedules)
       } else {
         alert(response_obj.errorMessage.message)
       }
@@ -119,6 +124,13 @@ const Timetable = () => {
       alert('please select division')
     }
   }
+
+  //for set the schedule
+
+  
+
+
+
   useEffect(() => {
     load_semester()
   }, [])
@@ -183,7 +195,7 @@ const Timetable = () => {
                 <CCardBody>
                   <CRow className="flex-column" style={{ padding: '0' }}>
                     {time_table ? (
-                        time_table.schedules.map((item, index) => (
+                        schedules.map((item, index) => (
                         <>
                           <CCol className="mb-4 d-flex align-items-center flex-column" key={index}>                        
                               <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
@@ -253,7 +265,7 @@ const Timetable = () => {
           ) : null}
         </CToast>
       )}
-      {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs}/>}
+      {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules}/>}
     </>
   )
 }

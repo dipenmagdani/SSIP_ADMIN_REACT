@@ -37,15 +37,15 @@ import { Store } from 'src/views/forms/validation/store'
 import base_url from 'src/base_url'
 import Breadcrumbnav from '../breadcrum/Breadcrumbnav'
 import expireToken from 'src/global_function/unauthorizedToken'
- import {SetLecture} from '../timetable/SetLecture'
+import { SetLecture } from '../timetable/SetLecture'
 import { useNavigate } from 'react-router-dom'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 
 export default function Teacherview() {
   return (
-   <>
+    <>
 
-<CRow className="mb-3">
+      <CRow className="mb-3">
         <CCol>
           <CCard>
             <CCardHeader>Semester</CCardHeader>
@@ -62,18 +62,18 @@ export default function Teacherview() {
           </CCard>
         </CCol>
       </CRow>
-<CTable>
-  <CTableHead>
-  <CAccordion activeItemKey={2}>
-  <CAccordionItem itemKey={1}>
-    <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-    <CAccordionBody>
-      <strong>hello</strong>
-    </CAccordionBody>
-  </CAccordionItem>
-</CAccordion>
-  </CTableHead>
-</CTable>
-   </>
+      <CTable>
+        <CTableHead>
+          <CAccordion activeItemKey={2}>
+            <CAccordionItem itemKey={1}>
+              <CAccordionHeader>Accordion Item #1</CAccordionHeader>
+              <CAccordionBody>
+                <strong>hello</strong>
+              </CAccordionBody>
+            </CAccordionItem>
+          </CAccordion>
+        </CTableHead>
+      </CTable>
+    </>
   )
 }

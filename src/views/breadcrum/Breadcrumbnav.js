@@ -15,7 +15,8 @@ const Breadcrumbnav = (props) => {
     console.log(objectCount)
     const {currentStep , chageSteps }= props
     let breadcrumbs = {
-        semester: ["semester"],
+        term:["term"],
+        semester: ["term","semester"],
         division: ["semester","division"],
         batch: ["semester","division","batch"],
     }

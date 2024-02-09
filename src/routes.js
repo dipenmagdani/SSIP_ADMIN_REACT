@@ -23,6 +23,7 @@ const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'))
 const Timetable = React.lazy(() => import('./views/timetable/Timetable'))
 const Subject = React.lazy(() => import('./views/subject/Subject'))
 const Teacherview = React.lazy(() => import('./views/teacher/Teacherview'));
+const Addstudent = React.lazy(() => import('./views/student_controller/Addstudent'));
 // Buttons
 const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'))
 const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
@@ -109,7 +110,7 @@ const routes = [
   { path: '/logout',name:'Logout',element:Logout},
   { path: '/timetable',name:'Timetable',element:Timetable},
   { path: '/subject',name:'Subject',element:Subject},
-  
+  { path: '/addstudent',name:'AddStudent',element:Addstudent},
 ]
 
  export default routes;
