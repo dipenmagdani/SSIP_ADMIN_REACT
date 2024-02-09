@@ -25,7 +25,7 @@ const Timetable = () => {
   const [StoredTokens, CallAPI] = useAPI()
   const [time_table, set_time_table] = useState(null)
   const [visible, setVisible] = useState(false)
-  const [lectureConfigs,setLectureConfigs] = useState(null)
+  const [lectureConfigs,setLectureConfigs] = useState(null)  
   const load_semester = async (batchslug) => {
     const header = {
       'Content-Type': 'application/json',
@@ -207,37 +207,24 @@ const Timetable = () => {
                                     </svg>
                                   </button>
                               </CAlert>                            
-                            <CCard className="w-100  rounded-0 ">
-                              <CCardBody>
-                                <CRow>
-                                  <CCol sm={12} md={12} lg={12}>
-                                    <CRow className="justify-content-center">
+                            <CCard className="w-100  rounded-0 border-0">
+                              <CCardBody className=''>
+                              <CRow className="justify-content-center">
                                       {item.lectures.length > 0 ? (
-                                        <CToast autohide={false} visible={true}>
-                                            <CToastHeader closeButton>
-                                              <svg
-                                                className="rounded me-2"
-                                                width="20"
-                                                height="20"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                preserveAspectRatio="xMidYMid slice"
-                                                focusable="false"
-                                                role="img"
-                                              >
-                                                <rect width="100%" height="100%" fill="#007aff"></rect>
-                                              </svg>
-                                              <div className="fw-bold me-auto">CoreUI for React.js</div>
-                                              <small>7 min ago</small>
+                                        item.lectures.map((lecture,index) => (
+                                          <CToast key={index} autohide={false} visible={true} className='mb-3 w-100'>
+                                            <CToastHeader className='d-flex flex-wrap justify-content-center'>                                              
+                                              <div className="fw-bold me-auto">{lecture.subject.subject_name}</div>
+                                              <small>{lecture.start_time.slice(0, 5)} | {lecture.end_time.slice(0, 5)}</small>
                                             </CToastHeader>
-                                            <CToastBody>Hello, world! This is a toast message.</CToastBody>
+                                            <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name}{index < lecture.batches.length - 1 && ', '}</span> ))} </span> <span className='mx-3'>{lecture.classroom.class_name}</span> </CToastBody>
                                           </CToast>
+                                        )) 
                                       ) : (
                                         <CToast autohide={false} visible={true}>                 
                                             <CToastBody>No Lectures Found</CToastBody>
                                         </CToast>
-                                      )}
-                                    </CRow>
-                                  </CCol>
+                                      )}                                    
                                 </CRow>
                               </CCardBody>
                             </CCard>

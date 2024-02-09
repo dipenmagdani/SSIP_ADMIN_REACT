@@ -5,16 +5,37 @@ import {
   CAlert,
 } from '@coreui/react'
 import { useForm } from "react-hook-form"
+import useAPI from 'src/global_function/useApi'
+import axios from 'axios'
 
 function SetLecture({ visible, setVisible, sechedule, lectureConfigs }) {    
   const [Classrooms, setClassroom] = useState(lectureConfigs.classrooms)
   const [Subjects, setSubjects] = useState(lectureConfigs.subjects)
   const [Teachers, setTeachers] = useState(lectureConfigs.teachers)
   const [Batches, setBatches] = useState(lectureConfigs.batches)
+  const [StoredTokens,CallAPI] = useAPI()
+
   const lectureForm = useRef()
   const { register, handleSubmit } = useForm();
-  const handleFormSubmit = (data) => {
-      console.log(data)
+  const handleFormSubmit = async (data) => {
+    if(data.start_time && data.end_time && data.teacher && data.subject && data.batches && data.classroom && data.type){
+      const axiosInstance = axios.create()
+      const body = data    
+      body.schedule_slug = sechedule.slug
+      const headers = {
+        "Content-Type":"application/json",
+        'ngrok-skip-browser-warning':true
+      }
+      const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/add_lecture_to_schedule/","post",headers,body,null)
+      if(response_obj.error === false){
+        // const response = response_obj.response
+        // console.log(response.data.data)
+      }else{
+        alert(response_obj.errorMessage.message)
+      }
+    }else{
+      console.log('here');
+    }
   };
 useEffect(() => {
   console.log(lectureForm.current);
@@ -95,7 +116,7 @@ useEffect(() => {
                 <option value="">....</option>
                 {Teachers &&
                   Teachers.map((item, index) => (
-                    <option key={index} value={item.id}>
+                    <option key={index} value={item.slug}>
                       {item.profile.name}
                     </option>
                   ))}
@@ -106,7 +127,7 @@ useEffect(() => {
               <select multiple class="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
                 {Batches &&
                   Batches.map((item, index) => (
-                    <option key={index} value={item.id}>
+                    <option key={index} value={item.slug}>
                       {item.batch_name}
                   </option>
                   ))}
