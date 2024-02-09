@@ -35,9 +35,8 @@ const Dashboard = () => {
   const [term_slug,set_term_slug] = useState("")
 
   useEffect(() => {               
-    if(profileDetails.admin_obj.profile.role === "admin"){
+    if(profileDetails.obj.profile.role === "admin"){
       getObjectCounts()
-        
     }
   }, []);
 

@@ -62,7 +62,7 @@ const _nav = {
     {
       component: CNavItem,
       name: 'Attedance History',
-      to: '/teacherview',
+      to: '/teacherdashboard',
       icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
     },
     {

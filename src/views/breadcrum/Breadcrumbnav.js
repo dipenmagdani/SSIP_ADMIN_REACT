@@ -42,7 +42,7 @@ const Breadcrumbnav = (props) => {
                                 </ol>                                                      
                             </nav>
 
-                            <span>Branch - {profileDetails.admin_obj.branches[0].branch_name}</span>
+                            <span>Branch - {profileDetails.obj.branches[0].branch_name}</span>
 
                             
                         </CCardBody>

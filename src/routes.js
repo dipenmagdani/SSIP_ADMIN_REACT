@@ -111,6 +111,7 @@ const routes = [
   { path: '/timetable',name:'Timetable',element:Timetable},
   { path: '/subject',name:'Subject',element:Subject},
   { path: '/addstudent',name:'AddStudent',element:Addstudent},
+  { path: '/teacherdashboard',name:'Teacherview',element:Teacherview}
 ]
 
  export default routes;
