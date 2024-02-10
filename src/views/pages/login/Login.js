@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store';
@@ -9,6 +9,7 @@ import "./LoginForm.css";
 import expireToken from 'src/global_function/unauthorizedToken';
 import '../../../css/tailwind.css'
 import { useForm } from "react-hook-form";
+import { CCol, CRow } from '@coreui/react';
 
 
 export default function Login(){
@@ -68,9 +69,19 @@ export default function Login(){
             <input type="password" name="floating_password" id="floating_password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required  {...register('password')}/>
             <label htmlFor="floating_email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
           </div>
-          <button type="submit" className="w-100 focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  text-slate-300" style={{border:'1px solid #ffa31a'}}> Submit </button>
+          <CRow>
+            <CCol>
+            <button type="submit" className="w-100 focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  text-slate-300" style={{border:'1px solid #ffa31a'}}> Submit </button>
+            </CCol>
+          </CRow>
+            <CRow className='justify-center mt-4'>
+              <CCol className='w-full text-center'>
+              <div> Do You have Account ? <Link to={"/register"} className='ml-2'>Register</Link></div>
+              </CCol>
+            </CRow>
+            
         </form>
-
+          
       </div>
       </section>
     </div>    

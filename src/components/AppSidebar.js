@@ -52,7 +52,7 @@ const AppSidebar = () => {
           )}
           {profileDetails.obj.profile.role === "student" && (
             <AppSidebarNav
-              items={navigation.teacher_role}
+              items={navigation.student_role}
             />
           )}
         </SimpleBar>
