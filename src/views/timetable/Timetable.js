@@ -18,6 +18,8 @@ import useAPI from 'src/global_function/useApi'
 import SetLecture from './SetLecture'
 
 const Timetable = () => {
+  const cors = require('cors')({ origin: true })
+  console.log(cors);
   const [Semesters, setSemesters] = useState(null)
   const [division, set_division] = useState(null)
   const [currentSelectSemester, setcurrentSelectSemester] = useState(null)
@@ -25,8 +27,7 @@ const Timetable = () => {
   const [StoredTokens, CallAPI] = useAPI()
   const [time_table, set_time_table] = useState(null)
   const [visible, setVisible] = useState(false)
-  const [lectureConfigs,setLectureConfigs] = useState(null)  
-
+  const [lectureConfigs,setLectureConfigs] = useState(null)
   const [schedules, set_sechedules] = useState(null)
   const [term,set_term] = useState(null)
 
@@ -45,7 +46,8 @@ const Timetable = () => {
       let response = response_obj.response
       setSemesters(response.data.data)
     } else {
-      console.log(response_obj.error)
+        setSemesters(null)
+        alert(response_obj.errorMessage.message)
     }
   }
 
@@ -89,6 +91,7 @@ const Timetable = () => {
         const response = response_obj.response
         set_division(response.data.data)
       } else {
+        set_division(null)
         alert(response_obj.errorMessage.message)
       }
     } else {
@@ -99,8 +102,9 @@ const Timetable = () => {
   const load_term = async()=>{
     const header = {
       "Content-Typle" :"application/json",
-      'ngrok-skip-browser-warning': true,
+      'ngrok-skip-browser-warning':true
     }
+    
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_terms`;let method='get';let headers = header;
     let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
@@ -112,8 +116,7 @@ const Timetable = () => {
     else{
       alert(response_obj.errorMessage.message)
     }
-  }
-
+  }  
   const load_time_talbe = async (division_slug) => {
     if (division_slug != ' ') {
       const headers = {
@@ -143,19 +146,9 @@ const Timetable = () => {
       alert('please select division')
     }
   }
-
   //for set the schedule
-
-  
-
-
-
-  useEffect(() => {
-    
-      load_term()  
-    
-    
-    //load_semester()
+  useEffect(() => {    
+      load_term()    
   }, [])
   return (
     <>
@@ -172,7 +165,7 @@ const Timetable = () => {
                       load_semester(e.target.value)
                     }}
                   >
-                    <option value="">Select Semester</option>
+                    <option value="">Select Term</option>
                     {term.map((item, index) => (
                       <option key={index} value={item.slug}>
                         term : {item.start_year} - {item.end_year}
@@ -246,7 +239,7 @@ const Timetable = () => {
                               <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
                                   {item.day.toUpperCase()}
                                   <button
-                                    className="h-20 btn"
+                                    className="btn"
                                     onClick={() => {
                                       showLectureModal(item)
                                     }}
@@ -270,9 +263,17 @@ const Timetable = () => {
                                       {item.lectures.length > 0 ? (
                                         item.lectures.map((lecture,index) => (
                                           <CToast key={index} autohide={false} visible={true} className='mb-3 w-100'>
-                                            <CToastHeader className='d-flex flex-wrap justify-content-center'>                                              
-                                              <div className="fw-bold me-auto">{lecture.subject.subject_name}</div>
-                                              <small>{lecture.start_time.slice(0, 5)} | {lecture.end_time.slice(0, 5)}</small>
+                                            <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
+                                                      <div className="fw-bold mx-2 my-2">
+                                                        {lecture.subject.subject_name}
+                                                      </div>
+                                                        <small className='mx-2 my-2'>
+                                                          {lecture.type.toUpperCase()}
+                                                        </small>
+                                                      <small className='mx-2 my-2'>
+                                                        {lecture.start_time.slice(0, 5)} |{' '}
+                                                        {lecture.end_time.slice(0, 5)}
+                                                      </small>
                                             </CToastHeader>
                                             <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name}{index < lecture.batches.length - 1 && ', '}</span> ))} </span> <span className='mx-3'>{lecture.classroom.class_name}</span> </CToastBody>
                                           </CToast>
@@ -301,13 +302,13 @@ const Timetable = () => {
           <CToastHeader className="bg-dark d-flex justify-content-center">
             <img src="/static/media/smartroll_logo.a3c3e21d0b4a56919e74.png" width={100}></img>
           </CToastHeader>
-          {Semesters ? (
+          {term ? Semesters ? (
             division ? (
               <CToastBody>Select a division</CToastBody>
             ) : (
               <CToastBody>Select a semester </CToastBody>
             )
-          ) : null}
+          ) : <CToastBody>Select a term </CToastBody> : null}
         </CToast>
       )}
       {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules}/>}

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { Store } from 'src/views/forms/validation/store';
 import axios from 'axios';
-import base_url from 'src/base_url';
 import { jwtDecode } from "jwt-decode";
 import expireToken from 'src/global_function/unauthorizedToken';
 import LoadingBar from 'react-top-loading-bar';

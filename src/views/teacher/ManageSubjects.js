@@ -43,8 +43,7 @@ function ManageSubjects({visible,setVisible,SelectedTeacher}) {
         if(response_obj.error == false){
           let response = response_obj.response
           setSubjectsToRender(response.data.data)
-        }else{  
-            console.log(response_obj.error)
+        }else{              
         }        
       }
       let checkedSubjects = subjectsToRender
@@ -67,8 +66,7 @@ function ManageSubjects({visible,setVisible,SelectedTeacher}) {
         if(response_obj.error == false){
           let response = response_obj.response
           setVisible(false)          
-        }else{  
-          console.log(response_obj.error)
+        }else{            
         }
         showAlert("success","Subject Added successfully...!")
       }

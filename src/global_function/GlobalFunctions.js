@@ -55,7 +55,7 @@ const expireToken = async (refreshToken) => {
 };
 
 const showAlert = (title,text) => {
-    console.log("helo");
+    
     Swal({
         title: title,
         text: text,

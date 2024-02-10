@@ -67,8 +67,7 @@ const CustomStyles = (setTeacherlist) => {
     if (response_obj.error == false) {
       let response = response_obj.response
       setTeacherlist((prevArray) => [...prevArray, response.data.data])
-    } else {
-      console.log(response_obj.error)
+    } else {      
     }
   }
 
@@ -89,8 +88,7 @@ const CustomStyles = (setTeacherlist) => {
         icon: 'error',
         button: 'OK',
       })
-    } else {
-      console.log(name, ph_no, email)
+    } else {      
 
       const body = {
         name,
@@ -168,8 +166,7 @@ const Teacher = () => {
     if (response_obj.error == false) {
       let response = response_obj.response
       setTeacherlist(response.data.teachers)
-    } else {
-      console.log(response_obj.error)
+    } else {      
     }
   }
 

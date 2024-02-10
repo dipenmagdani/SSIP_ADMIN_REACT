@@ -58,13 +58,11 @@ const CustomStyles = (set_semester,setBatchCout,term_slug) => {
     if(response_obj.error == false){
         let response = response_obj.response
         let batchCount = {...objectCount}
-        batchCount.semesters += 1
-        console.log(batchCount);
+        batchCount.semesters += 1        
         ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
         set_semester(prevArray => [...prevArray, response.data.data]);
         setBatchCout(preValue => preValue + 1);
-      }else{  
-        console.log(response_obj.error)
+      }else{          
       }
   }
 
@@ -127,14 +125,12 @@ const loadBatches = async() => {
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_semesters`;let method='get';let headers = header;
-    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,{"term_slug":term_slug})
-    console.log(response_obj)
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,{"term_slug":term_slug})    
     if(response_obj.error == false){
       let response = response_obj.response
       
       set_semester(response.data.data)
-    }else{  
-      console.log(response_obj.error)
+    }else{        
     }    
   }
 

@@ -36,8 +36,7 @@ export default function Login(){
           localStorage.setItem('refreshToken',response.data.refresh)        
           navigate('/')
         })
-        .catch((error)=>{
-          console.log(error.code);
+        .catch((error)=>{          
           if(error.code === "ERR_NETWORK"){
             ctxDispatch({ type: 'SET_404', payload: true });
           }
@@ -52,8 +51,7 @@ export default function Login(){
     useEffect(()=>{      
       if(set404){
         navigate("/404")
-        ctxDispatch({ type: 'SET_404', payload: false });
-        console.log(set404);
+        ctxDispatch({ type: 'SET_404', payload: false });        
       }
     },[set404])    
 

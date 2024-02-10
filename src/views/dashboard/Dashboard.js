@@ -52,7 +52,7 @@ const Dashboard = () => {
       let response = response_obj.response
       ctxDispatch({ type: 'GET_OBJECTS', payload: response.data });
     }else{  
-      console.log(response_obj.error)
+      // console.log(response_obj.error)
     }
   }
   
@@ -85,8 +85,7 @@ const Dashboard = () => {
             ))}
           </CRow>
         </CCardFooter>
-      </CCard>
-      {console.log(steps)}
+      </CCard>      
       {(() => {
         
         switch (steps) {
@@ -102,7 +101,7 @@ const Dashboard = () => {
           case 'batch':
             return <Select chageSteps={chageSteps} division_slug={division_slug} setsubSlug={setsubSlug}></Select>
           default:
-            console.log(steps)
+            {/* console.log(steps) */}
         }
       })()}
     </>

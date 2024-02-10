@@ -32,8 +32,7 @@ const Addstudent = () => {
         if (response_obj.error == false) {
             let response = response_obj.response
             setSemesters(response.data.data)
-        } else {
-            console.log(response_obj.error)
+        } else {            
         }
     }
     const load_division = async (semester_slug) => {
@@ -68,7 +67,6 @@ const Addstudent = () => {
 
 
     const handelFormSubmit = async()=>{
-        console.log(excel_file)
         const formdata = new FormData()
         formdata.append('students.xlsc',excel_file,excel_file.name)
         formdata.append("sheet_name", sheet_name);

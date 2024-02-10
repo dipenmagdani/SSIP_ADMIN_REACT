@@ -12,7 +12,7 @@ import "../../scss/panel.css"
 const Breadcrumbnav = (props) => {
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { objectCount , profileDetails } = state  
-    console.log(objectCount)
+    // console.log(objectCount)
     const {currentStep , chageSteps }= props
     let breadcrumbs = {
         term:["term"],

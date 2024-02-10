@@ -44,11 +44,11 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_
         alert(response_obj.errorMessage.message)
       }
     }else{
-      console.log('here');
+      // console.log('here');
     }
   };
 useEffect(() => {
-  console.log(lectureForm.current);
+  // console.log(lectureForm.current);
 }, [lectureForm])
 
   return (
@@ -92,7 +92,7 @@ useEffect(() => {
               <label className="form-label">Select Lecture Type</label>
               <select className="form-select" aria-label="Default select example" required {...register("type")}>
                 <option value="">....</option>
-                <option value={'lecture'}>Lecture</option>
+                <option value={'theory'}>Theory</option>
                 <option value={'lab'}>Lab</option>
               </select>
             </div>

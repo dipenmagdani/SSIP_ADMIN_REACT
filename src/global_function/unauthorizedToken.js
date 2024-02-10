@@ -14,7 +14,7 @@ const expireToken = async (refreshToken,setAccessTokenValid)=>{
         setAccessTokenValid(true)
     })
     .catch((error)=>{
-        console.log(error)
+        
     })
 }
 export default expireToken

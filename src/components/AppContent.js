@@ -36,7 +36,7 @@ const AppContent = () => {
         }
       })
     } else {
-      console.log(response_obj.error)
+      
     }
   }
 

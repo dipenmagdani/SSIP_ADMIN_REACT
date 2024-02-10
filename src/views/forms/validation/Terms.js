@@ -58,8 +58,7 @@ const CustomStyles = (set_term,setBatchCout) => {
       if(response_obj.error == false){
           let response = response_obj.response
           let batchCount = {...objectCount}
-          batchCount.terms += 1
-          console.log(batchCount);
+          batchCount.terms += 1          
           ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
           set_term(prevArray => [...prevArray, response.data.data]);
           setBatchCout(preValue => preValue + 1);
@@ -141,15 +140,14 @@ const load_term = async() => {
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/get_term`;let method='get';let headers = header;
-    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
-    console.log(response_obj)
+    let endpoint = `/manage/get_terms`;let method='get';let headers = header;
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)    
     if(response_obj.error == false){
       let response = response_obj.response
       
       set_term(response.data.data)
     }else{  
-      console.log(response_obj.error)
+      
     }    
   }
 
