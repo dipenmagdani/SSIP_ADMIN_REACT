@@ -141,7 +141,7 @@ const load_term = async() => {
       'ngrok-skip-browser-warning':true
     }
     const axiosInstance = axios.create()
-    let endpoint = `/manage/get_terms`;let method='get';let headers = header;
+    let endpoint = `/manage/get_term`;let method='get';let headers = header;
     let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
     console.log(response_obj)
     if(response_obj.error == false){

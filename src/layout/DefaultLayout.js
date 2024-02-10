@@ -8,11 +8,12 @@ import base_url from 'src/base_url';
 import { jwtDecode } from "jwt-decode";
 import expireToken from 'src/global_function/unauthorizedToken';
 import LoadingBar from 'react-top-loading-bar';
+import useAPI from 'src/global_function/useApi';
 
 const DefaultLayout = () => {
+  const [StoredTokens, CallAPI] = useAPI()
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken} = state
-
   const [_404,set404] = useState(true)
   const [accessTokenValid,setAccessTokenValid] = useState(false)
   const [progress,setProgress] = useState(0);  
@@ -20,47 +21,42 @@ const DefaultLayout = () => {
     window.setProgress = setProgress;
   }
 
-  const checkAccessTokenAuthenticity = () => {
+  const checkAccessTokenAuthenticity = async () => {
     const headers = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
     }
-    const access = localStorage.getItem('accessToken');
-    const refresh = localStorage.getItem('refreshToken');
-    headers['Authorization'] = `Bearer ${access}`;
-
-    axios.get(`${base_url}/check_token_authenticity/`,{headers:headers})
-    .then((response)=>{                
-      setAccessTokenValid(true)
-    })
-    .catch((error)=>{             
-      if(error.response.status === 401){
-          expireToken(refresh,setAccessTokenValid)
-      }
-    })
+    const method = 'get'  
+    const axiosInstance = axios.create()
+    let endpoint = `/check_token_authenticity/`    
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
+    if (response_obj.error == false) {
+      setAccessTokenValid(true)            
+    } else {
+      expireToken(refreshToken,setAccessTokenValid)
+    }    
   }
   const navigate = useNavigate();  
-  const checkServerAvaibility = ()=> {
-    const header = {
-      "Content-Type":"application/json",      
-      'ngrok-skip-browser-warning':true
-    }
-    
-    axios.get(`${base_url}/check_server_avaibility/`,{headers:header})
-    .then((response)=>{
-      set404(false) 
-      console.log("here")
-      console.log(response.data)
-    })
-    .catch((error)=>{             
-      navigate("/404")
-    })
+  const checkServerAvaibility = async ()=> {
+      const headers = {
+        "Content-Type":"application/json",      
+        'ngrok-skip-browser-warning':true
+      }
+      const method = 'get'
+      const axiosInstance = axios.create()
+      let endpoint = `/check_server_avaibility/`    
+      let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)    
+      if (response_obj.error == false) {
+        set404(false)
+      } else {
+        navigate("/404")
+      }
   }
 
   const decodeToken= () => {
-    console.log(accessToken,"decode")
+    // console.log(accessToken,"decode")
     const decoded = jwtDecode(accessToken); 
-    console.log("decode",decoded)
+    // console.log("decode",decoded)
     // if (typeof window !== 'undefined') {      
         // window.user_profile = decoded.obj.profile;
     // }
@@ -69,7 +65,6 @@ const DefaultLayout = () => {
   
   useEffect(() => {
     if(_404){      
-
       checkServerAvaibility()
     }else{
         checkAccessTokenAuthenticity()
@@ -84,8 +79,7 @@ const DefaultLayout = () => {
       decodeToken()
     }    
   }, [accessToken]);    
-  useEffect(() => {
-    console.log(accessTokenValid)
+  useEffect(() => {    
   },[accessTokenValid])
   if(accessToken && !_404 && accessTokenValid){
     return (    

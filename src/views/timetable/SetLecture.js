@@ -38,6 +38,7 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_
             return item; // Return unchanged item for other items
           });
         });
+        setVisible(!visible)
          console.log(response.data.data)
       }else{
         alert(response_obj.errorMessage.message)
