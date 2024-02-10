@@ -61,16 +61,24 @@ const _nav = {
   teacher_role:[
     {
       component: CNavItem,
-      name: 'Attedance History',
+      name: 'Dashboard',
       to: '/teacherdashboard',
       icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
-      name: 'Time Table',
-      to: '/timetable',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      name: 'Logout',
+      to: '/logout',    
+      icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
     },
+  ],
+  student_role:[
+    {
+      component: CNavItem,
+      name: 'Dashboard',
+      to: '/studentdashboard',
+      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    }, 
     {
       component: CNavItem,
       name: 'Logout',

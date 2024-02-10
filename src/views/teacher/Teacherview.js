@@ -75,7 +75,7 @@ export default function Teacherview() {
                                           className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center"
                                           color="primary"
                                           visible={true}
-                                          onClose={() => setVisible(false)}
+                                          
                                         >
                                           {item.day.toUpperCase()}
                                         </CAlert>

@@ -18,8 +18,8 @@ import useAPI from 'src/global_function/useApi'
 import SetLecture from './SetLecture'
 
 const Timetable = () => {
-  const cors = require('cors')({ origin: true })
-  console.log(cors);
+  
+  
   const [Semesters, setSemesters] = useState(null)
   const [division, set_division] = useState(null)
   const [currentSelectSemester, setcurrentSelectSemester] = useState(null)
