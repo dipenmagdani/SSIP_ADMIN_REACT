@@ -15,6 +15,7 @@ import {
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
+import { Collapse } from '@coreui/coreui'
 
 export default function Teacherview() {
   const [StoredTokens, CallAPI] = useAPI()
@@ -51,7 +52,7 @@ export default function Teacherview() {
         {TimeTables ? (
           TimeTables.map((timetable, index) => (
             <CRow key={index} className="text-center mb-5 justify-content-center">
-              <CCol className="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+              <CCol className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <CCard className="">
                   <CCardHeader className="d-flex justify-content-center justify-content-sm-between flex-wrap">
                     <span>Semester - {timetable.division.semester.no}</span>
@@ -59,16 +60,16 @@ export default function Teacherview() {
                   </CCardHeader>
                   <CCardBody>
                     <>
-                      <CRow className="text-center mb-5 justify-content-center">
-                        <CCol className="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-                          <CCard className="">
-                            <CCardBody>
+                      <CRow className="text-center justify-content-center">
+                        <CCol className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div className="">
+                            <div>
                               <CRow className="flex-column" style={{ padding: '0' }}>
                                 {timetable ? (
                                   timetable.schedules.map((item, index) => (
                                     <>
                                       <CCol
-                                        className="mb-4 d-flex align-items-center flex-column"
+                                        className="d-flex align-items-center flex-column"
                                         key={index}
                                       >
                                         <CAlert
@@ -79,16 +80,16 @@ export default function Teacherview() {
                                         >
                                           {item.day.toUpperCase()}
                                         </CAlert>
-                                        <CCard className="w-100  rounded-0 border-0">
-                                          <CCardBody className="">
-                                            <CRow className="justify-content-center">
+                                        <div className="w-100  rounded-0 border-0">
+                                          <CCardBody className="" style={{paddingBottom:"0px"}}>
+                                            <CRow className="justify-content-center w-100">
                                               {item.lectures.length > 0 ? (
                                                 item.lectures.map((lecture, index) => (
                                                   <CToast
                                                     key={index}
                                                     autohide={false}
                                                     visible={true}
-                                                    className="mb-3 w-100"
+                                                    className="mt-2 w-100"
                                                   >
                                                     <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
                                                       <div className="fw-bold mx-2 my-2">
@@ -103,10 +104,14 @@ export default function Teacherview() {
                                                       </small>
                                                     </CToastHeader>
                                                     <CToastBody className="d-flex flex-row flex-wrap justify-content-center justify-content-md-between">
-                                                      <span className="mx-3">
+                                                      <CRow className='w-100 align-items-center'>
+                                                        <CCol className='text-sm-start col-12 col-sm-4 col-lg-4 col-md-4'>
+                                                          
                                                         Prof - {lecture.teacher}{' '}
-                                                      </span>
-                                                      <span>
+                                                         
+                                                        </CCol>
+                                                        <CCol className=' text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
+                                                        <span>
                                                         batches -{' '}
                                                         {lecture.batches.map((batch, index) => (
                                                           <span key={index}>
@@ -115,10 +120,25 @@ export default function Teacherview() {
                                                               ', '}
                                                           </span>
                                                         ))}{' '}
-                                                      </span>{' '}
-                                                      <span className="mx-3">
+                                                      </span>
+                                                        </CCol>
+                                                        <CCol className='text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
+                                                        
                                                         {lecture.classroom.class_name}
-                                                      </span>{' '}
+                                                      {' '}
+                                                        </CCol>
+                                                      </CRow>
+                                                      <CRow>
+                                                        <CCol>
+                                                          <button className='btn btn-outline-success w-100'>Start Session</button>
+                                                        </CCol>
+                                                      </CRow>
+                                                      
+                                                      
+                                                      <div>
+                                                        <hr></hr>
+                                                      </div>
+                                                      
                                                     </CToastBody>
                                                   </CToast>
                                                 ))
@@ -129,7 +149,7 @@ export default function Teacherview() {
                                               )}
                                             </CRow>
                                           </CCardBody>
-                                        </CCard>
+                                        </div>
                                       </CCol>
                                     </>
                                   ))
@@ -137,8 +157,8 @@ export default function Teacherview() {
                                   <p>no schedule</p>
                                 )}
                               </CRow>
-                            </CCardBody>
-                          </CCard>
+                            </div>
+                          </div>
                         </CCol>
                       </CRow>
                     </>
