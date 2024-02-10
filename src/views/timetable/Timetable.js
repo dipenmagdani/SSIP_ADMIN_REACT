@@ -30,7 +30,8 @@ const Timetable = () => {
   const [schedules, set_sechedules] = useState(null)
   const [term,set_term] = useState(null)
 
-  const load_semester = async (batchslug) => {
+  const load_semester = async (term_slug) => {
+    console.log(term_slug)
     const header = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': true,
@@ -39,7 +40,7 @@ const Timetable = () => {
     let endpoint = `/manage/get_semesters`
     let method = 'get'
     let headers = header
-    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{'term_slug':term_slug})
     if (response_obj.error == false) {
       let response = response_obj.response
       setSemesters(response.data.data)
@@ -97,7 +98,8 @@ const Timetable = () => {
 
   const load_term = async()=>{
     const header = {
-      "Content-Typle" :"application/json"
+      "Content-Typle" :"application/json",
+      'ngrok-skip-browser-warning': true,
     }
     const axiosInstance = axios.create()
     let endpoint = `/manage/get_terms`;let method='get';let headers = header;
@@ -149,7 +151,10 @@ const Timetable = () => {
 
 
   useEffect(() => {
-    load_term()
+    
+      load_term()  
+    
+    
     //load_semester()
   }, [])
   return (
@@ -164,13 +169,13 @@ const Timetable = () => {
                   <CFormSelect
                     aria-label="Default select example"
                     onChange={(e) => {
-                      load_division(e.target.value)
+                      load_semester(e.target.value)
                     }}
                   >
                     <option value="">Select Semester</option>
                     {term.map((item, index) => (
                       <option key={index} value={item.slug}>
-                        term - {item.start_time} : {item.end_time}
+                        term : {item.start_year} - {item.end_year}
                       </option>
                     ))}
                   </CFormSelect>
