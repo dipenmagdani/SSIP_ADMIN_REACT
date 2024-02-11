@@ -29,11 +29,10 @@ const Sessionmanage = () => {
     const ws = useRef(null);
   
     useEffect(() => {
-        console.log(`${websocket}/ws/attendance_session/${session_data.session_id}/`)
-        console.log(accessToken)
+        
       try {
         if (!ws.current) {
-          ws.current = new WebSocket(`${websocket}/ws/attendance_session/${session_data.session_id}/`,[accessToken]);
+          ws.current = new WebSocket(`${websocket}/ws/attendance_session/${session_data.session_id}/?${accessToken}`);
         }
   
         // WebSocket event listeners
@@ -56,13 +55,8 @@ const Sessionmanage = () => {
       } catch (error) {
         console.error('Error:', error);
       }
-  
-      // Cleanup function
-      return () => {
-        if (ws.current) {
-          ws.current.close();
-        }
-      };
+
+      
     }, []);
 
     return (
@@ -156,29 +150,7 @@ const Sessionmanage = () => {
                                                 </CTableBody> */}
                                                 </CTable>
                                             </CCol>
-                                            <CCol className='col-12'>
-                                                <CRow className='justify-end'>
-                                                    <CCol>
-                                                        <CRow className='flex-column'>
-                                                            <CCol>
-                                                                <div>
-                                                                    <span>Total Student : {session_data.attendances.length}</span>
-                                                                </div>
-                                                            </CCol>
-                                                            <CCol>
-                                                                <div>
-                                                                    <span>Present Student : 90</span>
-                                                                </div>
-                                                            </CCol>
-                                                            <CCol>
-                                                                <div>
-                                                                    <span>Absent : 10</span>
-                                                                </div>
-                                                            </CCol>
-                                                        </CRow>
-                                                    </CCol>
-                                                </CRow>
-                                            </CCol>
+                                            
                                         </CRow>
                                     </CCardBody>
                                 </CCard>
