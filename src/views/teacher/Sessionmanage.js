@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import {
     COffcanvas,
     COffcanvasBody,
@@ -8,97 +8,133 @@ import {
     CCard,
     CCardHeader,
     CCardBody,
+    CTable,
+    CTableBody,
+    CTableHead,
+    CTableHeaderCell,
+    CTableRow
 } from '@coreui/react'
 import { Controller, useForm } from "react-hook-form"
 import useAPI from 'src/global_function/useApi'
 import axios from 'axios'
+import { useParams, useLocation } from 'react-router-dom'
+import { websocket } from 'src/base_url'
+import { Store } from '../forms/validation/store'
 
-
-const Sessionmanage = ({ visible, setVisible, sechedule, lectureConfigs, schedule_list }) => {
-
+const Sessionmanage = () => {
+    const location = useLocation();
+    const [session_data, setSessionData] = useState(location.state);
+    const { state, dispatch: ctxDispatch } = useContext(Store);
+    const { accessToken, refreshToken, batches, currentBatch, objectCount} = state
+    const ws = useRef(null);
+  
+    useEffect(() => {
+        console.log(`${websocket}/ws/attendance_session/${session_data.session_id}/`)
+        console.log(accessToken)
+      try {
+        if (!ws.current) {
+          ws.current = new WebSocket(`${websocket}/ws/attendance_session/${session_data.session_id}/`,[accessToken]);
+        }
+  
+        // WebSocket event listeners
+        ws.current.onopen = () => {
+          console.log('WebSocket connection established');
+        };
+  
+        ws.current.onclose = () => {
+          console.log('WebSocket connection closed');
+        };
+  
+        ws.current.onmessage = (event) => {
+          console.log('Received message from server:', event.data);
+          // Handle received message
+        };
+  
+        ws.current.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  
+      // Cleanup function
+      return () => {
+        if (ws.current) {
+          ws.current.close();
+        }
+      };
+    }, []);
 
     return (
         <>
-            <COffcanvas
-                className="card w-100"
-                placement="end"
-                visible={visible}
-                onHide={() => setVisible(false)}
-                data-coreui-backdrop="static"
-            >
-                <CAlert
-                    color="success"
-                    visible={true}
-                    className="justify-content-between align-items-center d-flex"
-                >
-                    {sechedule.day.toUpperCase()}
-                    <svg
-                        onClick={() => setVisible(false)}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-x-lg"
-                        viewBox="0 0 16 16"
-                    >
-                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                    </svg>
-                </CAlert>
-                <COffcanvasBody>
-                    <CRow className='w-100 flex-1 flex-col'>
-                        <CCol>
-                            {/* shows the details of the current lecture along with schedule */}
-                            <CCard>
-                                <CCardHeader>
-                                    Lecture Details
-                                </CCardHeader>
-                                <CCardBody>
-                                    {/* all the details of the session are display here */}
-                                    <CRow className='w-100 flex-1 justify-center'>
-                                        <CCol className='text-center'>
-                                            <p>Time</p>
-                                            <p>10:30 | 11:30</p>
-                                        </CCol>
-                                        <CCol className='text-center'>
-                                            <p>Subject</p>
-                                            <p>Environment Engineering</p>
-                                        </CCol>
-                                        <CCol className='text-center'>
-                                            <p>Lecture Type</p>
-                                            <p>Environment Engineering</p>
-                                        </CCol>
-                                        <CCol className='text-center'></CCol>
-                                        <CCol>
+            {
+                session_data ? (
+                    <>
+                        <CRow>
+                            <CCol>
 
-                                            <p>Classroom</p>
-                                            <p>Upnisad Hall</p>
-                                        </CCol>
-                                    </CRow>
-                                </CCardBody>
-                            </CCard>
-                        </CCol>
-                        <CCol>
-                            {/* table that shows the student which are in room along with it's attendace status */}
-                            <CRow>
-                                <CCol xs>
-                                    <CCard className="mb-4">
-                                        <CCardHeader>
-                                            <strong>Attedence</strong>
-                                        </CCardHeader>
-                                        <CCardBody>
+                                <CCard className="card w-100">
+                                    <CCardHeader>
+                                        <CRow>
+                                            <CCol>
+                                                <strong>Session Details</strong>
+                                            </CCol>
+                                            <CCol className='text-end'>
+                                                <strong>Date|Time : {new Date(session_data.created_at).toLocaleString()}</strong>
+                                            </CCol>
+                                        </CRow>
+                                    </CCardHeader>
+                                    <CCardBody>
+                                        <CRow className='w-100'>
+                                            <CCol className='col-12'>
+                                                <CRow className='w-100 flex-1 justify-center'>
+                                                    <CCol className='text-center col-12 col-sm-3 col-md-3 col-lg-3'>
+                                                        <p className='font-weight-bold' style={{ margin: "0px", padding: "0px", fontWeight: "bold" }}>Time</p>
+                                                        <p style={{ margin: "0px", padding: "0px" }}>{session_data.lecture.start_time} | {session_data.lecture.end_time}</p>
+                                                    </CCol>
+                                                    <CCol className='text-center col-12 col-sm-3 col-md-3 col-lg-3'>
+                                                        <p className='font-weight-bold' style={{ margin: "0px", padding: "0px", fontWeight: "bold" }}>Subject</p>
+                                                        <p style={{ margin: "0px", padding: "0px" }}>{session_data.lecture.subject.subject_name}</p>
+                                                    </CCol>
+                                                    <CCol className='text-center col-12 col-sm-3 col-md-3 col-lg-3'>
+                                                        <p className='font-weight-bold' style={{ margin: "0px", padding: "0px", fontWeight: "bold" }}>Lecture Type</p>
+                                                        <p style={{ margin: "0px", padding: "0px" }}>{session_data.lecture.type}</p>
+                                                    </CCol>
+                                                    <CCol className='text-center col-12 col-sm-3 col-md-3 col-lg-3'>
+
+                                                        <p className='font-weight-bold' style={{ margin: "0px", padding: "0px", fontWeight: "bold" }}>Classroom No.</p>
+                                                        <p style={{ margin: "0px", padding: "0px" }}>{session_data.lecture.classroom.class_name}</p>
+                                                    </CCol>
+                                                </CRow>
+                                            </CCol>
+                                            <CCol>
+
+                                            </CCol>
+                                        </CRow>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+                        </CRow>
+                        <CRow className='mt-3'>
+                            <CCol xs>
+                                <CCard className="mb-4">
+                                    <CCardHeader>
+                                        <strong>Attedence</strong>
+                                    </CCardHeader>
+                                    <CCardBody>
                                         <CRow className='w-100 flex-col'>
                                             <CCol className='col-12'>
-                                            <CTable align="middle" className="mb-0 border text-center" hover responsive>
-                                                <CTableHead color="light">
-                                                    <CTableRow>
-                                                        <CTableHeaderCell>SR. NO</CTableHeaderCell>
-                                                        <CTableHeaderCell>Enrollment No</CTableHeaderCell>
-                                                        <CTableHeaderCell>Student Name</CTableHeaderCell>
-                                                        <CTableHeaderCell>Batch</CTableHeaderCell>
-                                                        <CTableHeaderCell>attendace Status</CTableHeaderCell>
-                                                    </CTableRow>
-                                                </CTableHead>
-                                                {/* <CTableBody>
+                                                <CTable align="middle" className="mb-0 border text-center" hover responsive>
+                                                    <CTableHead color="light">
+                                                        <CTableRow>
+                                                            <CTableHeaderCell>SR. NO</CTableHeaderCell>
+                                                            <CTableHeaderCell>Enrollment No</CTableHeaderCell>
+                                                            <CTableHeaderCell>Student Name</CTableHeaderCell>
+                                                            <CTableHeaderCell>Batch</CTableHeaderCell>
+                                                            <CTableHeaderCell>attendace Status</CTableHeaderCell>
+                                                        </CTableRow>
+                                                    </CTableHead>
+                                                    {/* <CTableBody>
                                                     {semester.map((item, index) => (
                                                         <CTableRow v-for="item in tableItems" key={index} onClick={() => { chageSteps('division'); set_semester_slug(item.slug); }}>
                                                             <CTableDataCell>
@@ -118,40 +154,40 @@ const Sessionmanage = ({ visible, setVisible, sechedule, lectureConfigs, schedul
                                                         </CTableRow>
                                                     ))}
                                                 </CTableBody> */}
-                                            </CTable>
+                                                </CTable>
                                             </CCol>
                                             <CCol className='col-12'>
                                                 <CRow className='justify-end'>
                                                     <CCol>
-                                                       <CRow className='flex-col'>
+                                                        <CRow className='flex-column'>
                                                             <CCol>
                                                                 <div>
-                                                                    <span>Total Student : 100</span>
+                                                                    <span>Total Student : {session_data.attendances.length}</span>
                                                                 </div>
                                                             </CCol>
                                                             <CCol>
-                                                            <div>
+                                                                <div>
                                                                     <span>Present Student : 90</span>
                                                                 </div>
                                                             </CCol>
                                                             <CCol>
-                                                            <div>
+                                                                <div>
                                                                     <span>Absent : 10</span>
                                                                 </div>
                                                             </CCol>
-                                                        </CRow> 
+                                                        </CRow>
                                                     </CCol>
                                                 </CRow>
                                             </CCol>
-                                            </CRow>
-                                        </CCardBody>
-                                    </CCard>
-                                </CCol>
-                            </CRow>
-                        </CCol>
-                    </CRow>
-                </COffcanvasBody>
-            </COffcanvas>
+                                        </CRow>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+                        </CRow>
+                    </>
+                ) : (<p>No session availabe</p>)
+            }
+
         </>
     )
 }

@@ -11,13 +11,26 @@ import {
   CToastHeader,
   CToastBody,
   CAlert,
+  CTable,
+  CTableHead,
 } from '@coreui/react'
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
 import { Collapse } from '@coreui/coreui'
+import Sessionmanage from './Sessionmanage'
+import { useNavigate } from 'react-router-dom'
+
+
 
 export default function Teacherview() {
+
+  // usestate to opne and close the model
+
+  const [visible , setVisible] = useState(false)
+  const [session_data,set_session_data] = useState(null)
+  const navigation = useNavigate()
+
   const [StoredTokens, CallAPI] = useAPI()
   const [TimeTables, setTimeTables] = useState(null)
   const load_teacher_timetable = async () => {
@@ -41,6 +54,31 @@ export default function Teacherview() {
       setTimeTables(response.data.data)
     }
   }
+
+
+  const create_Session = async(lecture_slug)=>{
+    console.log(lecture_slug)
+    const headers = {
+      "Content-Type":"application/json",
+      'ngrok-skip-browser-warning': true,
+    }
+    const axiosInstance = axios.create()
+    const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/session/create_lecture_session/","post",headers,{"lecture_slug":lecture_slug},null)
+    if(response_obj.error === false)
+    {
+      const response = response_obj.response
+      set_session_data(response.data.data)
+      navigation(`/sessionmanage?session_id=${response.data.data.session_id}`,{
+      state : response.data.data
+      }
+      )
+
+    }
+    else{
+      alert(response_obj.errorMessage.message)
+    }
+  }
+
   useEffect(() => {
     load_teacher_timetable()
   }, [])
@@ -90,6 +128,7 @@ export default function Teacherview() {
                                                     autohide={false}
                                                     visible={true}
                                                     className="mt-2 w-100"
+                                                    
                                                   >
                                                     <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
                                                       <div className="fw-bold mx-2 my-2">
@@ -128,9 +167,9 @@ export default function Teacherview() {
                                                       {' '}
                                                         </CCol>
                                                       </CRow>
-                                                      <CRow>
+                                                      <CRow className='w-100'>
                                                         <CCol>
-                                                          <button className='btn btn-outline-success w-100'>Start Session</button>
+                                                          <button className='btn btn-outline-success w-100' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
                                                         </CCol>
                                                       </CRow>
                                                       
@@ -179,6 +218,7 @@ export default function Teacherview() {
           </CToast>
         )}
         </CCol>
+      
       </CRow>
     </>
   )

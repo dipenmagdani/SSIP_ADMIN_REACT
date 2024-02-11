@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store';
-import base_url from 'src/base_url';
+import {base_url} from 'src/base_url';
 import "../login/LoginForm.css";
 import expireToken from 'src/global_function/unauthorizedToken';
 import '../../../css/tailwind.css'

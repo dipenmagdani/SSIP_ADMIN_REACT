@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import axios from 'axios'
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import { useContext } from 'react'
 import { Store } from 'src/views/forms/validation/store'
 

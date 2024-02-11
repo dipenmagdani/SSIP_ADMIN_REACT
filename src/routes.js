@@ -43,6 +43,7 @@ const Breadcrumbnav = React.lazy(()=> import('./views/breadcrum/Breadcrumbnav'))
 const TeacherSidebar = React.lazy(()=> import('./views/teacher/TeacherSidebar'))
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 const StudentDashboard =  React.lazy(() => import('./views/student_controller/StudentDashboard'))
+const Sessionmanage =  React.lazy(() => import('./views/teacher/Sessionmanage'))
 const Logout = React.lazy(()=> import('./views/pages/logout/Logout'))
 
 // Icons
@@ -113,7 +114,8 @@ const routes = [
   { path: '/subject',name:'Subject',element:Subject},
   { path: '/addstudent',name:'AddStudent',element:Addstudent},
   { path: '/teacherdashboard',name:'Teacherview',element:Teacherview},
-  { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  
+  { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  ,
+  { path: '/sessionmanage',name:'Sessionmanage',element:Sessionmanage}  
 ]
 
  export default routes;

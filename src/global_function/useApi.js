@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Store } from "src/views/forms/validation/store";
-import base_url from "src/base_url";
+import {base_url} from "src/base_url";
 
 
 const useAPI = () => {  

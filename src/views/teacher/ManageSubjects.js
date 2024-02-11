@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext} from 'react'
 import { Store } from '../forms/validation/store'
 import axios from 'axios'
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import { showAlert } from 'src/global_function/GlobalFunctions'
