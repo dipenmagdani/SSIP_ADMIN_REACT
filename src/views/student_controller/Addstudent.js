@@ -12,6 +12,7 @@ const Addstudent = () => {
     const [excel_file , set_excel_file] = useState(null)
     const [sheet_name , set_sheet_name] = useState(null)
     const [division_name,set_division_name] = useState(null)
+    const [term,set_term] = useState([])
 
     // custom hook to handel the request
 
@@ -92,16 +93,57 @@ const Addstudent = () => {
         }
     }
 
+    const load_term = async()=>{
+        const header = {
+          "Content-Typle" :"application/json",
+          'ngrok-skip-browser-warning':true
+        }
+        
+        const axiosInstance = axios.create()
+        let endpoint = `/manage/get_terms`;let method='get';let headers = header;
+        let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
+        if(response_obj.error === false)
+        {
+          const response = response_obj.response
+          set_term(response.data.data)
+        }
+        else{
+          alert(response_obj.errorMessage.message)
+        }
+      } 
     // handel the useAEffect state 
 
     useEffect(() => {
-        load_semester()
+        load_term()
     }, [])
 
     return (
         <>
             <CRow className="mb-3">
                 <CCol>
+                {term && (
+                        <>
+                            <CCard className={`mb-3`}>
+                                <CCardHeader>Term</CCardHeader>
+                                <CCardBody>
+                                    <CFormSelect
+                                        aria-label="Default select example"
+                                        onChange={(e) => {
+                                            load_semester(e.target.value)
+                                            
+                                        }}
+                                    >
+                                        <option value="">Select Term</option>
+                                        {term.map((item, index) => (
+                                            <option key={index} value={item.slug}>
+                                                term: {item.start_year} : {item.end_year}
+                                            </option>
+                                        ))}
+                                    </CFormSelect>
+                                </CCardBody>
+                            </CCard>
+                        </>
+                    )}
                     {Semesters && (
                         <>
                             <CCard className={`mb-3`}>

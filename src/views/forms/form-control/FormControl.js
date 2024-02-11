@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { Store } from '../validation/store'
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import {
   CButton,
   CCard,

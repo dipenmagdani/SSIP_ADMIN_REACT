@@ -15,7 +15,7 @@ import Select from '../forms/input-group/InputGroup'
 import Validation from '../forms/validation/Validation'
 import { useContext , useEffect } from 'react'
 import { Store } from 'src/views/forms/validation/store';
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import Breadcrumbnav from '../breadcrum/Breadcrumbnav';
 import useAPI from 'src/global_function/useApi'

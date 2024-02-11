@@ -25,7 +25,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { Store } from '../validation/store'
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 

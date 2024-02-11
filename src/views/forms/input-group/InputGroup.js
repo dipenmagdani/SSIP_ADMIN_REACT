@@ -3,7 +3,7 @@ import { useState , useContext,useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Store } from '../validation/store'
 import axios from 'axios'
-import base_url from 'src/base_url'
+import {base_url} from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { APIMiddleware } from 'src/global_function/GlobalFunctions'
 import {
