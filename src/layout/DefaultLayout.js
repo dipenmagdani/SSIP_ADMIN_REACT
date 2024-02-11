@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import expireToken from 'src/global_function/unauthorizedToken';
 import LoadingBar from 'react-top-loading-bar';
 import useAPI from 'src/global_function/useApi';
+import { base_url } from 'src/base_url';
 
 const DefaultLayout = () => {
   const [StoredTokens, CallAPI] = useAPI()
@@ -16,49 +17,55 @@ const DefaultLayout = () => {
   const [_404,set404] = useState(true)
   const [accessTokenValid,setAccessTokenValid] = useState(false)
   const [progress,setProgress] = useState(0);  
+  
+  const navigate = useNavigate();  
+  
   if (typeof window !== 'undefined') {
     window.setProgress = setProgress;
   }
 
   const checkAccessTokenAuthenticity = async () => {
-    const headers = {
-      "Content-Type":"application/json",      
-      'ngrok-skip-browser-warning':true
-    }
-    const method = 'get'  
-    const axiosInstance = axios.create()
-    let endpoint = `/check_token_authenticity/`    
-    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
-    if (response_obj.error == false) {
-      setAccessTokenValid(true)            
-    } else {
-      expireToken(refreshToken,setAccessTokenValid)
-    }    
-  }
-  const navigate = useNavigate();  
-  const checkServerAvaibility = async ()=> {
+    if(localStorage.getItem('accessToken')){
       const headers = {
         "Content-Type":"application/json",      
-        'ngrok-skip-browser-warning':true
+        'ngrok-skip-browser-warning':true,
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }
-      const method = 'get'
-      const axiosInstance = axios.create()
-      let endpoint = `/check_server_avaibility/`    
-      let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)    
-      if (response_obj.error == false) {
+  
+      axios.get(`${base_url}/check_token_authenticity/`,{headers:headers})
+      .then((response)=>{
+        if(response.data.data === true){
+          setAccessTokenValid(true)            
+        }
+        else{
+          expireToken(refreshToken,setAccessTokenValid)
+        }
+      })
+      .catch((error)=>{
+        alert(error.message)
+      })
+    }
+      
+  }
+  const checkServerAvaibility = async ()=> {
+    const headers = {
+         "Content-Type":"application/json",      
+         'ngrok-skip-browser-warning':true,
+         
+    }
+    axios.get(`${base_url}/check_server_avaibility/`,{headers:headers})
+    .then((response)=>{
         set404(false)
-      } else {
+    })
+    .catch((error)=>{
         navigate("/404")
-      }
+    })
+    
+      
   }
 
   const decodeToken= () => {
-    // console.log(accessToken,"decode")
     const decoded = jwtDecode(accessToken); 
-    // console.log("decode",decoded)
-    // if (typeof window !== 'undefined') {      
-        // window.user_profile = decoded.obj.profile;
-    // }
     ctxDispatch({ type: 'SET_PROFILE', payload: decoded});    
   }
   
