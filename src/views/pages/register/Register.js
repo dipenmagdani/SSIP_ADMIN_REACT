@@ -88,7 +88,7 @@ export default function Register(){
         </form>
         <CRow className='justify-center mt-4'>
               <CCol className='w-full text-center'>
-              <div> Do You already have Account ? <Link to={"/login"} className='ml-2'>Login</Link></div>
+              <div> Or <Link to={"/login"} className='ml-2' style={{color:'rgb(255, 163, 26)'}}>Login</Link></div>
               </CCol>
             </CRow>
       </div>

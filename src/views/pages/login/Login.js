@@ -56,7 +56,6 @@ export default function Login(){
         ctxDispatch({ type: 'SET_404', payload: false });        
       }
     },[set404])    
-
   return (
     <div className="h-screen bg-center bg-no-repeat sm:p-20 p-6" style={{background:'black'}}>
       <section className="w-full h-full flex justify-center items-center rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-100" style={{backgroundImage:'url(/images/background2.jpg)'}}>
@@ -77,7 +76,7 @@ export default function Login(){
           </CRow>
             <CRow className='justify-center mt-4'>
               <CCol className='w-full text-center'>
-              <div> Do You have Account ? <Link to={"/register"} className='ml-2'>Register</Link></div>
+              <div> Or <Link to={"/register"} className='ml-2' style={{color:'rgb(255, 163, 26)'}}>Register</Link></div>
               </CCol>
             </CRow>
             

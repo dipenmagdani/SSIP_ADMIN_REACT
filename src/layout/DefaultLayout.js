@@ -5,17 +5,16 @@ import { useContext } from 'react';
 import { Store } from 'src/views/forms/validation/store';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import expireToken from 'src/global_function/unauthorizedToken';
-import LoadingBar from 'react-top-loading-bar';
-import useAPI from 'src/global_function/useApi';
+import LoadingBar from 'react-top-loading-bar';;
 import { base_url } from 'src/base_url';
 
-const DefaultLayout = () => {
-  const [StoredTokens, CallAPI] = useAPI()
+const DefaultLayout = () => {  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken} = state
-  const [_404,set404] = useState(true)
+  const { accessToken , refreshToken} = state  
+  
   const [accessTokenValid,setAccessTokenValid] = useState(false)
+  const [serverAvaibility,setServerAvaibility] = useState(false)
+
   const [progress,setProgress] = useState(0);  
   
   const navigate = useNavigate();  
@@ -24,28 +23,52 @@ const DefaultLayout = () => {
     window.setProgress = setProgress;
   }
 
-  const checkAccessTokenAuthenticity = async () => {
-    if(localStorage.getItem('accessToken')){
+
+const expireToken = async (refreshToken)=>{
+    const header = {
+        'ngrok-skip-browser-warning':true
+      }
+    axios.post(`${base_url}/auth/api/token/refresh/`,{
+        "refresh":refreshToken
+    },{headers:header})
+    .then((response)=>{        
+        localStorage.setItem('accessToken',response.data.access)
+        localStorage.setItem('refreshToken',response.data.refresh)        
+        const decoded = jwtDecode(response.data.access); 
+        ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
+        setAccessTokenValid(true)
+    })
+    .catch((error)=>{
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        navigate('/auth/login')
+    })
+}
+  const checkAccessTokenAuthenticity = async (accessToken) => {    
       const headers = {
         "Content-Type":"application/json",      
         'ngrok-skip-browser-warning':true,
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        'Authorization': `Bearer ${accessToken}`
       }
   
       axios.get(`${base_url}/check_token_authenticity/`,{headers:headers})
       .then((response)=>{
         if(response.data.data === true){
-          setAccessTokenValid(true)            
+          setAccessTokenValid(true)
         }
         else{
-          expireToken(refreshToken,setAccessTokenValid)
+          if(refreshToken){
+            expireToken(refreshToken)
+          }else{
+            navigate('/login')
+          }
         }
       })
-      .catch((error)=>{
-        alert(error.message)
-      })
-    }
-      
+      .catch((error)=>{        
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        navigate('/login')
+      })    
   }
   const checkServerAvaibility = async ()=> {
     const headers = {
@@ -55,56 +78,41 @@ const DefaultLayout = () => {
     }
     axios.get(`${base_url}/check_server_avaibility/`,{headers:headers})
     .then((response)=>{
-        set404(false)
+      setServerAvaibility(true)
+      if(accessToken){
+        const decoded = jwtDecode(accessToken); 
+        ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
+        checkAccessTokenAuthenticity(accessToken)
+      }else{
+        navigate('/login')
+      }
     })
     .catch((error)=>{
         navigate("/404")
-    })
-    
-      
-  }
-
-  const decodeToken= () => {
-    const decoded = jwtDecode(accessToken); 
-    ctxDispatch({ type: 'SET_PROFILE', payload: decoded});    
+    })    
   }
   
-  useEffect(() => {
-    if(_404){      
-      checkServerAvaibility()
-    }else{
-        checkAccessTokenAuthenticity()
-    }
-  },[_404])
-
-   useEffect(() => {
-    if(!accessToken){
-        navigate("/login")
-    }
-    else{      
-      decodeToken()
-    }    
-  }, [accessToken]);    
   useEffect(() => {    
-  },[accessTokenValid])
-  if(accessToken && !_404 && accessTokenValid){
-    return (    
+      checkServerAvaibility()   
+  },[])  
+
+  return(
+    <>
+    { serverAvaibility && accessTokenValid ? (
       <div>
-  <LoadingBar color={'#1f6feb'} progress={progress}
-      onLoaderFinished={() => setProgress(0)} />
+        <LoadingBar color={'#1f6feb'} progress={progress} onLoaderFinished={() => setProgress(0)} />
         <AppSidebar />
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
             <AppContent />
           </div>
-          <AppFooter/>
+          <AppFooter />
         </div>
-      </div>    
+      </div>
+    ) : null}
+    </>
   )
-  }else{
-    return null
-  }
 }
 
 export default DefaultLayout
