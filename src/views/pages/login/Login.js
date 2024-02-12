@@ -43,7 +43,8 @@ export default function Login(){
           }
           else{
             if(error.response.status === 401){
-              expireToken(refreshToken)            
+              alert(error.response.data.detail)
+              
           }
           }
           

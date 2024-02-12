@@ -53,6 +53,9 @@ export default function Teacherview() {
       console.log(response.data.data)
       setTimeTables(response.data.data)
     }
+    else{
+      alert(response_obj.errorMessage.message)
+    }
   }
 
 

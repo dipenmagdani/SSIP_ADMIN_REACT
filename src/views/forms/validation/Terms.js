@@ -147,7 +147,7 @@ const load_term = async() => {
       
       set_term(response.data.data)
     }else{  
-      
+      alert(response_obj.errorMessage.message)
     }    
   }
 

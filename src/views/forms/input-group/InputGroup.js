@@ -56,7 +56,8 @@ const CustomStyles = (division_slug,set_batches) => {
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
         set_batches(prevArray => [...prevArray, response.data.data])
         showAlert("success","Batch Added successfully...!")
-      }else{          
+      }else{     
+        alert(response_obj.errorMessage.message)     
       }    
   }
   
@@ -116,7 +117,8 @@ const Select = (props) => {
     if(response_obj.error == false){
       let response = response_obj.response
       set_batches(response.data.data)
-    }else{        
+    }else{      
+      alert(response_obj.errorMessage.message)  
     }
   }
 

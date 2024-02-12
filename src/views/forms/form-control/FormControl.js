@@ -115,6 +115,7 @@ const FormControl = (props) => {
       let response = response_obj.response      
         set_divisions(response.data.data)        
     }else{        
+      alert(response_obj.errorMessage.message)
     }
   }
 

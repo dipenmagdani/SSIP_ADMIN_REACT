@@ -62,7 +62,8 @@ const CustomStyles = (set_semester,setBatchCout,term_slug) => {
         ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
         set_semester(prevArray => [...prevArray, response.data.data]);
         setBatchCout(preValue => preValue + 1);
-      }else{          
+      }else{       
+        alert(response_obj.errorMessage.message)   
       }
   }
 
@@ -131,6 +132,7 @@ const loadBatches = async() => {
       
       set_semester(response.data.data)
     }else{        
+      alert(response_obj.errorMessage.message)
     }    
   }
 
