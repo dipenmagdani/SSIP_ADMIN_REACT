@@ -1,5 +1,5 @@
 import React from 'react'
-
+import moment from 'moment';
 import { useState } from 'react'
 import {
   CCard,
@@ -17,7 +17,6 @@ import {
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
-import { Collapse } from '@coreui/coreui'
 import Sessionmanage from './Sessionmanage'
 import { useNavigate } from 'react-router-dom'
 
@@ -29,6 +28,12 @@ export default function Teacherview() {
 
   const [visible , setVisible] = useState(false)
   const [session_data,set_session_data] = useState(null)
+
+  const [session_state,set_Session_state] = useState({
+    "pre":true,
+    "ongoing":false,
+    "post":false
+  })
   const navigation = useNavigate()
 
   const [StoredTokens, CallAPI] = useAPI()
@@ -122,9 +127,11 @@ export default function Teacherview() {
                                                           {lecture.type.toUpperCase()}
                                                         </small>
                                                       <small className='mx-2 my-2'>
-                                                        {lecture.start_time.slice(0, 5)} |{' '}
-                                                        {lecture.end_time.slice(0, 5)}
+                                                        
+                                                        {moment(lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} |{' '}
+                                                        {moment(lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}
                                                       </small>
+
                                                     </CToastHeader>
                                                     <CToastBody className="d-flex flex-row flex-wrap justify-content-center justify-content-md-between">
                                                       <CRow className='w-100 align-items-center'>
@@ -151,11 +158,22 @@ export default function Teacherview() {
                                                       {' '}
                                                         </CCol>
                                                       </CRow>
-                                                      <CRow className='w-100'>
-                                                        <CCol>
-                                                          <button className='btn btn-outline-success w-100' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
-                                                        </CCol>
-                                                      </CRow>
+                                                      <hr className='h-3 w-100'></hr>
+                                                      <div className=' d-flex w-100'>
+                                                        <div className='w-100'>
+                                                          {
+                                                            lecture.session.active === "pre" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
+                                                            
+                                                          }
+                                                           {
+                                                            lecture.session.active === "ongoing" && <button className='btn btn-outline-warning w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Rejoin Session</button>
+                                                          }
+                                                           {
+                                                            lecture.session.active === "post" && <button className='btn btn-outline-secondary w-100 mt-3' disabled={true}>Session Ended</button>
+                                                            
+                                                          }
+                                                        </div>
+                                                      </div>
                                                       
                                                       
                                                       <div>

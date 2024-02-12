@@ -19,6 +19,7 @@ import useAPI from 'src/global_function/useApi'
 import axios from 'axios'
 import { websocket } from 'src/base_url'
 import { Store } from '../forms/validation/store'
+import { useNavigate } from 'react-router-dom'
 
 const Sessionmanage = () => {
   const url = new URL(window.location.href.replace('/#', ''))
@@ -28,6 +29,7 @@ const Sessionmanage = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store)
   const { accessToken } = state
   const ws = useRef(null)
+  const navigate =  useNavigate()
   const [StoredTokens, CallAPI] = useAPI()
 
   useEffect(() => {
@@ -74,12 +76,17 @@ const Sessionmanage = () => {
 
       ws.current.onmessage = (event) => {
         let data = JSON.parse(event.data)
-        if (data.message.action == 'attendance_marked') {
-          setAttendances((prevArray) => [...prevArray, data.message.data])
-        }else if (data.message.action == 'session_ended') {
-            alert('Session has ended')
-        }else if (data.message.action == 'session_already_ended') {
-            alert('Session has already been ended')
+        console.log(data)
+        if(data.message){
+          if (data.message.action == 'attendance_marked') {
+            setAttendances((prevArray) => [...prevArray, data.message.data])
+          }else if (data.message.action == 'session_ended') {
+            
+              alert('Session has ended')
+              navigate("/teacherdashboard")
+          }else if (data.message.action == 'session_already_ended') {
+              alert('Session has already been ended')
+          }
         }
         // Handle received message
       }
