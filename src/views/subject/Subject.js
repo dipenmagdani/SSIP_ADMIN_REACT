@@ -29,7 +29,64 @@ import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 import useAPI from 'src/global_function/useApi'
 
-const CustomStyles = (set_Subjects,semester) => {
+const Subject = () => {
+
+    const [subjects, set_Subjects] = useState(null)
+    const [semester,set_semester] = useState(null)
+    //costom hook to call the API
+    const [term,set_term] = useState(null)
+    
+    const [StoredTokens,CallAPI] = useAPI()
+    const [current_semester, set_current_semester] = useState(null)
+
+    const load_subject = async()=>{
+        const header = {
+            "Content-Type":"application/json",      
+            'ngrok-skip-browser-warning':true
+          }
+          const axiosInstance = axios.create()
+          let endpoint = `/manage/get_subject`;let method='get';let headers = header;
+          let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,null)
+          if(response_obj.error == false){
+          let response = response_obj.response          
+          set_Subjects(response.data.data)
+        }else{            
+        }   
+    }
+    const load_semester = async(current_term)=>{
+      
+      const headers = {
+        "Content-Type":"application/json",
+        'ngrok-skip-browser-warning':true
+      }
+      const axiosInstance = axios.create()
+      const response_obje = await CallAPI(StoredTokens,axios,"/manage/get_semesters","get",headers,null,{"term_slug":current_term})
+      if(response_obje.error == false){
+        const response = response_obje.response        
+        set_semester(response.data.data)
+      }
+      else{        
+      }
+    }
+
+
+
+    const load_term = async()=>{
+      const header = {
+        "Content-Type":"application/json",
+        'ngrok-skip-browser-warning':true
+      }
+      const axiosInstance = axios.create
+      let endpoint = `/manage/get_terms`;let method='get';let headers = header;
+      let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)    
+      if(response_obj.error == false){
+      let response = response_obj.response
+          set_term(response.data.data)
+    }else{  
+      alert(response_obj.errorMessage.message)
+    }  
+    }
+
     const [validated, setValidated] = useState(false)
     const [subject_name, set_subject_name] = useState("")
     const [subject_code, set_subject_code] = useState("")
@@ -49,6 +106,7 @@ const CustomStyles = (set_Subjects,semester) => {
       if(response_obj.error == false){
           let response = response_obj.response
           set_Subjects(prevArray => [...prevArray, response.data.data])
+          showAlert("success","Subject Added successfully...!")
         }else{            
         }    
     }
@@ -64,116 +122,120 @@ const CustomStyles = (set_Subjects,semester) => {
         "code": subject_code,
         "subject_name": subject_name,
         "credit": subject_credit,
-        "semester_slug":currentSelectSemester,
+        "semester_slug":current_semester,
       }
       event.preventDefault()
       add_batch(body)
-      showAlert("success","Subject Added successfully...!")
-    }
-    return (
-      <CForm
-        className="row g-3 needs-validation"
-        noValidate
-        validated={validated}
-        onSubmit={handleSubmit}
-      >
-        <CCol md={6}>
-          <CFormLabel htmlFor="validationCustom01">Subjcet Name</CFormLabel>
-          <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_name(e.target.value)} required />
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-        </CCol>
-        <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom01">Semester Number</CFormLabel>
-        <CFormSelect
-                aria-label="Default select example"
-                onChange={(e) => {
-                  setcurrentSelectSemester(e.target.value)
-                }}
-              >
-                <option value="">Select Semester</option>
-                {semester.map((item, index) => (
-                  <option key={index} value={item.slug}>
-                    Semester - {item.no}
-                  </option>
-                ))}
-              </CFormSelect>
-        </CCol>
-        <CCol md={6}>
-          <CFormLabel htmlFor="validationCustom01">Subjcet Code</CFormLabel>
-          <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_code(e.target.value)} required />
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-        </CCol>
-        <CCol md={6}>
-          <CFormLabel htmlFor="validationCustom01">Subjcet Credit</CFormLabel>
-          <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_credit(e.target.value)} required />
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-        </CCol>
-        <CCol xs={12}>
-          <button className='btn btn-outline-dark form-control' type="submit">
-            Submit form
-          </button>
-        </CCol>
-      </CForm>
-    )
-  }
-
-const Subject = () => {
-
-    const [subjects, set_Subjects] = useState([])
-    const [semester,set_semester] = useState([])
-    //costom hook to call the API
-
-    const [StoredTokens,CallAPI] = useAPI()
-
-    const load_subject = async()=>{
-        const header = {
-            "Content-Type":"application/json",      
-            'ngrok-skip-browser-warning':true
-          }
-          const axiosInstance = axios.create()
-          let endpoint = `/manage/get_subject`;let method='get';let headers = header;
-          let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,null)
-          if(response_obj.error == false){
-          let response = response_obj.response          
-          set_Subjects(response.data.data)
-        }else{            
-        }   
-    }
-    const load_semester = async()=>{
-      const headers = {
-        "Content-Type":"application/json",
-        'ngrok-skip-browser-warning':true
-      }
-      const axiosInstance = axios.create()
-      const response_obje = await CallAPI(StoredTokens,axios,"/manage/get_semesters","get",headers,null,null)
-      if(response_obje.error == false){
-        const response = response_obje.response        
-        set_semester(response.data.data)
-      }
-      else{        
-      }
+      
     }
 
     useEffect(() => {
+        load_term()
         load_subject()
-        load_semester()
+       
     }, [])
     
   return (
     <>
     <>
-      <CRow>
-        <CCol xs={12}>
+    <CRow>
+    <CCol>
+        {term && (
+            <>
+              <CCard className={`mb-3`}>
+                <CCardHeader>select term</CCardHeader>
+                <CCardBody>
+                  <CFormSelect
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      console.log(e.target.value)
+                      load_semester(e.target.value)
+                    }}
+                  >
+                    <option value="">Select Term</option>
+                    {term.map((item, index) => (
+                      <option key={index} value={item.slug}>
+                        term : {item.start_year} - {item.end_year}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </CCardBody>
+              </CCard>
+            </>
+          )}
+          {semester && (
+            <>
+              <CCard className={`mb-3`}>
+                <CCardHeader>Semester</CCardHeader>
+                <CCardBody>
+                  <CFormSelect
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                     set_current_semester(e.target.value)
+                    }}
+                  >
+                    <option value="">Select Semester</option>
+                    {semester.map((item, index) => (
+                      <option key={index} value={item.slug}>
+                        Semester - {item.no}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </CCardBody>
+              </CCard>
+            </>
+          )}
+        </CCol>
+      </CRow>
+      {
+        current_semester ? (
+          <CRow>
+            <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
               <strong>Subjects</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(set_Subjects,semester)}</CCardBody>
+            <CCardBody>
+                <CForm
+            className="row g-3 needs-validation"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+          >
+            <CCol md={12}>
+              <CFormLabel htmlFor="validationCustom01">Subjcet Name</CFormLabel>
+              <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_name(e.target.value)} required />
+              <CFormFeedback valid>Looks good!</CFormFeedback>
+            </CCol>
+            
+            
+            <CCol md={6}>
+              <CFormLabel htmlFor="validationCustom01">Subjcet Code</CFormLabel>
+              <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_code(e.target.value)} required />
+              <CFormFeedback valid>Looks good!</CFormFeedback>
+            </CCol>
+            <CCol md={6}>
+              <CFormLabel htmlFor="validationCustom01">Subjcet Credit</CFormLabel>
+              <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_credit(e.target.value)} required />
+              <CFormFeedback valid>Looks good!</CFormFeedback>
+            </CCol>
+            <CCol xs={12}>
+              <button className='btn btn-outline-dark form-control' type="submit">
+                Submit form
+              </button>
+            </CCol>
+                </CForm>
+            </CCardBody>
           </CCard>
         </CCol>
       </CRow>
+        ) : (null)
+      }
+      
       <CRow>
-        <CCol xs>
+        {
+          subjects ? (
+            <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>
               <strong>Subject History</strong>
@@ -206,6 +268,9 @@ const Subject = () => {
             </CCardBody>
           </CCard>
         </CCol>
+          ) : (null)
+        }
+        
       </CRow>
     </>
     </>
