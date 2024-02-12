@@ -33,7 +33,8 @@ const Addstudent = () => {
         if (response_obj.error == false) {
             let response = response_obj.response
             setSemesters(response.data.data)
-        } else {            
+        } else {      
+            alert(response_obj.errorMessage.message)      
         }
     }
     const load_division = async (semester_slug) => {

@@ -49,11 +49,14 @@ const StudentDashboard = () => {
           'ngrok-skip-browser-warning': true,
         } 
         const axiosInstance = axios.create()
-        const response_obj = await CallAPI(StoredTokens,axiosInstance,"endpoint","post",headers,{"lecture_slug":lecture_slug},null)
+        const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/session/mark_attendance_for_student/","post",headers,{"lecture_slug":lecture_slug},null)
         if(response_obj.error === false)
         {
           const response = response_obj.response
-          console.log(response.data.data)
+          if(response.data.data ===- true)
+          {
+            alert("your Attendance Marked successfully")
+          }
         }
         else{
           alert(response_obj.errorMessage.message)
@@ -150,11 +153,11 @@ const StudentDashboard = () => {
                                                       {' '}
                                                         </CCol>
                                                       </CRow>
-                                                      <CRow className='w-100 mt-3'>
-                                                        <CCol>
+                                                        <div className='d-flex flex-wrap w-100'>
+                                                      <div className='w-100 mt-3'>
                                                           <button className='btn btn-outline-success w-100' value={lecture.slug} onClick={(e)=>{mark_attendance(e.target.value)}}>Mark Attendance</button>
-                                                        </CCol>
-                                                      </CRow>
+                                                        </div>
+                                                      </div>
                                                       
                                                       
                                                       <div>

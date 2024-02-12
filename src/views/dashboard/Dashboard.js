@@ -52,7 +52,7 @@ const Dashboard = () => {
       let response = response_obj.response
       ctxDispatch({ type: 'GET_OBJECTS', payload: response.data });
     }else{  
-      // console.log(response_obj.error)
+      alert(response_obj.errorMessage.message)
     }
   }
   
