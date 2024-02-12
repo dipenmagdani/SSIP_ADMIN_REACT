@@ -60,26 +60,7 @@ export default function Teacherview() {
 
 
   const create_Session = async(lecture_slug)=>{
-    console.log(lecture_slug)
-    const headers = {
-      "Content-Type":"application/json",
-      'ngrok-skip-browser-warning': true,
-    }
-    const axiosInstance = axios.create()
-    const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/session/create_lecture_session/","post",headers,{"lecture_slug":lecture_slug},null)
-    if(response_obj.error === false)
-    {
-      const response = response_obj.response
-      set_session_data(response.data.data)
-      navigation(`/sessionmanage?session_id=${response.data.data.session_id}`,{
-      state : response.data.data
-      }
-      )
-
-    }
-    else{
-      alert(response_obj.errorMessage.message)
-    }
+    navigation(`/sessionmanage?slug=${lecture_slug}`)
   }
 
   useEffect(() => {
