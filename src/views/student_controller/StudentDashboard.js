@@ -15,7 +15,7 @@ import {
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
-
+import moment from 'moment'
 
 
 const StudentDashboard = () => {
@@ -124,8 +124,8 @@ const StudentDashboard = () => {
                                                           {lecture.type.toUpperCase()}
                                                         </small>
                                                       <small className='mx-2 my-2'>
-                                                        {lecture.start_time.slice(0, 5)} |{' '}
-                                                        {lecture.end_time.slice(0, 5)}
+                                                      {moment(lecture.start_time.slice(0,5), 'HH:mm').format('h:mm A')} |{' '}
+                                                      {moment(lecture.end_time.slice(0,5), 'HH:mm').format('h:mm A')}
                                                       </small>
                                                     </CToastHeader>
                                                     <CToastBody className="d-flex flex-row flex-wrap justify-content-center justify-content-md-between">
