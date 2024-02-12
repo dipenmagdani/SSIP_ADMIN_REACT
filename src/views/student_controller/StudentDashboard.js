@@ -53,7 +53,7 @@ const StudentDashboard = () => {
         if(response_obj.error === false)
         {
           const response = response_obj.response
-          if(response.data.data ===- true)
+          if(response.data.data === true)
           {
             alert("your Attendance Marked successfully")
           }
@@ -155,7 +155,14 @@ const StudentDashboard = () => {
                                                       </CRow>
                                                         <div className='d-flex flex-wrap w-100'>
                                                       <div className='w-100 mt-3'>
-                                                          <button className='btn btn-outline-success w-100' value={lecture.slug} onClick={(e)=>{mark_attendance(e.target.value)}}>Mark Attendance</button>
+                                                      {
+                                                            (lecture.session.active === "pre" ||  lecture.session.active === "ongoing") && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> mark_attendance(e.target.value)}>Mark Your Attendance</button>
+                                                            
+                                                          }
+                                                           {
+                                                            lecture.session.active === "post" && <button className='btn btn-outline-secondary w-100 mt-3' disabled={true}>Session Ended</button>
+                                                            
+                                                          }
                                                         </div>
                                                       </div>
                                                       
