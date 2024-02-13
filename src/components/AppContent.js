@@ -70,7 +70,7 @@ const AppContent = () => {
               if (profileDetails.obj.profile.role === "admin") {
                 return <Route path="/" element={<Navigate to="dashboard" replace />} />;
               } else if (profileDetails.obj.profile.role === "teacher") {
-                return <Route path="/" element={<Navigate to="teacherdashboard" replace />} />;
+                return <Route path="/" element={<Navigate to="teacher/dashboard" replace />} />;
               }
               else if (profileDetails.obj.profile.role === "student") {
                 return <Route path="/" element={<Navigate to="studentdashboard" replace />} />;

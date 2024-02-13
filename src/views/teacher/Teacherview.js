@@ -60,7 +60,7 @@ export default function Teacherview() {
 
 
   const create_Session = async(lecture_slug)=>{
-    navigation(`/sessionmanage?slug=${lecture_slug}`)
+    navigation(`/teacher/session?slug=${lecture_slug}`)
   }
 
   useEffect(() => {

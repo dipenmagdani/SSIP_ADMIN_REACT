@@ -64,7 +64,7 @@ const Sessionmanage = () => {
           setSessionData(response.data.data)
         } else {
           alert(responseobj.errorMessage.message)
-          navigate("/teacherdashboard")
+          navigate("/teacher/dashboard")
         }
       })
     }

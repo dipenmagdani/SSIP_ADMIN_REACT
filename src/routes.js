@@ -1,4 +1,5 @@
 import React from 'react'
+import LectureHistory from './views/teacher/LectureHistory'
 
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -113,9 +114,10 @@ const routes = [
   { path: '/timetable',name:'Timetable',element:Timetable},
   { path: '/subject',name:'Subject',element:Subject},
   { path: '/addstudent',name:'AddStudent',element:Addstudent},
-  { path: '/teacherdashboard',name:'Teacherview',element:Teacherview},
+  { path: '/teacher/dashboard',name:'Teacherview',element:Teacherview},
   { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  ,
-  { path: '/sessionmanage',name:'Sessionmanage',element:Sessionmanage}  
+  { path: '/teacher/session',name:'Sessionmanage',element:Sessionmanage}  ,
+  { path: '/teacher/lectures/history',name:'LectureHistory',element:LectureHistory}  
 ]
 
  export default routes;

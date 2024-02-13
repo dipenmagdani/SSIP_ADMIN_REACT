@@ -9,8 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import expireToken from 'src/global_function/unauthorizedToken';
 import LoadingBar from 'react-top-loading-bar';
 
-const DefaultLayout = () => {
-  console.log(base_url)
+const DefaultLayout = () => {  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken} = state
   const [serverAvaibility,setServerAvaibility] = useState(false)
