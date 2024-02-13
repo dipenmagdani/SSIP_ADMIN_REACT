@@ -14,7 +14,7 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_
   const [Teachers, setTeachers] = useState(lectureConfigs.teachers)
   const [Batches, setBatches] = useState(lectureConfigs.batches)
   const [StoredTokens,CallAPI] = useAPI()
-
+  console.log(lectureConfigs)
   const lectureForm = useRef()
   const { register, handleSubmit } = useForm();
   const handleFormSubmit = async (data) => {

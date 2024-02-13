@@ -118,7 +118,7 @@ const StudentDashboard = () => {
                                                   >
                                                     <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
                                                       <div className="fw-bold mx-2 my-2">
-                                                        {lecture.subject.subject_name}
+                                                        {lecture.subject.subject_name.charAt(0).toUpperCase() + lecture.subject.subject_name.slice(1)}
                                                       </div>
                                                         <small className='mx-2 my-2'>
                                                           {lecture.type.toUpperCase()}
@@ -132,7 +132,7 @@ const StudentDashboard = () => {
                                                       <CRow className='w-100 align-items-center'>
                                                         <CCol className='text-sm-start col-12 col-sm-4 col-lg-4 col-md-4'>
                                                           
-                                                        Prof - {lecture.teacher}{' '}
+                                                        Prof - {lecture.teacher.charAt(0).toUpperCase() + lecture.teacher.slice(1)}{' '}
                                                          
                                                         </CCol>
                                                         <CCol className=' text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
@@ -140,7 +140,7 @@ const StudentDashboard = () => {
                                                         batches -{' '}
                                                         {lecture.batches.map((batch, index) => (
                                                           <span key={index}>
-                                                            {batch.batch_name}
+                                                            {batch.batch_name.toUpperCase()}
                                                             {index < lecture.batches.length - 1 &&
                                                               ', '}
                                                           </span>
@@ -149,7 +149,7 @@ const StudentDashboard = () => {
                                                         </CCol>
                                                         <CCol className='text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
                                                         
-                                                        {lecture.classroom.class_name}
+                                                        {lecture.classroom.class_name.charAt(0).toUpperCase() + lecture.classroom.class_name.slice(1)}
                                                       {' '}
                                                         </CCol>
                                                       </CRow>
@@ -186,7 +186,9 @@ const StudentDashboard = () => {
                                     </>
                                   ))
                                 ) : (
-                                  <p>no schedule</p>
+                                  <CToast autohide={false} visible={true}>
+                                                  <CToastBody>No Schedules Found</CToastBody>
+                                                </CToast>
                                 )}
                               </CRow>
                             </div>

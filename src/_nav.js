@@ -3,7 +3,13 @@ import CIcon from '@coreui/icons-react'
 import {
   cilDrop,
   cilPencil,
-  cilAccountLogout
+  cilAccountLogout,
+  cilCalendar,
+  cilNotes,
+  cilPeople,
+  cilLibraryBuilding,
+  cilSchool
+
   //cilSpeedometer,
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react'
@@ -24,31 +30,31 @@ const _nav = {
       component: CNavItem,
       name: 'Dashboard',
       to: '/',
-      icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
       name: 'Subject',
       to: '/subject',    
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
       name: 'Teachers',
       to: '/manage-teachers',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilSchool} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
       name: 'Add Student',
       to: '/addstudent',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
       name: 'Timetable',
       to: '/timetable',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
@@ -63,7 +69,7 @@ const _nav = {
       component: CNavItem,
       name: 'Dashboard',
       to: '/teacherdashboard',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
@@ -77,7 +83,7 @@ const _nav = {
       component: CNavItem,
       name: 'Dashboard',
       to: '/studentdashboard',
-      icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
     }, 
     {
       component: CNavItem,

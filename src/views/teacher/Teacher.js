@@ -214,7 +214,7 @@ const Teacher = () => {
                       key={index}
                     >
                       <CTableDataCell>
-                        <div>{item.profile.name}</div>
+                        <div>{item.profile.name.charAt(0) + item.profile.name.slice(1)}</div>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item.profile.email}</div>
