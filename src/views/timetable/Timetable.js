@@ -10,7 +10,7 @@ import {
   CToast,
   CToastBody,
   CToastHeader,
-  CAlert,  
+  CAlert,
 } from '@coreui/react'
 import axios from 'axios'
 import { useEffect } from 'react'
@@ -18,8 +18,8 @@ import useAPI from 'src/global_function/useApi'
 import SetLecture from './SetLecture'
 
 const Timetable = () => {
-  
-  
+
+
   const [Semesters, setSemesters] = useState(null)
   const [division, set_division] = useState(null)
   const [currentSelectSemester, setcurrentSelectSemester] = useState(null)
@@ -27,9 +27,9 @@ const Timetable = () => {
   const [StoredTokens, CallAPI] = useAPI()
   const [time_table, set_time_table] = useState(null)
   const [visible, setVisible] = useState(false)
-  const [lectureConfigs,setLectureConfigs] = useState(null)
+  const [lectureConfigs, setLectureConfigs] = useState(null)
   const [schedules, set_sechedules] = useState(null)
-  const [term,set_term] = useState(null)
+  const [term, set_term] = useState(null)
 
   const load_semester = async (term_slug) => {
     console.log(term_slug)
@@ -41,18 +41,18 @@ const Timetable = () => {
     let endpoint = `/manage/get_semesters`
     let method = 'get'
     let headers = header
-    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{'term_slug':term_slug})
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers, null, { 'term_slug': term_slug })
     if (response_obj.error == false) {
       let response = response_obj.response
       setSemesters(response.data.data)
     } else {
-        setSemesters(null)
-        alert(response_obj.errorMessage.message)
+      setSemesters(null)
+      alert(response_obj.errorMessage.message)
     }
   }
 
-  const showLectureModal = async (schedule) => {      
-  const header = {
+  const showLectureModal = async (schedule) => {
+    const header = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': true,
     }
@@ -60,13 +60,13 @@ const Timetable = () => {
     let endpoint = `/manage/get_lecture_configs`
     let method = 'get'
     let headers = header
-    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{ schedule_slug: schedule.slug })
-    if(response_obj.error ===false){
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers, null, { schedule_slug: schedule.slug })
+    if (response_obj.error === false) {
       set_sechedule(schedule)
       setLectureConfigs(response_obj.response.data.data)
       setVisible(true)
-    }else{
-        alert(response_obj.errorMessage.message);        
+    } else {
+      alert(response_obj.errorMessage.message);
     }
   }
   const load_division = async (semester_slug) => {
@@ -99,24 +99,23 @@ const Timetable = () => {
     }
   }
 
-  const load_term = async()=>{
+  const load_term = async () => {
     const header = {
-      "Content-Typle" :"application/json",
-      'ngrok-skip-browser-warning':true
+      "Content-Typle": "application/json",
+      'ngrok-skip-browser-warning': true
     }
-    
+
     const axiosInstance = axios.create()
-    let endpoint = `/manage/get_terms`;let method='get';let headers = header;
-    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers)
-    if(response_obj.error === false)
-    {
+    let endpoint = `/manage/get_terms`; let method = 'get'; let headers = header;
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
+    if (response_obj.error === false) {
       const response = response_obj.response
       set_term(response.data.data)
     }
-    else{
+    else {
       alert(response_obj.errorMessage.message)
     }
-  }  
+  }
   const load_time_talbe = async (division_slug) => {
     if (division_slug != ' ') {
       const headers = {
@@ -147,14 +146,14 @@ const Timetable = () => {
     }
   }
   //for set the schedule
-  useEffect(() => {    
-      load_term()    
+  useEffect(() => {
+    load_term()
   }, [])
   return (
     <>
       <CRow className="mb-3">
         <CCol>
-        {term && (
+          {term && (
             <>
               <CCard className={`mb-3`}>
                 <CCardHeader>select term</CCardHeader>
@@ -233,63 +232,65 @@ const Timetable = () => {
                 <CCardBody>
                   <CRow className="flex-column" style={{ padding: '0' }}>
                     {time_table ? (
-                        schedules.map((item, index) => (
+                      schedules.map((item, index) => (
                         <>
-                          <CCol className="mb-4 d-flex align-items-center flex-column" key={index}>                        
-                              <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
-                                  {item.day.toUpperCase()}
-                                  <button
-                                    className="btn"
-                                    onClick={() => {
-                                      showLectureModal(item)
-                                    }}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="16"
-                                      height="16"
-                                      fill="currentColor"
-                                      className="bi bi-plus-circle"
-                                      viewBox="0 0 16 16"
-                                    >
-                                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                    </svg>
-                                  </button>
-                              </CAlert>                            
+                          <CCol className="mb-4 d-flex align-items-center flex-column" key={index}>
+                            <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
+                              {item.day.toUpperCase()}
+                              <button
+                                className="btn"
+                                onClick={() => {
+                                  showLectureModal(item)
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  fill="currentColor"
+                                  className="bi bi-plus-circle"
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                </svg>
+                              </button>
+                            </CAlert>
                             <CCard className="w-100  rounded-0 border-0">
                               <CCardBody className=''>
-                              <CRow className="justify-content-center">
-                                      {item.lectures.length > 0 ? (
-                                        item.lectures.map((lecture,index) => (
-                                          <CToast key={index} autohide={false} visible={true} className='mb-3 w-100'>
-                                            <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
-                                                      <div className="fw-bold mx-2 my-2">
-                                                        {lecture.subject.subject_name}
-                                                      </div>
-                                                        <small className='mx-2 my-2'>
-                                                          {lecture.type.toUpperCase()}
-                                                        </small>
-                                                      <small className='mx-2 my-2'>
-                                                        {lecture.start_time.slice(0, 5)} |{' '}
-                                                        {lecture.end_time.slice(0, 5)}
-                                                      </small>
-                                            </CToastHeader>
-                                            <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name}{index < lecture.batches.length - 1 && ', '}</span> ))} </span> <span className='mx-3'>{lecture.classroom.class_name}</span> </CToastBody>
-                                          </CToast>
-                                        )) 
-                                      ) : (
-                                        <CToast autohide={false} visible={true}>                 
-                                            <CToastBody>No Lectures Found</CToastBody>
-                                        </CToast>
-                                      )}                                    
+                                <CRow className="justify-content-center">
+                                  {item.lectures.length > 0 ? (
+                                    item.lectures.map((lecture, index) => (
+                                      <CToast key={index} autohide={false} visible={true} className='mb-3 w-100'>
+                                        <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
+                                          <div className="fw-bold mx-2 my-2">
+                                            {lecture.subject.subject_name.charAt(0).toUpperCase() + lecture.subject.subject_name.slice(1)}
+                                          </div>
+                                          <small className='mx-2 my-2'>
+                                            {lecture.type.toUpperCase()}
+                                          </small>
+                                          <small className='mx-2 my-2'>
+                                            {lecture.start_time.slice(0, 5)} |{' '}
+                                            {lecture.end_time.slice(0, 5)}
+                                          </small>
+                                        </CToastHeader>
+                                        <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher.charAt(0).toUpperCase() + lecture.teacher.slice(1)} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name.toUpperCase()}{index < lecture.batches.length - 1 && ', '}</span>))} </span> <span className='mx-3'>{lecture.classroom.class_name.charAt(0).toUpperCase() + lecture.classroom.class_name.slice(1)}</span> </CToastBody>
+                                      </CToast>
+                                    ))
+                                  ) : (
+                                    <CToast autohide={false} visible={true}>
+                                      <CToastBody>No Lectures Found</CToastBody>
+                                    </CToast>
+                                  )}
                                 </CRow>
                               </CCardBody>
                             </CCard>
                           </CCol></>
-                        ))                     
+                      ))
                     ) : (
-                      <p>no schedule</p>
+                      <CToast autohide={false} visible={true}>
+                        <CToastBody>No Schedules Found</CToastBody>
+                      </CToast>
                     )}
                   </CRow>
                 </CCardBody>
@@ -311,7 +312,7 @@ const Timetable = () => {
           ) : <CToastBody>Select a term </CToastBody> : null}
         </CToast>
       )}
-      {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules}/>}
+      {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules} />}
     </>
   )
 }

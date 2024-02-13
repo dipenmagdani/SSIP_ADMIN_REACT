@@ -253,7 +253,7 @@ const Subject = () => {
                   {subjects.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item.subject_name}</div>
+                        <div>{item.subject_name.charAt(0).toUpperCase() + item.subject_name.slice(1)}</div>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item.code}</div>
