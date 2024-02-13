@@ -21,21 +21,24 @@ const Addstudent = () => {
     // functions to handel the requests
 
     const load_semester = async (batchslug) => {
-        const header = {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': true,
+        if(batchslug != " "){
+            const header = {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': true,
+            }
+            const axiosInstance = axios.create()
+            let endpoint = `/manage/get_semesters`
+            let method = 'get'
+            let headers = header
+            let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
+            if (response_obj.error == false) {
+                let response = response_obj.response
+                setSemesters(response.data.data)
+            } else {      
+                alert(response_obj.errorMessage.message)      
+            }     
         }
-        const axiosInstance = axios.create()
-        let endpoint = `/manage/get_semesters`
-        let method = 'get'
-        let headers = header
-        let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
-        if (response_obj.error == false) {
-            let response = response_obj.response
-            setSemesters(response.data.data)
-        } else {      
-            alert(response_obj.errorMessage.message)      
-        }
+       
     }
     const load_division = async (semester_slug) => {
         if (semester_slug != ' ') {
@@ -95,6 +98,7 @@ const Addstudent = () => {
     }
 
     const load_term = async()=>{
+        
         const header = {
           "Content-Typle" :"application/json",
           'ngrok-skip-browser-warning':true

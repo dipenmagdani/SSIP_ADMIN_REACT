@@ -151,11 +151,12 @@ export default function Teacherview() {
                                                       {' '}
                                                         </CCol>
                                                       </CRow>
-                                                      <CRow className='w-100'>
-                                                        <CCol>
-                                                          <button className='btn btn-outline-success w-100' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
-                                                        </CCol>
-                                                      </CRow>
+                                                      <hr className='w-100'></hr>
+                                                      <div className='d-flex w-100'>
+                                                        <div className='w-100'>
+                                                          <button className='btn btn-outline-success w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
+                                                        </div>
+                                                      </div>
                                                       
                                                       
                                                       <div>

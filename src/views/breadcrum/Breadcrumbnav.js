@@ -17,8 +17,8 @@ const Breadcrumbnav = (props) => {
     let breadcrumbs = {
         term:["term"],
         semester: ["term","semester"],
-        division: ["semester","division"],
-        batch: ["semester","division","batch"],
+        division: ["term","semester","division"],
+        batch: ["term","semester","division","batch"],
     }
     return (
         <>    

@@ -62,9 +62,9 @@ const Timetable = () => {
     let headers = header
     let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{ schedule_slug: schedule.slug })
     if(response_obj.error ===false){
-        setVisible(true)
-        set_sechedule(schedule)
-        setLectureConfigs(response_obj.response.data.data)
+      set_sechedule(schedule)
+      setLectureConfigs(response_obj.response.data.data)
+      setVisible(true)
     }else{
         alert(response_obj.errorMessage.message);        
     }

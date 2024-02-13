@@ -57,24 +57,26 @@ import Swal from 'sweetalert'
       method,
       headers,
       body,
+      null
     )
     if (response_obj.error == false) {
       
       let response = response_obj.response
-      console.log(response.data.data)
+     
       setTeacherlist((prevArray) => [...prevArray, response.data.data])
     } else {      
     }
   }
 
   const handleSubmit = (event) => {
+    
     event.preventDefault()
     const form = event.currentTarget
-    if (form.checkValidity() === false) {
-      event.preventDefault()
-      event.stopPropagation()
-      return
-    }
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault()
+    //   event.stopPropagation()
+    //   return
+    // }
     const name = event.target.tname.value
     const ph_no = event.target.tmobile.value
     const email = event.target.temail.value
@@ -164,7 +166,7 @@ const Teacher = () => {
       let response = response_obj.response
       setTeacherlist(response.data.data)
     } else {
-      console.log(response_obj.error)
+      console.log(response_obj.errorMessage.message)
     }
   }
 
