@@ -68,8 +68,14 @@ const _nav = {
     {
       component: CNavItem,
       name: 'Dashboard',
-      to: '/teacherdashboard',
+      to: '/teacher/dashboard',
       icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
+      name: 'LectureHistory',
+      to: '/teacher/lectures/history',    
+      icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
