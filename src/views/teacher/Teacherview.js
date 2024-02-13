@@ -126,7 +126,7 @@ export default function Teacherview() {
                                                         {moment(lecture.end_time.slice(0,5), 'HH:mm').format('h:mm A')}
                                                       </small>
                                                     </CToastHeader>
-                                                    <CToastBody className="d-flex flex-row flex-wrap justify-content-center justify-content-md-between">
+                                                    <CToastBody className="d-flex flex-row flex-wrap justify-content-center">
                                                       <CRow className='w-100 align-items-center'>
                                                         <CCol className='text-sm-start col-12 col-sm-4 col-lg-4 col-md-4'>
                                                           

@@ -1,4 +1,4 @@
-import React, { useState,useRef,useEffect} from 'react'
+import React, { useRef,useEffect} from 'react'
 import {
   COffcanvas,  
   COffcanvasBody,  
@@ -8,11 +8,7 @@ import { useForm } from "react-hook-form"
 import useAPI from 'src/global_function/useApi'
 import axios from 'axios'
 
-function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_list}) {    
-  const [Classrooms, setClassroom] = useState(lectureConfigs.classrooms)
-  const [Subjects, setSubjects] = useState(lectureConfigs.subjects)
-  const [Teachers, setTeachers] = useState(lectureConfigs.teachers)
-  const [Batches, setBatches] = useState(lectureConfigs.batches)
+function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_list}) {
   const [StoredTokens,CallAPI] = useAPI()
   console.log(lectureConfigs)
   const lectureForm = useRef()
@@ -100,8 +96,8 @@ useEffect(() => {
               <label className="form-label">Select Classroom</label>
               <select className="form-select" aria-label="Default select example" {...register("classroom")}>
                 <option value="">....</option>
-                {Classrooms &&
-                  Classrooms.map((item, index) => (
+                {lectureConfigs.classrooms &&
+                  lectureConfigs.classrooms.map((item, index) => (
                     <option key={index} value={item.slug}>
                       {item.class_name}
                     </option>
@@ -112,8 +108,8 @@ useEffect(() => {
               <label className="form-label">Select Subject</label>
               <select className="form-select" aria-label="Default select example" {...register("subject")}>
                 <option value="">....</option>
-                {Subjects &&
-                  Subjects.map((item, index) => (
+                {lectureConfigs.subjects &&
+                  lectureConfigs.subjects.map((item, index) => (
                     <option key={index} value={item.slug}>
                       {item.subject_name}
                     </option>
@@ -124,8 +120,8 @@ useEffect(() => {
               <label className="form-label">Select Teacher</label>
               <select className="form-select" aria-label="Default select example" {...register("teacher")}>
                 <option value="">....</option>
-                {Teachers &&
-                  Teachers.map((item, index) => (
+                {lectureConfigs.teachers &&
+                  lectureConfigs.teachers.map((item, index) => (
                     <option key={index} value={item.slug}>
                       {item.profile.name}
                     </option>
@@ -135,8 +131,8 @@ useEffect(() => {
             <div className="mb-3">
               <label className="form-label">Select Batch</label>
               <select multiple className="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
-                {Batches &&
-                  Batches.map((item, index) => (
+                {lectureConfigs.batches &&
+                  lectureConfigs.batches.map((item, index) => (
                     <option key={index} value={item.slug}>
                       {item.batch_name}
                   </option>

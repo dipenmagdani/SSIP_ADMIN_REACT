@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React,{ useState } from 'react'
 import {
   CCard,
   CCardBody,
@@ -22,7 +21,6 @@ const Timetable = () => {
 
   const [Semesters, setSemesters] = useState(null)
   const [division, set_division] = useState(null)
-  const [currentSelectSemester, setcurrentSelectSemester] = useState(null)
   const [schedule, set_sechedule] = useState(null)
   const [StoredTokens, CallAPI] = useAPI()
   const [time_table, set_time_table] = useState(null)
@@ -60,13 +58,12 @@ const Timetable = () => {
     let endpoint = `/manage/get_lecture_configs`
     let method = 'get'
     let headers = header
-    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers, null, { schedule_slug: schedule.slug })
-    if (response_obj.error === false) {
-      set_sechedule(schedule)
-      setLectureConfigs(response_obj.response.data.data)
-      setVisible(true)
-    } else {
-      alert(response_obj.errorMessage.message);
+    let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{ schedule_slug: schedule.slug })
+    if(response_obj.error ===false){
+        set_sechedule(schedule)
+        setLectureConfigs(response_obj.response.data.data)
+    }else{
+        alert(response_obj.errorMessage.message);        
     }
   }
   const load_division = async (semester_slug) => {
@@ -90,8 +87,9 @@ const Timetable = () => {
       if (response_obj.error === false) {
         const response = response_obj.response
         set_division(response.data.data)
+        setLectureConfigs(null)
       } else {
-        set_division(null)
+        set_division(null)        
         alert(response_obj.errorMessage.message)
       }
     } else {
@@ -234,28 +232,28 @@ const Timetable = () => {
                     {time_table ? (
                       schedules.map((item, index) => (
                         <>
-                          <CCol className="mb-4 d-flex align-items-center flex-column" key={index}>
-                            <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
-                              {item.day.toUpperCase()}
-                              <button
-                                className="btn"
-                                onClick={() => {
-                                  showLectureModal(item)
-                                }}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  fill="currentColor"
-                                  className="bi bi-plus-circle"
-                                  viewBox="0 0 16 16"
-                                >
-                                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                </svg>
-                              </button>
-                            </CAlert>
+                          <CCol className="mb-4 d-flex align-items-center flex-column" key={index}>                        
+                              <CAlert className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center" color="primary" visible={true} onClose={() => setVisible(false)}>
+                                  {item.day.toUpperCase()}
+                                  <button
+                                    className="btn"
+                                    onClick={() => {
+                                      showLectureModal(item); setVisible(true);
+                                    }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="currentColor"
+                                      className="bi bi-plus-circle"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                    </svg>
+                                  </button>
+                              </CAlert>                            
                             <CCard className="w-100  rounded-0 border-0">
                               <CCardBody className=''>
                                 <CRow className="justify-content-center">

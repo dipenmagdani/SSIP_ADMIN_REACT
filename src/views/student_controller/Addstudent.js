@@ -20,8 +20,8 @@ const Addstudent = () => {
 
     // functions to handel the requests
 
-    const load_semester = async (batchslug) => {
-        if(batchslug != " "){
+    const load_semester = async (termSlug) => {
+        if(termSlug){
             const header = {
                 'Content-Type': 'application/json',
                 'ngrok-skip-browser-warning': true,
@@ -30,13 +30,15 @@ const Addstudent = () => {
             let endpoint = `/manage/get_semesters`
             let method = 'get'
             let headers = header
-            let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers)
+            let response_obj = await CallAPI(StoredTokens, axiosInstance, endpoint, method, headers,null,{term_slug:termSlug})
             if (response_obj.error == false) {
                 let response = response_obj.response
                 setSemesters(response.data.data)
             } else {      
                 alert(response_obj.errorMessage.message)      
-            }     
+            }
+        }else{
+            alert('Please select a valid term')
         }
        
     }
