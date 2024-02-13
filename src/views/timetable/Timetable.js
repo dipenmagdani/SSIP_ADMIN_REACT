@@ -117,7 +117,7 @@ const Timetable = () => {
     }
   }
   const load_time_talbe = async (division_slug) => {
-    if (division_slug != ' ') {
+    if (division_slug != '') {
       const headers = {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': true,
