@@ -1,5 +1,8 @@
-export const base_url= "http://192.168.203.106:8000";
-export const websocket = "ws://192.168.203.106:8000"
+
+export const base_url= "http://172.16.2.98:8000";
+export const websocket = "ws://172.16.2.98:8000"
+
+
 
 // const token = localStorage.getItem('accessToken')
 // const header = {

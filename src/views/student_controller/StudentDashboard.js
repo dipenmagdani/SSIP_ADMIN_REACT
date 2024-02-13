@@ -21,6 +21,7 @@ import moment from 'moment'
 const StudentDashboard = () => {
     const [StoredTokens, CallAPI] = useAPI()
     const [TimeTables, setTimeTables] = useState(null)
+    const [attendance_status,set_attendance_status] = useState(false)
     const load_teacher_timetable = async () => {
       const headers = {
         'Content-Type': 'application/json',
@@ -56,9 +57,11 @@ const StudentDashboard = () => {
           if(response.data.data === true)
           {
             alert("your Attendance Marked successfully")
+            set_attendance_status(!attendance_status)
           }
         }
         else{
+          
           alert(response_obj.errorMessage.message)
         }
     }
@@ -105,8 +108,8 @@ const StudentDashboard = () => {
                                           {item.day.toUpperCase()}
                                         </CAlert>
                                         <div className="w-100  rounded-0 border-0">
-                                          <CCardBody className="" style={{paddingBottom:"0px"}}>
-                                            <CRow className="justify-content-center w-100">
+                                          <div className="" style={{paddingBottom:"0px"}}>
+                                            <div className="justify-content-center w-100">
                                               {item.lectures.length > 0 ? (
                                                 item.lectures.map((lecture, index) => (
                                                   <CToast
@@ -136,8 +139,8 @@ const StudentDashboard = () => {
                                                          
                                                         </CCol>
                                                         <CCol className=' text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
-                                                        <span>
-                                                        batches -{' '}
+                                                        <div className='w-100 text-center'>
+                                                        {' '}
                                                         {lecture.batches.map((batch, index) => (
                                                           <span key={index}>
                                                             {batch.batch_name.toUpperCase()}
@@ -145,7 +148,7 @@ const StudentDashboard = () => {
                                                               ', '}
                                                           </span>
                                                         ))}{' '}
-                                                      </span>
+                                                      </div>
                                                         </CCol>
                                                         <CCol className='text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
                                                         
@@ -156,7 +159,7 @@ const StudentDashboard = () => {
                                                         <div className='d-flex flex-wrap w-100'>
                                                       <div className='w-100 mt-3'>
                                                       {
-                                                            (lecture.session.active === "pre" ||  lecture.session.active === "ongoing") && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> mark_attendance(e.target.value)}>Mark Your Attendance</button>
+                                                            (lecture.session.active === "pre" ||  lecture.session.active === "ongoing") && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> mark_attendance(e.target.value)} disabled={attendance_status}>Mark Your Attendance</button>
                                                             
                                                           }
                                                            {
@@ -179,8 +182,8 @@ const StudentDashboard = () => {
                                                   <CToastBody>No Lectures Found</CToastBody>
                                                 </CToast>
                                               )}
-                                            </CRow>
-                                          </CCardBody>
+                                            </div>
+                                          </div>
                                         </div>
                                       </CCol>
                                     </>
@@ -210,6 +213,9 @@ const StudentDashboard = () => {
                 alt="SmartRoll Logo"
               />
             </CToastHeader>
+            <CToastBody>
+              <p>No Timetable Found</p>
+            </CToastBody>
           </CToast>
         )}
         </CCol>
