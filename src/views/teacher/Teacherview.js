@@ -103,8 +103,8 @@ export default function Teacherview() {
                                           {item.day.toUpperCase()}
                                         </CAlert>
                                         <div className="w-100  rounded-0 border-0">
-                                          <CCardBody className="" style={{paddingBottom:"0px"}}>
-                                            <CRow className="justify-content-center w-100">
+                                          <div className="" style={{paddingBottom:"0px"}}>
+                                            <div className="justify-content-center w-100">
                                               {item.lectures.length > 0 ? (
                                                 item.lectures.map((lecture, index) => (
                                                   <CToast
@@ -134,8 +134,8 @@ export default function Teacherview() {
                                                          
                                                         </CCol>
                                                         <CCol className=' text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
-                                                        <span>
-                                                        batches -{' '}
+                                                        <div className='w-100 text-center'>
+                                                        {' '}
                                                         {lecture.batches.map((batch, index) => (
                                                           <span key={index}>
                                                             {batch.batch_name.toUpperCase()}
@@ -143,7 +143,7 @@ export default function Teacherview() {
                                                               ', '}
                                                           </span>
                                                         ))}{' '}
-                                                      </span>
+                                                      </div>
                                                         </CCol>
                                                         <CCol className='text-sm-end col-12 col-sm-4 col-lg-4 col-md-4'>
                                                         
@@ -154,7 +154,15 @@ export default function Teacherview() {
                                                       <hr className='w-100'></hr>
                                                       <div className='d-flex w-100'>
                                                         <div className='w-100'>
-                                                          <button className='btn btn-outline-success w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
+                                                          {
+                                                            lecture.session.active === "pre" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Start Session</button>
+                                                          }
+                                                          {
+                                                            lecture.session.active === "ongoing" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Ongoing Session</button>
+                                                          }
+                                                          {lecture.session.active === "post" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Ongoing Session</button>
+
+                                                          }
                                                         </div>
                                                       </div>
                                                       
@@ -171,8 +179,8 @@ export default function Teacherview() {
                                                   <CToastBody>No Lectures Found</CToastBody>
                                                 </CToast>
                                               )}
-                                            </CRow>
-                                          </CCardBody>
+                                            </div>
+                                          </div>
                                         </div>
                                       </CCol>
                                     </>

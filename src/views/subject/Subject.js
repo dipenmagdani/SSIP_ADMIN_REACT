@@ -203,19 +203,19 @@ const Subject = () => {
             onSubmit={handleSubmit}
           >
             <CCol md={12}>
-              <CFormLabel htmlFor="validationCustom01">Subjcet Name</CFormLabel>
+              <CFormLabel htmlFor="validationCustom01">Subject Name</CFormLabel>
               <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_name(e.target.value)} required />
               <CFormFeedback valid>Looks good!</CFormFeedback>
             </CCol>
             
             
             <CCol md={6}>
-              <CFormLabel htmlFor="validationCustom01">Subjcet Code</CFormLabel>
+              <CFormLabel htmlFor="validationCustom01">Subject Code</CFormLabel>
               <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_code(e.target.value)} required />
               <CFormFeedback valid>Looks good!</CFormFeedback>
             </CCol>
             <CCol md={6}>
-              <CFormLabel htmlFor="validationCustom01">Subjcet Credit</CFormLabel>
+              <CFormLabel htmlFor="validationCustom01">Subject Credit</CFormLabel>
               <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_credit(e.target.value)} required />
               <CFormFeedback valid>Looks good!</CFormFeedback>
             </CCol>

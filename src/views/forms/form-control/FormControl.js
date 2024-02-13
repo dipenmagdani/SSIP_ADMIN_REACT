@@ -53,7 +53,7 @@ const CustomStyles = (set_divisions, semester_slug) => {
     if(response_obj.error == false){
       let response = response_obj.response
       let changeCount = {...objectCount}
-      changeCount.division += 1  
+      changeCount.divison += 1  
         set_divisions(prevArray => [...prevArray, response.data.data])
       showAlert("success","Semester Added successfully...!")
     }else{        
