@@ -1,5 +1,5 @@
-export const base_url= "http://localhost:8000";
-export const websocket = "ws://localhost:8000"
+export const base_url= "";
+export const websocket = ""
 
 // const token = localStorage.getItem('accessToken')
 // const header = {
