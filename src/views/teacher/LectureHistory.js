@@ -76,7 +76,7 @@ const load_subjects_of_teacher = async () => {
   }
 
   const search_lecture = (day)=>{
-    
+    console.log(day);
     const filteredData = lecture.filter(item => item.session.some(session => session.day === day));
     
     if(filteredData.length > 0) {

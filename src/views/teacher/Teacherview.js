@@ -159,7 +159,7 @@ export default function Teacherview() {
                                                           {
                                                             lecture.session.active === "ongoing" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Ongoing Session</button>
                                                           }
-                                                          {lecture.session.active === "post" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Ongoing Session</button>
+                                                          {lecture.session.active === "post" && <button disabled={true} className='btn btn-outline-secondary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Session Ended</button>
 
                                                           }
                                                         </div>
