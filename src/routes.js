@@ -47,7 +47,7 @@ const StudentDashboard =  React.lazy(() => import('./views/student_controller/St
 const Sessionmanage =  React.lazy(() => import('./views/teacher/Sessionmanage'))
 const Logout = React.lazy(()=> import('./views/pages/logout/Logout'))
 
-// Icons
+// // Icons
 const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'))
 const Flags = React.lazy(() => import('./views/icons/flags/Flags'))
 const Brands = React.lazy(() => import('./views/icons/brands/Brands'))
