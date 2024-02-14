@@ -49,8 +49,7 @@ export default function Teacherview() {
       null,
     )
     if (response_obj.error === false) {
-      const response = response_obj.response
-      console.log(response.data.data)
+      const response = response_obj.response      
       setTimeTables(response.data.data)
     }
     else{
@@ -175,8 +174,8 @@ export default function Teacherview() {
                                                   </CToast>
                                                 ))
                                               ) : (
-                                                <CToast autohide={false} visible={true}>
-                                                  <CToastBody>No Lectures Found</CToastBody>
+                                                <CToast autohide={false} visible={true} className='w-100 my-3'>
+                                                  <CToastBody>You don't have any lectures today ://</CToastBody>
                                                 </CToast>
                                               )}
                                             </div>

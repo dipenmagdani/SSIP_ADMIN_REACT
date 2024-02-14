@@ -67,8 +67,7 @@ const load_subjects_of_teacher = async () => {
         {subject_slug:subject_slug},
       )
       if (response_obj.error === false) {
-        const response = response_obj.response
-        console.log(response.data.data)
+        const response = response_obj.response        
         setLecture(response.data.data)     
       }
       else{

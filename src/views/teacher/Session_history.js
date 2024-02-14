@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import {
     COffcanvas,  
@@ -14,7 +14,13 @@ import {
     CCol
   } from '@coreui/react'
 const Session_history = ({visible,setVisible,attendances,session_data}) => {
-    const tableRef = useRef(null);
+  const tableRef = useRef(null);
+  const [isRefReady, setIsRefReady] = useState(false);
+  useEffect(() => {
+    if (tableRef.current) {
+      setIsRefReady(true);
+    }
+  },[tableRef.current])
   return (
    <>
    <COffcanvas
@@ -43,15 +49,15 @@ const Session_history = ({visible,setVisible,attendances,session_data}) => {
         </CAlert>
         <COffcanvasBody>
             <div className='w-100'>
-            <DownloadTableExcel
+            {tableRef.current ? (<DownloadTableExcel
                         filename={`${session_data.lecture.subject.subject_name} - ${new Date(session_data.day).toLocaleString()}`}
-                        sheet="users"
+                        sheet="attendance"
                         currentTableRef={tableRef.current}
                     >
 
                       <button className='my-2 w-100 btn btn btn-outline-primary'> Export excel </button>
 
-                    </DownloadTableExcel>
+                  </DownloadTableExcel>) :null}
             </div>
         <CRow className="w-100 flex-col">
                     <CCol className="col-12">
