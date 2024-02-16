@@ -82,8 +82,8 @@ const StudentDashboard = () => {
               <CCol className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <CCard className="">
                   <CCardHeader className="d-flex justify-content-center justify-content-sm-between flex-wrap">
-                    <span>Semester - {timetable.division.semester.no}</span>
-                    <span>Division - {timetable.division.division_name}</span>
+                    <span className='mx-2'>Semester - {timetable.division.semester.no}</span>
+                    <span className='mx-2'>Division - {timetable.division.division_name}</span>
                   </CCardHeader>
                   <CCardBody>
                     <>
@@ -110,7 +110,7 @@ const StudentDashboard = () => {
                                         <div className="w-100  rounded-0 border-0">
                                           <div className="" style={{paddingBottom:"0px"}}>
                                             <div className="justify-content-center w-100">
-                                              {item.lectures.length > 0 ? (
+                                              {item.lectures.length < 0 ? (
                                                 item.lectures.map((lecture, index) => (
                                                   <CToast
                                                     key={index}
@@ -178,7 +178,7 @@ const StudentDashboard = () => {
                                                   </CToast>
                                                 ))
                                               ) : (
-                                                <CToast autohide={false} visible={true}>
+                                                <CToast className="w-100 d-flex justify-content-center mt-3" autohide={false} visible={true}>
                                                   <CToastBody>No Lectures Found</CToastBody>
                                                 </CToast>
                                               )}
@@ -189,7 +189,7 @@ const StudentDashboard = () => {
                                     </>
                                   ))
                                 ) : (
-                                  <CToast autohide={false} visible={true}>
+                                  <CToast className="mt-3" autohide={false} visible={true}>
                                                   <CToastBody>No Schedules Found</CToastBody>
                                                 </CToast>
                                 )}

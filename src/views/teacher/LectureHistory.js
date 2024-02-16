@@ -244,7 +244,7 @@ const load_subjects_of_teacher = async () => {
                       <CTableRow v-for="item in tableItems">
                         <CTableDataCell colSpan={3}>
                           <div className='alert alert-primary w-100 my-2'>
-                            <span className=''>No Lecture Sessions Are Thre for This Subject</span>
+                            <span className=''>No Lecture Sessions Are There for This Subject</span>
                           </div>
                         
                         </CTableDataCell>
