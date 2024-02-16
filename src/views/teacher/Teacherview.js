@@ -159,7 +159,7 @@ export default function Teacherview() {
                                                           {
                                                             lecture.session.active === "ongoing" && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Ongoing Session</button>
                                                           }
-                                                          {lecture.session.active === "post" && <button disabled={true} className='btn btn-outline-secondary w-100 mt-3' value={lecture.slug} onClick={(e)=> create_Session(e.target.value)}>Session Ended</button>
+                                                          {lecture.session.active === "post" && <button disabled={true} className='btn btn-outline-secondary w-100 mt-3'>Session Ended</button>
 
                                                           }
                                                         </div>
@@ -175,8 +175,10 @@ export default function Teacherview() {
                                                 ))
                                               ) : (
                                                 <CToast autohide={false} visible={true} className='w-100 my-3'>
-                                                  <CToastBody>You don't have any lectures today ://</CToastBody>
+                                                  <CToastBody>{"You don't have any lectures today"}</CToastBody>
                                                 </CToast>
+                                                    
+                                                  
                                               )}
                                             </div>
                                           </div>

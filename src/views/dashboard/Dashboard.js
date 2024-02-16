@@ -9,7 +9,7 @@ import {
 } from '@coreui/react'
 
 import axios from 'axios'
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
+
 import FormControl from '../forms/form-control/FormControl'
 import Select from '../forms/input-group/InputGroup'
 import Validation from '../forms/validation/Validation'
@@ -69,7 +69,7 @@ const Dashboard = () => {
   return (
     <>
       <Breadcrumbnav currentStep={steps} chageSteps={chageSteps}></Breadcrumbnav>
-      <WidgetsDropdown />
+      
       <CCard className="mb-4">
         <CCardFooter>
           <CRow xs={{ cols: 1 }} md={{ cols: 4 }} className="text-center">

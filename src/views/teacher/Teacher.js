@@ -207,10 +207,6 @@ const Teacher = () => {
                   {Teacherlist.map((item, index) => (
                     <CTableRow
                       v-for="item in tableItems"
-                      onClick={() => {
-                        setSelectedTeacher(item)
-                        setVisible(true)
-                      }}
                       key={index}
                     >
                       <CTableDataCell>
