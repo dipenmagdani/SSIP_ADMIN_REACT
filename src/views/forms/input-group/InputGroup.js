@@ -28,9 +28,9 @@ import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 import { batch } from 'react-redux'
 import useAPI from 'src/global_function/useApi'
-const CustomStyles = (division_slug,set_batches) => {
+const CustomStyles = (division_slug,set_batches,setBatchCout) => {
   const [validated, setValidated] = useState(false)
-  const [batch_name, set_batch_name] = useState("");
+  const [batch_name, set_batch_name] = useState(null);
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, objectCount } = state
@@ -42,6 +42,12 @@ const CustomStyles = (division_slug,set_batches) => {
 
 
   const add_batch = async (body) => {
+    if(batch_name){
+
+    }
+    else{
+      alert("Please Enter The Valid Batch Name")
+    }
     const header = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
@@ -52,9 +58,11 @@ const CustomStyles = (division_slug,set_batches) => {
     if(response_obj.error == false){
         let response = response_obj.response        
         let changeSubjectCount = {...objectCount}
-        changeSubjectCount.Batches += 1        
+        changeSubjectCount.batches += 1      
+        console.log(changeSubjectCount)  
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
         set_batches(prevArray => [...prevArray, response.data.data])
+        setBatchCout(preValue => preValue + 1);
         showAlert("success","Batch Added successfully...!")
       }else{     
         alert(response_obj.errorMessage.message)     
@@ -103,7 +111,7 @@ const Select = (props) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
   const navigate = useNavigate()
-  const {division_slug , chageSteps} = props
+  const {division_slug , chageSteps,setBatchCout} = props
   const [batches, set_batches] = useState([]);
   
   const load_batches = async () => {
@@ -133,7 +141,7 @@ const Select = (props) => {
             <CCardHeader>
               <strong>Batches</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(division_slug,set_batches)}</CCardBody>
+            <CCardBody>{CustomStyles(division_slug,set_batches,setBatchCout)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>

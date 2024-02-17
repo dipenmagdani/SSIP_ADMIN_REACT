@@ -165,7 +165,7 @@ const Timetable = () => {
                     <option value="">Select Term</option>
                     {term.map((item, index) => (
                       <option key={index} value={item.slug}>
-                        term : {item.start_year} - {item.end_year}
+                        Term : {item.start_year} - {item.end_year}
                       </option>
                     ))}
                   </CFormSelect>

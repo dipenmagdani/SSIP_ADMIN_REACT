@@ -76,8 +76,8 @@ export default function Teacherview() {
               <CCol className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <CCard className="">
                   <CCardHeader className="d-flex justify-content-center justify-content-sm-between flex-wrap">
-                    <span>Semester - {timetable.division.semester.no}</span>
-                    <span>Division - {timetable.division.division_name}</span>
+                    <span className='mx-2'>Semester - {timetable.division.semester.no}</span>
+                    <span  className='mx-2'>Division - {timetable.division.division_name}</span>
                   </CCardHeader>
                   <CCardBody>
                     <>
