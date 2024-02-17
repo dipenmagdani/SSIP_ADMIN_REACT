@@ -48,7 +48,11 @@ const CustomStyles = (set_semester,setsemCount,term_slug) => {
 
   
   const addBatches = async(body) => {
-    if(semester_no =! 0){
+    if(semester_no != 0){
+      const header = {
+        "Content-Type":"application/json",      
+        'ngrok-skip-browser-warning':true
+      }
       const axiosInstance = axios.create()
       let endpoint = `/manage/add_semester/`;let method='post';let headers = header;
       let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
@@ -66,10 +70,6 @@ const CustomStyles = (set_semester,setsemCount,term_slug) => {
     else{
       alert("Please Enter the Valid Semester Number")
     }
-    const header = {
-      "Content-Type":"application/json",      
-      'ngrok-skip-browser-warning':true
-    }
     
   }
 
@@ -79,6 +79,8 @@ const CustomStyles = (set_semester,setsemCount,term_slug) => {
     if (form.checkValidity() === false) {
       event.preventDefault()
       event.stopPropagation()
+      alert('Please enter the valid semester details')
+      return
     }
     setValidated(true)
     const body = {
@@ -87,7 +89,6 @@ const CustomStyles = (set_semester,setsemCount,term_slug) => {
       
     }
     addBatches(body)
-    showAlert("success","Bactch Added successfully...!")
     
   }
   return (

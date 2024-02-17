@@ -20,8 +20,7 @@ import moment from 'moment'
 
 const StudentDashboard = () => {
     const [StoredTokens, CallAPI] = useAPI()
-    const [TimeTables, setTimeTables] = useState(null)
-    const [attendance_status,set_attendance_status] = useState(false)
+    const [TimeTables, setTimeTables] = useState(null)    
     const load_teacher_timetable = async () => {
       const headers = {
         'Content-Type': 'application/json',
@@ -44,7 +43,7 @@ const StudentDashboard = () => {
       }
     }
 
-    const mark_attendance =async (lecture_slug)=>{
+    const mark_attendance =async (btn,lecture_slug)=>{
         const headers = {
           'Content-Type':"application/json",
           'ngrok-skip-browser-warning': true,
@@ -55,13 +54,17 @@ const StudentDashboard = () => {
         {
           const response = response_obj.response
           if(response.data.data === true)
+          btn.disabled = true
+          btn.classList.add('btn-outline-secondary');
           {
-            alert("your Attendance Marked successfully")
-            set_attendance_status(!attendance_status)
+            alert("your Attendance Marked successfully")            
           }
         }
         else{
-          
+          if (response_obj.errorMessage.code == 100){            
+            btn.disabled = true
+            btn.classList.add('btn-outline-secondary');
+          }
           alert(response_obj.errorMessage.message)
         }
     }
@@ -110,7 +113,7 @@ const StudentDashboard = () => {
                                         <div className="w-100  rounded-0 border-0">
                                           <div className="" style={{paddingBottom:"0px"}}>
                                             <div className="justify-content-center w-100">
-                                              {item.lectures.length < 0 ? (
+                                              {item.lectures.length > 0 ? (
                                                 item.lectures.map((lecture, index) => (
                                                   <CToast
                                                     key={index}
@@ -157,9 +160,9 @@ const StudentDashboard = () => {
                                                         </CCol>
                                                       </CRow>
                                                         <div className='d-flex flex-wrap w-100'>
-                                                      <div className='w-100 mt-3'>
+                                                      <div className='w-100 mt-3'>                                                      
                                                       {
-                                                            (lecture.session.active === "pre" ||  lecture.session.active === "ongoing") && <button className='btn btn-outline-primary w-100 mt-3' value={lecture.slug} onClick={(e)=> mark_attendance(e.target.value)} disabled={attendance_status}>Mark Your Attendance</button>
+                                                            (lecture.session.active === "pre" ||  lecture.session.active === "ongoing") && <button className={`btn ${lecture.session.attendances.is_present ? 'btn-outline-secondary':'btn-outline-primary'} w-100 mt-3`} value={lecture.slug} onClick={(e)=> !lecture.session.attendances.is_present && mark_attendance(e.target,e.target.value)} disabled={lecture.session.attendances.is_present}>Mark Your Attendance</button>
                                                             
                                                           }
                                                            {

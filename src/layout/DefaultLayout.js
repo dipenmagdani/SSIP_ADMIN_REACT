@@ -70,6 +70,7 @@ const checkAccessTokenAuthenticity = async (accessToken) => {
   })    
 }
 const checkServerAvaibility = async ()=> {
+  
   const headers = {
        "Content-Type":"application/json",      
        'ngrok-skip-browser-warning':true,
@@ -86,7 +87,7 @@ const checkServerAvaibility = async ()=> {
       navigate('/login')
     }
   })
-  .catch((error)=>{
+  .catch((error)=>{    
       navigate("/404")
   })    
 }
