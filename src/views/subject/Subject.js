@@ -96,6 +96,7 @@ const Subject = () => {
     const { accessToken,refreshToken } = state
     const navigate = useNavigate()
     const add_batch = async (body) => {
+      
       const header = {
         "Content-Type":"application/json",      
         'ngrok-skip-browser-warning':true
@@ -108,14 +109,18 @@ const Subject = () => {
           set_Subjects(prevArray => [...prevArray, response.data.data])
           showAlert("success","Subject Added successfully...!")
         }else{            
+          alert(response_obj.errorMessage.message)
         }    
     }
     
     const handleSubmit = (event) => {
+      
       const form = event.currentTarget
       if (form.checkValidity() === false) {
         event.preventDefault()
         event.stopPropagation()
+        alert("Please Enter Valid Subject Information")
+        return
       }
       setValidated(true)
       const body = {
@@ -155,7 +160,7 @@ const Subject = () => {
                     <option value="">Select Term</option>
                     {term.map((item, index) => (
                       <option key={index} value={item.slug}>
-                        term : {item.start_year} - {item.end_year}
+                        Term : {item.start_year} - {item.end_year}
                       </option>
                     ))}
                   </CFormSelect>
@@ -211,12 +216,12 @@ const Subject = () => {
             
             <CCol md={6}>
               <CFormLabel htmlFor="validationCustom01">Subject Code</CFormLabel>
-              <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_code(e.target.value)} required />
+              <CFormInput type="number" id="validationCustom01" onChange={e => set_subject_code(e.target.value)} required />
               <CFormFeedback valid>Looks good!</CFormFeedback>
             </CCol>
             <CCol md={6}>
               <CFormLabel htmlFor="validationCustom01">Subject Credit</CFormLabel>
-              <CFormInput type="text" id="validationCustom01" onChange={e => set_subject_credit(e.target.value)} required />
+              <CFormInput type="number" id="validationCustom01" onChange={e => set_subject_credit(e.target.value)} required />
               <CFormFeedback valid>Looks good!</CFormFeedback>
             </CCol>
             <CCol xs={12}>

@@ -8,8 +8,8 @@ import {
   cilNotes,
   cilPeople,
   cilLibraryBuilding,
-  cilSchool
-
+  cilSchool,
+  cilClock
   //cilSpeedometer,
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react'
@@ -75,7 +75,7 @@ const _nav = {
       component: CNavItem,
       name: 'LectureHistory',
       to: '/teacher/lectures/history',    
-      icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
+      icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,

@@ -29,13 +29,13 @@ import {base_url} from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 
-const CustomStyles = (set_semester,setBatchCout,term_slug) => {
+const CustomStyles = (set_semester,setsemCount,term_slug) => {
   
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch, objectCount} = state
   const [validated, setValidated] = useState(false)
   const currentYear = new Date().getFullYear() 
-  const [semester_no, set_semester_no] = useState("")
+  const [semester_no, set_semester_no] = useState(0)
   const [Start, setStart] = useState(currentYear);
   const EndYear = (parseInt(Start, 10) + 1).toString();
   const navigate = useNavigate()
@@ -48,23 +48,29 @@ const CustomStyles = (set_semester,setBatchCout,term_slug) => {
 
   
   const addBatches = async(body) => {
+    if(semester_no =! 0){
+      const axiosInstance = axios.create()
+      let endpoint = `/manage/add_semester/`;let method='post';let headers = header;
+      let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
+      if(response_obj.error == false){
+          let response = response_obj.response
+          let batchCount = {...objectCount}
+          batchCount.semesters += 1        
+          ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
+          set_semester(prevArray => [...prevArray, response.data.data]);
+          setsemCount(preValue => preValue + 1);
+        }else{       
+          alert(response_obj.errorMessage.message)   
+        }
+    }
+    else{
+      alert("Please Enter the Valid Semester Number")
+    }
     const header = {
       "Content-Type":"application/json",      
       'ngrok-skip-browser-warning':true
     }
-    const axiosInstance = axios.create()
-    let endpoint = `/manage/add_semester/`;let method='post';let headers = header;
-    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
-    if(response_obj.error == false){
-        let response = response_obj.response
-        let batchCount = {...objectCount}
-        batchCount.semesters += 1        
-        ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
-        set_semester(prevArray => [...prevArray, response.data.data]);
-        setBatchCout(preValue => preValue + 1);
-      }else{       
-        alert(response_obj.errorMessage.message)   
-      }
+    
   }
 
   const handleSubmit = (event) => {
@@ -110,7 +116,7 @@ const CustomStyles = (set_semester,setBatchCout,term_slug) => {
 const Validation = (props) => {
   const {chageSteps} = props
   const {set_semester_slug} = props
-  const {setBatchCout} = props
+  const {setsemCount} = props
   const {term_slug} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch} = state
@@ -156,7 +162,7 @@ const loadBatches = async() => {
             <CCardHeader>
               <strong>Semesters</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(set_semester,setBatchCout,term_slug)}</CCardBody>
+            <CCardBody>{CustomStyles(set_semester,setsemCount,term_slug)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -176,7 +182,7 @@ const loadBatches = async() => {
                 </CTableHead>
                 <CTableBody>
                   {semester.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index} onClick={() => {chageSteps('division'); set_semester_slug(item.slug);}}>
+                    <CTableRow v-for="item in tableItems" key={index} onClick={() => {chageSteps('division'); set_semester_slug(item.slug);}} style={{cursor:"grab"}}>
                       <CTableDataCell>
                         <div>{item.no}</div>   
                       </CTableDataCell>

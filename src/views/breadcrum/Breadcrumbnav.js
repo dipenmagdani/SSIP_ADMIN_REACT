@@ -36,7 +36,7 @@ const Breadcrumbnav = (props) => {
                                     {
                                         breadcrumbs[currentStep].map((items,keys)=>(
                                             
-                                             <li className="breadcrumb-item active" aria-current="page" key={keys}><a onClick={() => {chageSteps(items)}} className={items === currentStep?"disabled":""}>{items}</a></li>
+                                             <li className="breadcrumb-item active" aria-current="page" key={keys}><a style={{cursor:"grab"}} onClick={() => {chageSteps(items)}} className={items === currentStep?"disabled":""}>{items}</a></li>
                                         ))
                                     }
                                 </ol>                                                      

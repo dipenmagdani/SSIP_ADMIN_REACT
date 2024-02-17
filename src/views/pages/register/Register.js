@@ -70,8 +70,12 @@ export default function Register(){
   return (
     <div className="h-screen bg-center bg-no-repeat sm:p-20 p-6" style={{background:'black'}}>
       <section className="w-full h-full flex justify-center items-center rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-100" style={{backgroundImage:'url(/images/background2.jpg)'}}>
-      <div className="text-white sm:w-full">        
+      <div className="text-white sm:w-full">
+             
         <form className="max-w-sm mx-auto" onSubmit={handleSubmit(SubmitLogin)} autoComplete='off'>
+        <div className='mb-3'>
+          <span style={{color:'rgb(255, 163, 26)'}}>Warning: This credentials will be used to Log-You-In from now on </span>
+        </div> 
           <div className="relative border-b-2	border-slate-500 z-0 w-full mb-5 group">
             <input type="text" name="floating_enrollment" id="floating_enrollment" className="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-300 appearance-none text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required {...register('enrollment')}/>
             <label htmlFor="floating_email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Entrollment No.</label>

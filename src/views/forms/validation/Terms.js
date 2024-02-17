@@ -29,7 +29,7 @@ import {base_url} from 'src/base_url'
 import expireToken from 'src/global_function/unauthorizedToken'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 
-const CustomStyles = (set_term,setBatchCout) => {
+const CustomStyles = (set_term,set_term_count) => {
   
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { accessToken, refreshToken, batches, currentBatch, objectCount} = state
@@ -61,7 +61,7 @@ const CustomStyles = (set_term,setBatchCout) => {
           batchCount.terms += 1          
           ctxDispatch({ type: 'GET_OBJECTS', payload: batchCount });
           set_term(prevArray => [...prevArray, response.data.data]);
-          setBatchCout(preValue => preValue + 1);
+          set_term_count(preValue => preValue + 1);
           showAlert("success","Bactch Added successfully...!")
         }else{  
           alert(response_obj.errorMessage.message)
@@ -122,7 +122,7 @@ const Terms = (props) => {
 
     const {chageSteps} = props
   const {set_term_slug} = props
-  const {setBatchCout} = props
+  const {set_term_count} = props
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, currentBatch} = state
   const navigate = useNavigate()
@@ -163,9 +163,9 @@ const load_term = async() => {
         <CCol xs={12}>
           <CCard className="mb-3">
             <CCardHeader>
-              <strong>Semesters</strong>
+              <strong>Term</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(set_term,setBatchCout)}</CCardBody>
+            <CCardBody>{CustomStyles(set_term,set_term_count)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -186,7 +186,7 @@ const load_term = async() => {
                 </CTableHead>
                 <CTableBody>
                   {term.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index} onClick={() => {chageSteps('semester'); set_term_slug(item.slug);}}>
+                    <CTableRow v-for="item in tableItems" key={index} onClick={() => {chageSteps('semester'); set_term_slug(item.slug);}} style={{cursor:"grab"}}>
                       <CTableDataCell>
                         <div>{item.start_year}</div>   
                       </CTableDataCell>
@@ -197,7 +197,7 @@ const load_term = async() => {
                     </CTableRow>
                   ))}
                 </CTableBody>
-              </CTable>) : (<p>no terms</p>)}
+              </CTable>) : (<p>no Terms</p>)}
               
             </CCardBody>
           </CCard>

@@ -30,35 +30,41 @@ import { useNavigate } from 'react-router-dom'
 import { showAlert } from 'src/global_function/GlobalFunctions'
 import useAPI from 'src/global_function/useApi'
 
-const CustomStyles = (set_divisions, semester_slug) => {
+const CustomStyles = (set_divisions, semester_slug,set_divisionCount) => {
   const [StoredTokens,CallAPI] = useAPI()
   const [validated, setValidated] = useState(false)
-  const [division_name, set_division_name] = useState("")
+  const [division_name, set_division_name] = useState(null)
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters , objectCount } = state
   const [semCount, setsemCount] = useState(objectCount);
   const navigate = useNavigate()
-
-
-
-
+  
   const add_division = async (body) => {
-    const header = {
-      "Content-Type":"application/json",      
-      'ngrok-skip-browser-warning':true
+    if(division_name){
+      const header = {
+        "Content-Type":"application/json",      
+        'ngrok-skip-browser-warning':true
+      }
+      const axiosInstance = axios.create()
+      let endpoint = `/manage/add_division/`;let method='post';let headers = header;
+      let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
+      if(response_obj.error == false){
+        let response = response_obj.response
+        let changeCount = {...objectCount}
+        console.log(objectCount)
+        changeCount.divisons += 1  
+        console.log(changeCount.divison)
+        ctxDispatch({ type: 'GET_OBJECTS', payload: changeCount });
+          set_divisions(prevArray => [...prevArray, response.data.data])
+          set_divisionCount(preValue => preValue + 1);
+        showAlert("success","Semester Added successfully...!")
+      }else{        
+        alert(response_obj.errorMessage.message)
+      }  
     }
-    const axiosInstance = axios.create()
-    let endpoint = `/manage/add_division/`;let method='post';let headers = header;
-    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,body,null)
-    if(response_obj.error == false){
-      let response = response_obj.response
-      let changeCount = {...objectCount}
-      changeCount.divison += 1  
-        set_divisions(prevArray => [...prevArray, response.data.data])
-      showAlert("success","Semester Added successfully...!")
-    }else{        
-      alert(response_obj.errorMessage.message)
-    }    
+     else{
+      alert("Please Enter The Valid Division Name")
+     }
   }
 
   const handleSubmit = (event) => {
@@ -85,7 +91,7 @@ const CustomStyles = (set_divisions, semester_slug) => {
     >
       <CCol md={12}>
         <CFormLabel htmlFor="validationCustom01">Division Name</CFormLabel>
-        <CFormInput type="text" id="validationCustom01" onChange={e => set_division_name(e.target.value)} required />
+        <CFormInput type="text" id="validationCustom01" onChange={e => set_division_name(e.target.value.toUpperCase())} required  maxLength={1}/>
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>      
       <CCol xs={12}>
@@ -98,7 +104,7 @@ const CustomStyles = (set_divisions, semester_slug) => {
 }
 
 const FormControl = (props) => {
-  const { semester_slug ,chageSteps , set_division_slug } = props
+  const { semester_slug ,chageSteps , set_division_slug , set_divisionCount } = props
   const [divisions, set_divisions] = useState([]);
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken,refreshToken, semesters } = state
@@ -132,7 +138,7 @@ const FormControl = (props) => {
             <CCardHeader>
               <strong>Divison</strong>
             </CCardHeader>
-            <CCardBody>{CustomStyles(set_divisions, semester_slug)}</CCardBody>
+            <CCardBody>{CustomStyles(set_divisions, semester_slug,set_divisionCount)}</CCardBody>
           </CCard>
         </CCol>
       </CRow>
@@ -152,7 +158,7 @@ const FormControl = (props) => {
                 <CTableBody style={{textAlign:"center"}}>
                   {divisions.map((item, index) => (
                   
-                      <CTableRow key={index} onClick={() => {chageSteps('batch'); set_division_slug(item.slug);}}>
+                      <CTableRow key={index} onClick={() => {chageSteps('batch'); set_division_slug(item.slug);}} style={{cursor:"pointer"}}>
                         <CTableDataCell>
                           <div>{item.division_name}</div>
                         </CTableDataCell>

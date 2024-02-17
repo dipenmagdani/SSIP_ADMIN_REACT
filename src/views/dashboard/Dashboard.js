@@ -25,9 +25,13 @@ const Dashboard = () => {
   const [semester_slug, set_semester_slug] = useState("");
   const [semSlug, setsemSlug] = useState("");
   const [subSlug, setsubSlug] = useState("");
-  const [batchCount, setbatchCount] = useState(0);
+
+  const [term_conut, set_term_count] = useState(0)
   const [semCount, setsemCount] = useState(0);
-  const [subCount, setsubCount] = useState(0);  
+  const [divisionCount,set_divisionCount] = useState(0)
+  const [batchCount, setbatchCount] = useState(0);
+  
+    
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken , refreshToken , profileDetails, objectCount } = state  
   const [division_slug, set_division_slug] = useState("")
@@ -59,13 +63,14 @@ const Dashboard = () => {
   const chageSteps = (currentStep) =>{
       setsteps(currentStep)
   }
+  console.log(divisionCount)
   const progressExample = [
     { title: 'Terms', value: objectCount.terms, nextStep:'semester' },
     { title: 'Semester', value: objectCount.semesters, nextStep:'semester' },
     { title: 'divison', value: objectCount.divisons, nextStep:'subject' },
     { title: 'Batches', value: objectCount.batches, nextStep:'batch'},
   ]
-
+  console.log(objectCount)
   return (
     <>
       <Breadcrumbnav currentStep={steps} chageSteps={chageSteps}></Breadcrumbnav>
@@ -75,7 +80,7 @@ const Dashboard = () => {
           <CRow xs={{ cols: 1 }} md={{ cols: 4 }} className="text-center">
             {progressExample.map((item, index) => (
               <CCol className="mb-sm-2 mb-0" key={index}>
-                <CButton style={{ backgroundColor: 'transparent', border: 'none' }}>
+                <CButton style={{ backgroundColor: 'transparent', border: 'none',cursor:"default" }}>
                   <div className="text-medium-emphasis">{item.title}</div>
                   <strong style={{ color: 'black' }}>
                     {item.value} {item.percent}
@@ -91,15 +96,15 @@ const Dashboard = () => {
         switch (steps) {
 
           case 'term':
-            return <Terms chageSteps={chageSteps} set_term_slug={set_term_slug} setBatchCout={setbatchCount}></Terms>
+            return <Terms chageSteps={chageSteps} set_term_slug={set_term_slug} set_term_count={set_term_count}></Terms>
 
           case 'semester':
-            return <Validation chageSteps={chageSteps} term_slug={term_slug}  set_semester_slug={set_semester_slug} setBatchCout={setbatchCount}></Validation>
+            return <Validation chageSteps={chageSteps} term_slug={term_slug}  set_semester_slug={set_semester_slug} setsemCount={setsemCount}></Validation>
             
           case 'division':
-            return <FormControl chageSteps={chageSteps}  semester_slug={semester_slug} set_division_slug={set_division_slug}></FormControl>
+            return <FormControl chageSteps={chageSteps}  semester_slug={semester_slug} set_division_slug={set_division_slug} set_divisionCount={set_divisionCount}></FormControl>
           case 'batch':
-            return <Select chageSteps={chageSteps} division_slug={division_slug} setsubSlug={setsubSlug}></Select>
+            return <Select chageSteps={chageSteps} division_slug={division_slug} setsubSlug={setsubSlug} setBatchCout={setbatchCount}></Select>
           default:
             {/* console.log(steps) */}
         }

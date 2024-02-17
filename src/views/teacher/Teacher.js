@@ -72,21 +72,25 @@ import Swal from 'sweetalert'
     
     event.preventDefault()
     const form = event.currentTarget
-    // if (form.checkValidity() === false) {
-    //   event.preventDefault()
-    //   event.stopPropagation()
-    //   return
-    // }
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+      Swal({
+        title: 'Please Enter Valid Information',
+        icon: 'error',
+        button: 'OK',  
+      })
+      return
+    }
+    
     const name = event.target.tname.value
     const ph_no = event.target.tmobile.value
     const email = event.target.temail.value
     setValidated(true)
     if (!name || !ph_no || !email) {
-      Swal({
-        title: 'Input Field Empty',
-        icon: 'error',
-        button: 'OK',
-      })
+      
+      alert("hello")
+      
     } else {      
 
       const body = {
@@ -127,11 +131,6 @@ import Swal from 'sweetalert'
         <CFormInput type="email" id="validationCustom02" name="temail" required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
-      {/* <CCol md={6}>
-          <CFormLabel htmlFor="validationCustom02">Teacher Password</CFormLabel>
-          <CFormInput type="password" id="validationCustom02"  required onChange={e => setTeacher_password(e.target.value)}/>
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-        </CCol> */}
       <CCol xs={12}>
         <button className="btn btn-outline-dark form-control" type="submit">
           Submit form
