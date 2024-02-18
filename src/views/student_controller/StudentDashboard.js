@@ -95,7 +95,7 @@ const StudentDashboard = () => {
                           <div className="">
                             <div>
                               <CRow className="flex-column" style={{ padding: '0' }}>
-                                {timetable ? (
+                                {timetable && timetable.schedules.length > 0 ? (
                                   timetable.schedules.map((item, index) => (
                                     <>
                                       <CCol
@@ -182,7 +182,7 @@ const StudentDashboard = () => {
                                                 ))
                                               ) : (
                                                 <CToast className="w-100 d-flex justify-content-center mt-3" autohide={false} visible={true}>
-                                                  <CToastBody>No Lectures Found</CToastBody>
+                                                  <CToastBody>No Lectures Today</CToastBody>
                                                 </CToast>
                                               )}
                                             </div>
@@ -192,8 +192,8 @@ const StudentDashboard = () => {
                                     </>
                                   ))
                                 ) : (
-                                  <CToast className="mt-3" autohide={false} visible={true}>
-                                                  <CToastBody>No Schedules Found</CToastBody>
+                                  <CToast className="w-100 d-flex justify-content-center mt-3" autohide={false} visible={true}>
+                                                  <CToastBody>No Lectures Today</CToastBody>
                                                 </CToast>
                                 )}
                               </CRow>

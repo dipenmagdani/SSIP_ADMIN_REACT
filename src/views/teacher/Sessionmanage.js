@@ -55,6 +55,10 @@ const Sessionmanage = () => {
       ).then((responseobj) => {
         if (responseobj.error === false) {
           const response = responseobj.response
+          if(response.data.data.active == 'post'){
+            alert("The session has already been ended!!")
+            navigate("/teacher/dashboard") 
+          }
           if (!ws.current) {
             ws.current = new WebSocket(
               `${websocket}/ws/attendance_session/${response.data.data.session_id}/?${accessToken}`,

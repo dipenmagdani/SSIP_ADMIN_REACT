@@ -1,7 +1,7 @@
 // export const base_url= `http://${window.location.host}`;
 // export const websocket = `ws://${window.location.host}`;
-export const base_url= `http://192.168.29.18:8000`;
-export const websocket = `ws://192.168.29.18:8000`;
+export const base_url= `https://smartroll.ldce.mnv-dev.live`;
+export const websocket = `wss://smartroll.ldce.mnv-dev.live`;
 
 // const token = localStorage.getItem('accessToken')
 // const header = {

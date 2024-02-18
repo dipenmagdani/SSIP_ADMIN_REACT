@@ -86,7 +86,7 @@ export default function Teacherview() {
                           <div className="">
                             <div>
                               <CRow className="flex-column" style={{ padding: '0' }}>
-                                {timetable ? (
+                                {timetable && timetable.schedules.length > 0? (
                                   timetable.schedules.map((item, index) => (
                                     <>
                                       <CCol
@@ -174,8 +174,8 @@ export default function Teacherview() {
                                                   </CToast>
                                                 ))
                                               ) : (
-                                                <CToast autohide={false} visible={true} className='w-100 my-3'>
-                                                  <CToastBody>{"You don't have any lectures today"}</CToastBody>
+                                                <CToast className="w-100 d-flex justify-content-center mt-3" autohide={false} visible={true}>
+                                                  <CToastBody>You have no lectures today!!</CToastBody>
                                                 </CToast>
                                                     
                                                   
@@ -187,8 +187,8 @@ export default function Teacherview() {
                                     </>
                                   ))
                                 ) : (
-                                  <CToast autohide={false} visible={true}>
-                                                  <CToastBody>No Schedules Found</CToastBody>
+                                  <CToast className="w-100 d-flex justify-content-center mt-3" autohide={false} visible={true}>
+                                                  <CToastBody>You have no lectures today!!</CToastBody>
                                                 </CToast>
                                 )}
                               </CRow>
