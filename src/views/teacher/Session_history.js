@@ -145,7 +145,8 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
                   <CTableBody>
                     {attendances &&
                       attendances.map((item, index) => (
-                        <CTableRow v-for="alert alert-primary item in tableItems" key={index}>
+                        
+                        <CTableRow v-for={`alert alert-primary item in tableItems`} style={item.manual ? {border:"2px solid darkorange"} : null} key={index}>
                           {/* <CTableDataCell>
                                         <div>{item.student.sr_no}</div>   
                                 </CTableDataCell> */}
