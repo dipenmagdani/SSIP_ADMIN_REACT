@@ -117,9 +117,10 @@ const Sessionmanage = () => {
     }
   }
 
-  const mark_student_attendanc = async (event, attendance_Slug) => {
+  const mark_student_attendance = async (event, attendance_Slug) => {
     event.preventDefault()
     try {
+      if(!confirm("Are you sure you want to mark the attendance manually?"))return;
       console.log(attendance_Slug)
       event.target.checked = "checked"
       event.target.disabled = true
@@ -268,7 +269,7 @@ const Sessionmanage = () => {
                             {/* <CTableHeaderCell>SR. NO</CTableHeaderCell> */}
                             <CTableHeaderCell>Enrollment No</CTableHeaderCell>
                             <CTableHeaderCell>Student Name</CTableHeaderCell>
-                            <CTableHeaderCell>IP Addr</CTableHeaderCell>
+                            {/* <CTableHeaderCell>IP Addr</CTableHeaderCell> */}
                             <CTableHeaderCell>Batch</CTableHeaderCell>
                             <CTableHeaderCell>Status</CTableHeaderCell>
                           </CTableRow>
@@ -286,9 +287,9 @@ const Sessionmanage = () => {
                                 <CTableDataCell>
                                   <div>{item.student.profile.name ? item.student.profile.name: '-'}</div>
                                 </CTableDataCell>
-                                <CTableDataCell>
+                                {/* <CTableDataCell>
                                   <div>{item.marking_ip ? item.marking_ip : '-'}</div>
-                                </CTableDataCell>
+                                </CTableDataCell> */}
                                 <CTableDataCell>
                                 <div>
                                   {item.batches
@@ -300,7 +301,7 @@ const Sessionmanage = () => {
 
                                 </CTableDataCell>
                                 {item.is_present ? (<CTableDataCell>
-                                  <div className="text-success d-flex align-items-center justify-content-center">
+                                  <div className="text-success d-flex justify-content-center align-items-center">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       width="16"
@@ -318,8 +319,8 @@ const Sessionmanage = () => {
                                     <p style={{visibility:'hidden'}}>P</p>
                                   </div>
                                 </CTableDataCell>): (<CTableDataCell>
-                                  <div className="text-success">
-                                  <input type="checkbox" onClick={(e)=>{ mark_student_attendanc(e,item.slug)}}></input>
+                                  <div className="text-success d-flex justify-content-center align-items-center">
+                                  <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
                                     <p style={{visibility:'hidden'}}>F</p>
                                   </div>
                                 </CTableDataCell>)}
