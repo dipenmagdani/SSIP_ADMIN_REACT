@@ -10,25 +10,18 @@ import {
   CToast,
   CToastHeader,
   CToastBody,
-  CAlert,
-  CTable,
-  CTableHead,
+  CAlert,  
 } from '@coreui/react'
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
-import { Collapse } from '@coreui/coreui'
-import Sessionmanage from './Sessionmanage'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 
 
 export default function Teacherview() {
 
-  // usestate to opne and close the model
-
-  const [visible , setVisible] = useState(false)
-  const [session_data,set_session_data] = useState(null)
+  // usestate to opne and close the model  
   const navigation = useNavigate()
 
   const [StoredTokens, CallAPI] = useAPI()

@@ -38,11 +38,26 @@ const Sessionmanage = () => {
   const [StoredTokens, CallAPI] = useAPI()
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      function successCallback(position) {
+        console.log('Latitude:', position.coords.latitude);
+        console.log('Longitude:', position.coords.longitude);
+      }
+      function errorCallback(error) {
+        console.error('Error getting location:', error.message);
+      }            
+      for (let i = 0; i < 5; i++) {            
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { enableHighAccuracy: true, maximumAge: 0 });
+      }   
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
     if (lectureSlug) {
       const headers = {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': true,
-      }
+      }          
+            
       const axiosInstance = axios.create()
       CallAPI(
         StoredTokens,
