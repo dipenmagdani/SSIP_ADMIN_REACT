@@ -56,7 +56,7 @@ export default function Register(){
                 expireToken(refreshToken)            
                 }
               else{
-                alert("something went worng")
+                alert(error.response.data.detail)
               }
             }
             
