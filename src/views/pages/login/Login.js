@@ -71,7 +71,7 @@ export default function Login(){
           </div>
           <CRow>
             <CCol>
-            <button type="submit" className="w-100 focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  text-slate-300" style={{border:'1px solid #ffa31a'}}> Submit </button>
+            <button type="submit" className="w-100 focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  text-slate-300" style={{border:'1px solid #ffa31a'}}> Login </button>
             </CCol>
           </CRow>
             <CRow className='justify-center mt-4'>
