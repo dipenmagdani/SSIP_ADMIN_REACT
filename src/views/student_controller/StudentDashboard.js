@@ -114,7 +114,7 @@ const StudentDashboard = () => {
                       {branch.branch_name}
                     </CAlert>
                     {
-                      timetable.schedule.lectures.length > 0 ? (
+                      timetable.schedule ? (timetable.schedule.lectures.length > 0 ? (
                         timetable.schedule.lectures.map((lecture, index) => {
                           return (
                             <div key={index}>
@@ -239,7 +239,10 @@ const StudentDashboard = () => {
                           )
                           
                         })
-                      ) : (null)
+                      ) : (null)) : (<div className='d-flex justify-content-center w-full my-3'><CToast className='w-100' animation={false} autohide={false} visible={true}>
+                      <CToastBody className='text-center w-full'>There is no lecture today....</CToastBody>
+                    </CToast></div>)
+                      
 
                     }
                   </div>

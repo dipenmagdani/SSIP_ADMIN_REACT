@@ -70,7 +70,7 @@ export default function Teacherview() {
               return branch.semesters.map((semester, index) => {
 
                 return (
-                  <div key={index}>
+                  <div key={index} >
                     <CAlert
                       className="m-0 rounded-0 w-100 p-2 d-flex justify-content-between align-items-center mb-2"
                       color="primary"
@@ -80,10 +80,10 @@ export default function Teacherview() {
                     </CAlert>
                     {semester.divisions.map((division, index) => {
                       console.log(division)
-                      return division.timetable.schedule.lectures.length > 0 ? (
+                      return division.timetable.schedule ? (division.timetable.schedule.lectures.length > 0 ? (
                         division.timetable.schedule.lectures.map((lectures, index) => {
                           return (
-                            <div key={index}>
+                            <div key={index} className='d-flex justify-content-center'>
                               <CRow className="flex-column" style={{ padding: '0' }}>
                                 <CCol className="d-flex align-items-center flex-column" key={index}>
                                   <div className="w-100 rounded-0 border-0">
@@ -168,7 +168,11 @@ export default function Teacherview() {
                             </div>
                           )
                         })
-                      ) : (null)
+                      ) : (null)) : (<div className='d-flex justify-content-center w-100 my-3'><CToast className='w-100' animation={false} autohide={false} visible={true}>
+                        
+                        <CToastBody className='text-center'>There is no lecture today....</CToastBody>
+                      </CToast></div>)
+                      
                     })}
                   </div>
                 )
