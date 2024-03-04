@@ -8,7 +8,7 @@ import {base_url} from "src/base_url";
 const useAPI = () => {  
   const navigate = useNavigate()
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken , profileDetails, objectCount } = state
+  const { accessToken , refreshToken } = state
 
   const StoredTokens = {
     accessToken,
