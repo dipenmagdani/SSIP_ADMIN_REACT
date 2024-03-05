@@ -336,7 +336,7 @@ const Sessionmanage = () => {
                                 </CTableDataCell>): (<CTableDataCell>
                                   <div className="text-success d-flex justify-content-center align-items-center">
                                   <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
-                                    <p style={{visibility:'hidden'}}>F</p>
+                                    <p style={{visibility:'hidden'}}>A</p>
                                   </div>
                                 </CTableDataCell>)}
                               </CTableRow>

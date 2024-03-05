@@ -113,6 +113,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
         <COffcanvasBody>
           <div className='w-100'>
             {tableRef.current ? (<DownloadTableExcel
+
               filename={`${session_data.lecture.subject.subject_name} - ${new Date(session_data.day).toLocaleString()}`}
               sheet="attendance"
               currentTableRef={tableRef.current}
@@ -191,7 +192,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
                             <div className="text-success d-flex justify-content-center align-items-center">
                               {/* <CFormCheck onClick={(e) => { mark_student_attendanc(e, item.slug) }}>Mark Attendance</CFormCheck> */}
                               <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
-                              <p style={{ visibility: 'hidden' }}>F</p>
+                              <p style={{ visibility: 'hidden' }}>A</p>
                             </div>
                           </CTableDataCell>)}
                         </CTableRow>

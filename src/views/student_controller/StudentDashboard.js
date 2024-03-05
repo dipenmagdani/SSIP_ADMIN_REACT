@@ -21,6 +21,8 @@ import { BarController } from 'chart.js'
 const StudentDashboard = () => {
   const [StoredTokens, CallAPI] = useAPI()
   const [TimeTables, setTimeTables] = useState(null)
+  const [permission_state, set_permission_state]  = useState(false)
+
   const load_teacher_timetable = async () => {
     const headers = {
       'Content-Type': 'application/json',
@@ -42,6 +44,15 @@ const StudentDashboard = () => {
     }
   }
 
+  const get_location_permission = ()=>{
+    if(!permission_state){
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((position)=>{
+          set_permission_state(true)
+        })
+      }
+    }
+  }
   const mark_attendance = async (btn, lecture_slug) => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by this browser.')
@@ -93,12 +104,14 @@ const StudentDashboard = () => {
   }
 
   useEffect(() => {
+    get_location_permission()
     load_teacher_timetable()
-  }, [])
+  }, [permission_state])
 
   return (
     <>
-      <CRow className="mb-3">
+      {
+        permission_state ? (<CRow className="mb-3">
         <CCol>
           {
             TimeTables && TimeTables.map((branch, index) => {
@@ -239,7 +252,11 @@ const StudentDashboard = () => {
                           )
                           
                         })
-                      ) : (null)) : (<div className='d-flex justify-content-center w-full my-3'><CToast className='w-100' animation={false} autohide={false} visible={true}>
+                      ) : (<div className='d-flex w-100 justify-content-center'>
+                      <div className='alert alert-warning w-75 my-2 text-center '>
+                <span className=''>No lecture sessions are there for this branch</span>
+              </div>
+                  </div>)) : (<div className='d-flex justify-content-center w-full my-3'><CToast className='w-100' animation={false} autohide={false} visible={true}>
                       <CToastBody className='text-center w-full'>There is no lecture today....</CToastBody>
                     </CToast></div>)
                       
@@ -252,7 +269,10 @@ const StudentDashboard = () => {
             })
           }
         </CCol>
-      </CRow>
+      </CRow>) : (<video src='/images/mobile.webm' autoPlay={false} controls={true} className='w-100 h-full'></video>)
+      }
+
+      
     </>
   )
 }

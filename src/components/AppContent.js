@@ -16,20 +16,7 @@ import { cilFace } from '@coreui/icons'
 const AppContent = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, accessTokenActive, profileDetails } = state
-  const [permission_state,set_permission_state] = useState(false)
   const navigate = useNavigate();
-
-  const get_location_permission = () =>{
-    if(navigator.geolocation){
-      
-        navigator.geolocation.getCurrentPosition((position)=>{
-          set_permission_state(true)
-        })
-    }
-    else{
-      alert("please allow permission of location")
-    }
-  }
 
   const loadBatches = async () => {
     const header = {
@@ -57,18 +44,12 @@ const AppContent = () => {
       if (profileDetails.obj.profile.role === "admin") {
         // loadBatches()
       }
-      if(profileDetails.obj.profile.role === "student"){
-        get_location_permission()
-      }
-      if(profileDetails.obj.profile.role === "teacher"){
-        get_location_permission()
-      }
     }
   }, []);
   return (
     <>
-    {
-      permission_state ? (<CContainer lg>
+    
+      <CContainer lg>
         <Suspense fallback={<CSpinner color="primary" />}>
           <Routes>
             {routes.map((route, idx) => {
@@ -103,11 +84,7 @@ const AppContent = () => {
   
           </Routes>
         </Suspense>
-      </CContainer>) : (
-        <video src='/images/mobile.webm' autoPlay={false} controls={true} className='w-100 h-full'></video>
-      )
-    }
-    
+      </CContainer>
     </>
   )
 }
