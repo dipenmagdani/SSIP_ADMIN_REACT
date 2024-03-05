@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import moment from 'moment';
 import {
   COffcanvas,
   COffcanvasBody,
@@ -132,7 +133,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
                       <CTableHeaderCell colSpan={5}>L.D COLLEGE OF ENGINEERING</CTableHeaderCell>
                     </CTableRow>
                     <CTableRow aria-colspan={5}>
-                      <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.day}</CTableHeaderCell>
+                      <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.day} | TIME: {moment(session_data.lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} to {moment(session_data.lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}</CTableHeaderCell>
                     </CTableRow>
                     <CTableRow>
                       {/* <CTableHeaderCell>SR. NO</CTableHeaderCell> */}

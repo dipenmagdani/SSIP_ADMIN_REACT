@@ -269,7 +269,7 @@ const StudentDashboard = () => {
             })
           }
         </CCol>
-      </CRow>) : (<video src='/images/mobile.webm' autoPlay={false} controls={true} className='w-100 h-full'></video>)
+      </CRow>) : (<iframe width="100%" height="315" src="https://www.youtube.com/embed/ERhEIsEXG50?si=i9ez0hxneFCuAe6E" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>)
       }
 
       
