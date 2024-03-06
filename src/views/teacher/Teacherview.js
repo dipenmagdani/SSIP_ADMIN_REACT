@@ -19,8 +19,7 @@ import moment from 'moment';
 export default function Teacherview() {
 
   // usestate to opne and close the model  
-  const navigation = useNavigate()
-  const [premission_state,set_permission_state] = useState(false)
+  const navigation = useNavigate()  
   const [StoredTokens, CallAPI] = useAPI()
   const [TimeTables, setTimeTables] = useState(null)
   const [lecture_list,set_lecture_list]  = useState(null)
@@ -66,7 +65,7 @@ export default function Teacherview() {
         
 
       })
-      console.log(data)
+      // console.log(data)
       setTimeTables(data)
     }
     else {
@@ -74,30 +73,28 @@ export default function Teacherview() {
     }
   }
 
-  const get_location_permission = ()=>{
-    if(!premission_state){
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition((position)=>{
-          set_permission_state(true)
-        })
-      }
-    }
+  // const get_location_permission = ()=>{
+  //   if(!premission_state){
+  //     if(navigator.geolocation){
+  //       navigator.geolocation.getCurrentPosition((position)=>{
+  //         set_permission_state(true)
+  //       })
+  //     }
+  //   }
     
-  }
+  // }
 
   const create_Session = async (lecture_slug) => {
     navigation(`/teacher/session?slug=${lecture_slug}`)
   }
 
   useEffect(() => {
-    get_location_permission()
+    // get_location_permission()
       load_teacher_timetable()
-  }, [premission_state])
+  }, [])
 
   return (
     <>
-      {
-        premission_state ? (
           <CRow className="mb-3">
         <CCol>
           {
@@ -219,10 +216,7 @@ export default function Teacherview() {
         </CCol>
 
       </CRow>
-        ) : (<iframe width="100%" height="315" src="https://www.youtube.com/embed/ERhEIsEXG50?si=i9ez0hxneFCuAe6E" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>)
-      }
-
-      
+  
     </>
   )
 }

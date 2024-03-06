@@ -13,15 +13,14 @@ import { CCol, CRow } from '@coreui/react';
 
 
 export default function Login(){
-      
-
      const navigate = useNavigate();
      const { register, handleSubmit} = useForm();      
     
       const { state, dispatch: ctxDispatch } = useContext(Store);
-      const { refreshToken , set404 } = state;
+      const { refreshToken , set404 ,loader_state} = state;
 
       const SubmitLogin = (data) => {
+        ctxDispatch({ type: 'LOADER_STATE', payload: true});
         const header = {
           'ngrok-skip-browser-warning':true
         }
@@ -30,6 +29,7 @@ export default function Login(){
           "password":data.password        
         },{header})
         .then((response)=>{        
+          ctxDispatch({ type: 'LOADER_STATE', payload: false});
           ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
           ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.refresh });
 
@@ -37,7 +37,8 @@ export default function Login(){
           localStorage.setItem('refreshToken',response.data.refresh)        
           navigate('/')
         })
-        .catch((error)=>{          
+        .catch((error)=>{  
+          ctxDispatch({ type: 'LOADER_STATE', payload: false});        
           if(error.code === "ERR_NETWORK"){
             ctxDispatch({ type: 'SET_404', payload: true });
           }
@@ -56,7 +57,22 @@ export default function Login(){
         ctxDispatch({ type: 'SET_404', payload: false });        
       }
     },[set404])    
+
+    const EnterEnrollment = () => {
+      const enrollment = prompt("Please enter your enrollment no!!");
+      if(isNaN(enrollment)){
+        alert("Please enter a valid enrollment number!!")
+        return;
+      }
+      console.log(enrollment)
+      // API CALL
+    }
+
   return (
+    <>
+      <div  className={!loader_state ? 'd-none' : ''} style={{backdropFilter: 'blur(5px)',height: '100vh', width: '100%', position: 'absolute',zIndex: 9999,top: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', left: 0 }}>
+        <img className="animated-container" style={{height:'10vh'}} src='/svgs/loader.svg'></img>
+      </div>
     <div className="h-screen bg-center sm:p-10 p-2" style={{backgroundImage:`url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='%23f1f5f9'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e")`}}>
       <section className="w-full h-full flex justify-center items-center">
       <div className="text-white sm:w-full w-75">        
@@ -76,14 +92,15 @@ export default function Login(){
           </CRow>
             <CRow className='justify-center mt-4'>
               <CCol className='w-full text-center'>
-              <div className='text-black'> Do not have an account?  <Link to={"/register"} className='ml-2' style={{color:'#ffa31a'}}>Register</Link></div>
+                <div className='text-black'> Do not have an account?  <Link to={"/register"} className='ml-2' style={{color:'#ffa31a'}}>Register</Link></div>
+                <div className='text-black'> Or <button className="" type="button" onClick={EnterEnrollment} style={{color:'#ffa31a'}}>Forgot Password</button></div>
               </CCol>
-            </CRow>
-            
+            </CRow>            
         </form>
           
       </div>
       </section>
     </div>    
+    </>
   );
 };

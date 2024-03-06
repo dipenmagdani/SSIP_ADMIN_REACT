@@ -162,4 +162,4 @@ data.data.map((branch,br_index) => {
     })
 })
 
-console.log(lectures)
+// console.log(lectures)

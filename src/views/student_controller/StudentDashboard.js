@@ -44,14 +44,31 @@ const StudentDashboard = () => {
     }
   }
 
-  const get_location_permission = ()=>{
-    if(!permission_state){
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition((position)=>{
-          set_permission_state(true)
-        })
-      }
-    }
+  const get_location_permission = ()=>{    
+    // if(!permission_state){
+      navigator.permissions.query({ name: "geolocation" }).then((result) => {        
+        if (result.state === "granted") {          
+            set_permission_state(true)
+        } else if (result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition((position)=>{
+            set_permission_state(true)
+          })
+        } else if (result.state === "denied") {
+          navigator.geolocation.getCurrentPosition((position)=>{
+            set_permission_state(true)
+          })
+        }
+        result.addEventListener("change", () => {
+          if (result.state === "granted") {          
+            set_permission_state(true)
+          } else if (result.state === "prompt") {          
+              set_permission_state(false)            
+          } else if (result.state === "denied") {            
+              set_permission_state(false)            
+          }
+        });
+      });          
+    // }
   }
   const mark_attendance = async (btn, lecture_slug) => {
     if (!navigator.geolocation) {
@@ -103,7 +120,7 @@ const StudentDashboard = () => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     get_location_permission()
     load_teacher_timetable()
   }, [permission_state])

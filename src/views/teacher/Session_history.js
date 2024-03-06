@@ -30,7 +30,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
     event.preventDefault()
     try {
       if(!confirm("Are you sure you want to mark the attendance manually?"))return;
-      console.log(attendance_Slug)
+      // console.log(attendance_Slug)
       event.target.checked = "checked"
       event.target.disabled = true
       const axiosInstance = axios.create()
