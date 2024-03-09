@@ -25,7 +25,7 @@ export default function Register(){
       const { refreshToken , set404 ,loader_state} = state;
 
       const SubmitRegister = (data) => {
-        const flag = confirm("Are you sure you want to save the details?")
+        const flag = confirm("Please make sure you've entered correct email address, as it will be used for further notifications!!")
         if (flag == true) {
           if(data.enrollment != parseInt(data.enrollment)){          
             return alert("please enter the valid enrollment numner")

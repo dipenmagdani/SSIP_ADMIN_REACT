@@ -64,7 +64,16 @@ export default function Login(){
         alert("Please enter a valid enrollment number!!")
         return;
       }
-      console.log(enrollment)
+      const header = {
+        'ngrok-skip-browser-warning':true
+      }
+      Axios.post(`${base_url}/auth/api/forgot_password/`,{enrollment:enrollment},{header})
+      .then((response)=>{
+          alert("Reset password link has been sent to your registered email...")
+      })
+      .catch((error)=>{
+          alert(error.response.data.message)
+      })
       // API CALL
     }
 
