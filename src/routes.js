@@ -33,26 +33,20 @@ const routes = [
   { path: '/forms/input-group', name: 'Input Group', element: InputGroup },
 
   { path: '/forms/validation', name: 'Validation', element: Validation },
-  { path: '/manage-teachers', name: 'Teacher', element: Teacher },
-  { path: '/breadcrumb', name: 'Breadcrumbnav', element: Breadcrumbnav },
-  { path: '/TeacherSidebar', name: 'TeacherSidebar', element: TeacherSidebar },
-  { path: '/logout', name: 'Logout', element: Logout },
-  { path: '/timetable', name: 'Timetable', element: Timetable },
-  { path: '/subject', name: 'Subject', element: Subject },
-  { path: '/addstudent', name: 'AddStudent', element: Addstudent },
-  { path: '/attendance-history', name: 'attendance-history', element: AttendanceHistory },
-  { path: '/teacher/dashboard', name: 'Teacherview', element: Teacherview },
-  { path: '/studentdashboard', name: 'StudentDashboard', element: StudentDashboard },
-  { path: '/teacher/session', name: 'Sessionmanage', element: Sessionmanage },
-  { path: '/teacher/survey-manage', name: 'SurveyManage', element: SurveyManage },
-
-  { path: '/teacher/lectures/history', name: 'LectureHistory', element: LectureHistory },
-
-  {
-    path: '/teacher/lectures/additional-features',
-    name: 'LectureHistory',
-    element: AdditionalFeatures,
-  },
+  { path: '/manage-teachers',name:'Teacher',element:Teacher},
+  { path: '/breadcrumb',name:'Breadcrumbnav',element:Breadcrumbnav},
+  { path: '/TeacherSidebar',name:'TeacherSidebar',element:TeacherSidebar},
+  { path: '/logout',name:'Logout',element:Logout},
+  { path: '/timetable',name:'Timetable',element:Timetable},
+  { path: '/subject',name:'Subject',element:Subject},
+  { path: '/addstudent',name:'AddStudent',element:Addstudent},
+  { path: '/attendance-history',name:'attendance-history',element:AttendanceHistory},
+  { path: '/teacher/dashboard',name:'Teacherview',element:Teacherview},
+  { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  ,
+  { path: '/teacher/session',name:'Sessionmanage',element:Sessionmanage},
+  { path: '/teacher/survey-manage',name:'SurveyManage',element:Sessionmanage}  ,
+  { path: '/teacher/lectures/history',name:'LectureHistory',element:LectureHistory},
+  { path: '/teacher/lectures/additional-features',name:'LectureHistory',element:AdditionalFeatures}  
 ]
 
 export default routes
