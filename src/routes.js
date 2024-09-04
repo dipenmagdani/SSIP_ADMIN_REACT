@@ -85,7 +85,8 @@ const routes = [
   { path: '/attendance-history',name:'attendance-history',element:AttendanceHistory},
   { path: '/teacher/dashboard',name:'Teacherview',element:Teacherview},
   { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  ,
-  { path: '/teacher/session',name:'Sessionmanage',element:Sessionmanage}  ,
+  { path: '/teacher/session',name:'Sessionmanage',element:Sessionmanage},
+  { path: '/teacher/survey-manage',name:'SurveyManage',element:Sessionmanage}  ,
   { path: '/teacher/lectures/history',name:'LectureHistory',element:LectureHistory},
   { path: '/teacher/lectures/additional-features',name:'LectureHistory',element:AdditionalFeatures}  
 ]
