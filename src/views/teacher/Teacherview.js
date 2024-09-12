@@ -73,12 +73,6 @@ export default function Teacherview() {
 
   // }
 
-  const manage_survey = async (lecture_slug) => {
-    navigation(`/teacher/survey-manage`, {
-      state: { lecture_slug: lecture_slug },
-    })
-  }
-
   const create_Session = async (lecture_slug) => {
     navigation(`/teacher/session?slug=${lecture_slug}`)
   }
@@ -216,17 +210,7 @@ export default function Teacherview() {
                                             )}
                                           </div>
                                         </div>
-                                        <div className="d-flex w-100">
-                                          <div className="w-100">
-                                            <button
-                                              className="btn btn-outline-warning w-100 mt-3 hover:text-white"
-                                              value={lecture.slug}
-                                              onClick={(e) => manage_survey(e.target.value)}
-                                            >
-                                              Manage Surveys
-                                            </button>
-                                          </div>
-                                        </div>
+
                                         <div></div>
                                       </CToastBody>
                                     </CToast>

@@ -33,9 +33,9 @@ function SurveyManage() {
 
   const handleEndSurvey = async (survey_slug) => {
     const headers = {
-        'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': true,
-      }
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': true,
+    }
     const axiosInstance = axios.create()
     CallAPI(
       StoredTokens,
@@ -104,7 +104,9 @@ function SurveyManage() {
   return (
     <>
       <div className="mb-3">
-      <CButton onClick={() => set_survey_visible(true)} className='mb-3 bg-gray-800'>Create Survey</CButton>
+        <CButton onClick={() => set_survey_visible(true)} className="mb-3 bg-gray-800">
+          Create Survey
+        </CButton>
 
         <select
           className="form-select"
@@ -115,7 +117,7 @@ function SurveyManage() {
           onChange={(e) => setStatus(e.target.value)}
         >
           <option value="none">....</option>
-          <option value="active">Active</option>    
+          <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
       </div>
@@ -258,7 +260,7 @@ function SurveyManage() {
                                   <div className="w-100 fw-bold text-center text-sm-start">
                                     <div>
                                       <small className="mx-2 my-2 text-lg block text-gray-600">
-                                        {index+1} {item.title}
+                                        {index + 1} {item.title}
                                       </small>
                                     </div>
                                     <hr className="w-100 my-2" />
@@ -296,10 +298,13 @@ function SurveyManage() {
             </div>
           </div>
         </CCol>
-        <CreateSurvey survey_visible={survey_visible} set_survey_visible={set_survey_visible}></CreateSurvey>
+        <CreateSurvey
+          survey_visible={survey_visible}
+          set_survey_visible={set_survey_visible}
+        ></CreateSurvey>
       </CRow>
     </>
   )
-}   
+}
 
 export default SurveyManage
