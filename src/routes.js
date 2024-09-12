@@ -19,7 +19,7 @@ const Validation = React.lazy(() => import('./views/forms/validation/Validation'
 const Teacher = React.lazy(() => import('./views/teacher/Teacher'))
 const Breadcrumbnav = React.lazy(() => import('./views/breadcrum/Breadcrumbnav'))
 const TeacherSidebar = React.lazy(() => import('./views/teacher/TeacherSidebar'))
-const SurveyManage = React.lazy(() => import('./views/teacher/SurveyManage'))
+const ManageSurveys = React.lazy(() => import('./views/teacher/ManageSurveys'))
 
 // Buttons
 
@@ -44,7 +44,7 @@ const routes = [
   { path: '/teacher/dashboard', name: 'Teacherview', element: Teacherview },
   { path: '/studentdashboard', name: 'StudentDashboard', element: StudentDashboard },
   { path: '/teacher/session', name: 'Sessionmanage', element: Sessionmanage },
-  { path: '/teacher/survey-manage', name: 'SurveyManage', element: SurveyManage },
+  { path: '/teacher/manage-survey', name: 'ManageSurveys', element: ManageSurveys },
 
   { path: '/teacher/lectures/history', name: 'LectureHistory', element: LectureHistory },
 
