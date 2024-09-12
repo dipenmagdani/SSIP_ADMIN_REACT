@@ -25,14 +25,17 @@ export const ManageSurveys = () => {
   const [StoredTokens, CallAPI] = useAPI()
 
   const [numberOfOptions, setNumberOfOptions] = useState(1)
-  const selectedBranch = watch('branch')
-  const selectedSemester = watch('semester')
-  const selectedDivision = watch('division')
+  const [branchSelected,setBranchSelected] = useState(false)
+  const [semesterSelected,setSemesterSelected] = useState(false)
+  const [divisonSelected,setDivisonSelected] = useState(false)
 
-  const [branch, setBranch] = useState([])
+  const [branches, setBranches] = useState([])
   const [semesters, setSemesters] = useState([])
 
-  const handleFormSubmit = (data) => {}
+  const handleFormSubmit = (data) => {
+    console.log(data);
+    
+  }
 
   const handleBranch = async () => {
     const headers = {
@@ -52,34 +55,32 @@ export const ManageSurveys = () => {
     if (response_obj.error === false) {
       const response = response_obj.response
       const data = response.data.data
-      setBranch(data)
+      setBranches(data)
       console.log(data.map((b) => b.slug))
     }
   }
 
-  const handleSemester = async (branch_slug) => {
-    console.log(branch_slug)
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   'ngrok-skip-browser-warning': true,
-    // }
-    // const selectedBranchSlug = branch.find((b) => b.branch_name === selectedBranch)?.slug
-    // const axiosInstance = axios.create()
-    // const response_obj = await CallAPI(
-    //   StoredTokens,
-    //   axiosInstance,
-    //   `/manage/get_semesters_from_branch/${selectedBranchSlug}`,
-    //   'get',
-    //   headers,
-    //   null,
-    //   null,
-    // )
-    // if (response_obj.error === false) {
-    //   const response = response_obj?.response
-    //   const data = response?.data?.data
-    //   console.log(data)
-    //   setSemesters(data)
-    // }
+  const handleSemester = async (branch_slug) => {    
+    const headers = {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': true,
+    }    
+    const axiosInstance = axios.create()
+    const response_obj = await CallAPI(
+      StoredTokens,
+      axiosInstance,
+      `/manage/get_semesters_from_branch/${branch_slug}`,
+      'get',
+      headers,
+      null,
+      null,
+    )
+    if (response_obj.error === false) {
+      const response = response_obj?.response
+      const data = response?.data?.data
+      console.log(data)
+      setSemesters(data)
+    }
   }
 
   useEffect(() => {
@@ -141,42 +142,50 @@ export const ManageSurveys = () => {
 
               {/* Select Branch */}
               <div className="mb-4">
-                <label className="form-label text-lg font-semibold">Select Branch</label>
-                <CDropdown className="form-control border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
+                <label className="form-label text-lg font-semibold">Select Branch</label>                
+                <Controller
+                    control={control}
+                    name="branch"                    
+                    rules={{ required: 'Branch is required' }}                    
+                    render={({ field }) => (    
+                  <CDropdown className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
                   <CDropdownToggle
                     caret
-                    className="w-full text-left bg-white text-gray-700 border rounded-md hover:text-yellow-500"
+                    className="w-full text-left bg-white border-none text-gray-700 rounded-md hover:text-yellow-500"
                   >
-                    Select Branch
+                    {field.value?.name || 'Select Branch'}
                   </CDropdownToggle>
-                  {branch && branch.length > 0 && (
-                    <CDropdownMenu className="w-full">
-                      {branch.map((b, index) => (
+                  {branches && branches.length > 0 && (
+                    <CDropdownMenu className="w-full cursor-pointer">
+                      {branches.map((b, index) => (
                         <CDropdownItem
-                          onClick={() => {
+                          onClick={() => {                            
+                            setValue('branch',{"name":b.branch_name,"slug":b.slug})
+                            setBranchSelected(true)
                             handleSemester(b.slug)
-                            setValue('semester', '')
                           }}
-                          key={b.id || index}
+                          key={index}
                         >
                           {b.branch_name}
                         </CDropdownItem>
                       ))}
                     </CDropdownMenu>
                   )}
-                </CDropdown>
-                {/* {errors.branch && (
+                  </CDropdown>
+                    )}
+                    />
+                {errors.branch && (
                   <p className="text-red-500 mt-1 text-sm">{errors.branch.message}</p>
-                )} */}
+                )}
               </div>
 
               {/* Select Semester */}
-              {selectedBranch && (
+              {branchSelected && (
                 <div className="mb-4">
                   <label className="form-label text-lg font-semibold">Select Semester</label>
                   <Controller
                     control={control}
-                    name="semester"
+                    name="semester"                    
                     rules={{ required: 'Semester is required' }}
                     render={({ field }) => (
                       <CDropdown className="form-control border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
@@ -184,17 +193,23 @@ export const ManageSurveys = () => {
                           caret
                           className="w-full text-left bg-white text-gray-700 border-none rounded-md hover:text-yellow-500"
                         >
-                          {field.value || 'Select Semester'}
+                          {field.value?.name || 'Select Semester'}
                         </CDropdownToggle>
                         {semesters && semesters.length > 0 && (
-                          <CDropdownMenu className="w-full">
+                          <CDropdownMenu className="w-full">  
+                          <CDropdownItem
+                                onClick={() => {
+                                  setValue('semester', {"name":"Select All","slug":"__all__"})
+                                }}                                
+                              >
+                                Select All
+                              </CDropdownItem>                        
                             {semesters.map((s, index) => (
                               <CDropdownItem
-                                onClick={() => {
-                                  field.onChange(s.no)
-                                  setValue('division', '')
+                                onClick={() => {                                  
+                                  setValue('semester',{"name":s.no,"slug":s.slug})
                                 }}
-                                key={s.id || index}
+                                key={index}
                               >
                                 {s.no}
                               </CDropdownItem>
@@ -211,7 +226,7 @@ export const ManageSurveys = () => {
               )}
 
               {/* Select Division */}
-              {selectedSemester && (
+              {semesterSelected && (
                 <div className="mb-4">
                   <label className="form-label text-lg font-semibold">Select Division</label>
                   <Controller
@@ -262,7 +277,7 @@ export const ManageSurveys = () => {
               )}
 
               {/* Select Batch */}
-              {selectedDivision && (
+              {divisonSelected && (
                 <div className="mb-4">
                   <label className="form-label text-lg font-semibold">Select Batch</label>
                   <Controller
