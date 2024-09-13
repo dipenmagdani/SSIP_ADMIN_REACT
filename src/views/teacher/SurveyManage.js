@@ -300,6 +300,7 @@ function SurveyManage() {
         </CCol>
         <CreateSurvey
           survey_visible={survey_visible}
+          setActiveSurvey={setActiveSurvey}
           set_survey_visible={set_survey_visible}
         ></CreateSurvey>
       </CRow>
