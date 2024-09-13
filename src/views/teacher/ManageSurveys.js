@@ -25,16 +25,17 @@ export const ManageSurveys = () => {
   const [StoredTokens, CallAPI] = useAPI()
 
   const [numberOfOptions, setNumberOfOptions] = useState(1)
-  const [branchSelected,setBranchSelected] = useState(false)
-  const [semesterSelected,setSemesterSelected] = useState(false)
-  const [divisonSelected,setDivisonSelected] = useState(false)
+  const [branchSelected, setBranchSelected] = useState(false)
+  const [semesterSelected, setSemesterSelected] = useState(false)
+  const [divisionSelected, setDivisionSelected] = useState(false)
 
   const [branches, setBranches] = useState([])
   const [semesters, setSemesters] = useState([])
+  const [division, setDivision] = useState([])
+  const [batches, setBatches] = useState([])
 
   const handleFormSubmit = (data) => {
-    console.log(data);
-    
+    console.log(data)
   }
 
   const handleBranch = async () => {
@@ -60,11 +61,11 @@ export const ManageSurveys = () => {
     }
   }
 
-  const handleSemester = async (branch_slug) => {    
+  const handleSemester = async (branch_slug) => {
     const headers = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': true,
-    }    
+    }
     const axiosInstance = axios.create()
     const response_obj = await CallAPI(
       StoredTokens,
@@ -83,6 +84,52 @@ export const ManageSurveys = () => {
     }
   }
 
+  const handleDivision = async (semester_slug) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': true,
+    }
+    const axiosInstance = axios.create()
+    const response_obj = await CallAPI(
+      StoredTokens,
+      axiosInstance,
+      `/manage/get_divisons_from_semester/${semester_slug}`,
+      'get',
+      headers,
+      null,
+      null,
+    )
+    if (response_obj.error === false) {
+      const response = response_obj?.response
+      const data = response?.data?.data
+      console.log(data)
+      setDivision(data)
+    }
+  }
+  const handleBatches = async (division_slug) => {
+    console.log(division_slug)
+    // setSlug(division_slug)
+    const headers = {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': true,
+    }
+    const axiosInstance = axios.create()
+    const response_obj = await CallAPI(
+      StoredTokens,
+      axiosInstance,
+      `/manage/get_batches_from_divison/${division_slug}`,
+      'get',
+      headers,
+      null,
+      null,
+    )
+    if (response_obj.error === false) {
+      const response = response_obj?.response
+      const data = response?.data?.data
+      console.log(data)
+      setBatches(data)
+    }
+  }
   useEffect(() => {
     handleBranch()
   }, [])
@@ -142,38 +189,38 @@ export const ManageSurveys = () => {
 
               {/* Select Branch */}
               <div className="mb-4">
-                <label className="form-label text-lg font-semibold">Select Branch</label>                
+                <label className="form-label text-lg font-semibold">Select Branch</label>
                 <Controller
-                    control={control}
-                    name="branch"                    
-                    rules={{ required: 'Branch is required' }}                    
-                    render={({ field }) => (    
-                  <CDropdown className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
-                  <CDropdownToggle
-                    caret
-                    className="w-full text-left bg-white border-none text-gray-700 rounded-md hover:text-yellow-500"
-                  >
-                    {field.value?.name || 'Select Branch'}
-                  </CDropdownToggle>
-                  {branches && branches.length > 0 && (
-                    <CDropdownMenu className="w-full cursor-pointer">
-                      {branches.map((b, index) => (
-                        <CDropdownItem
-                          onClick={() => {                            
-                            setValue('branch',{"name":b.branch_name,"slug":b.slug})
-                            setBranchSelected(true)
-                            handleSemester(b.slug)
-                          }}
-                          key={index}
-                        >
-                          {b.branch_name}
-                        </CDropdownItem>
-                      ))}
-                    </CDropdownMenu>
+                  control={control}
+                  name="branch"
+                  rules={{ required: 'Branch is required' }}
+                  render={({ field }) => (
+                    <CDropdown className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
+                      <CDropdownToggle
+                        caret
+                        className="w-full text-left bg-white border-none text-gray-700 rounded-md hover:text-yellow-500"
+                      >
+                        {field.value?.name || 'Select Branch'}
+                      </CDropdownToggle>
+                      {branches && branches.length > 0 && (
+                        <CDropdownMenu className="w-full cursor-pointer">
+                          {branches.map((b, index) => (
+                            <CDropdownItem
+                              onClick={() => {
+                                setValue('branch', { name: b.branch_name, slug: b.slug })
+                                setBranchSelected(true)
+                                handleSemester(b.slug)
+                              }}
+                              key={index}
+                            >
+                              {b.branch_name}
+                            </CDropdownItem>
+                          ))}
+                        </CDropdownMenu>
+                      )}
+                    </CDropdown>
                   )}
-                  </CDropdown>
-                    )}
-                    />
+                />
                 {errors.branch && (
                   <p className="text-red-500 mt-1 text-sm">{errors.branch.message}</p>
                 )}
@@ -185,7 +232,7 @@ export const ManageSurveys = () => {
                   <label className="form-label text-lg font-semibold">Select Semester</label>
                   <Controller
                     control={control}
-                    name="semester"                    
+                    name="semester"
                     rules={{ required: 'Semester is required' }}
                     render={({ field }) => (
                       <CDropdown className="form-control border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 focus:ring-opacity-50">
@@ -196,18 +243,25 @@ export const ManageSurveys = () => {
                           {field.value?.name || 'Select Semester'}
                         </CDropdownToggle>
                         {semesters && semesters.length > 0 && (
-                          <CDropdownMenu className="w-full">  
-                          <CDropdownItem
-                                onClick={() => {
-                                  setValue('semester', {"name":"Select All","slug":"__all__"})
-                                }}                                
-                              >
-                                Select All
-                              </CDropdownItem>                        
+                          <CDropdownMenu className="w-full">
+                            <CDropdownItem
+                              onClick={() => {
+                                setValue('semester', { name: 'Select All', slug: '__all__' })
+                                setSemesterSelected(false)
+                                // handleDivision('__all__')
+                              }}
+                            >
+                              Select All
+                            </CDropdownItem>
                             {semesters.map((s, index) => (
                               <CDropdownItem
-                                onClick={() => {                                  
-                                  setValue('semester',{"name":s.no,"slug":s.slug})
+                                onClick={() => {
+                                  const slug = s.slug
+                                  setValue('semester', { name: s.no, slug: s.slug })
+                                  setSemesterSelected(true)
+                                  if (slug !== '__all__') {
+                                    handleDivision(slug)
+                                  }
                                 }}
                                 key={index}
                               >
@@ -239,33 +293,23 @@ export const ManageSurveys = () => {
                           caret
                           className="w-full text-left bg-white text-gray-700 border-none rounded-md hover:text-yellow-500"
                         >
-                          {field.value || 'Select Division'}
+                          {field.value?.name || 'Select Division'}
                         </CDropdownToggle>
                         <CDropdownMenu className="w-full">
-                          <CDropdownItem
-                            onClick={() => {
-                              field.onChange('A')
-                              setValue('batch', '')
-                            }}
-                          >
-                            A
-                          </CDropdownItem>
-                          <CDropdownItem
-                            onClick={() => {
-                              field.onChange('B')
-                              setValue('batch', '')
-                            }}
-                          >
-                            B
-                          </CDropdownItem>
-                          <CDropdownItem
-                            onClick={() => {
-                              field.onChange('C')
-                              setValue('batch', '')
-                            }}
-                          >
-                            C
-                          </CDropdownItem>
+                          {division &&
+                            division.length > 0 &&
+                            division.map((d, index) => (
+                              <CDropdownItem
+                                onClick={() => {
+                                  setValue('division', { name: d.division_name, slug: d.slug })
+                                  setDivisionSelected(true)
+                                  handleBatches(d.slug)
+                                }}
+                                key={index}
+                              >
+                                {d.division_name}
+                              </CDropdownItem>
+                            ))}
                         </CDropdownMenu>
                       </CDropdown>
                     )}
@@ -277,7 +321,7 @@ export const ManageSurveys = () => {
               )}
 
               {/* Select Batch */}
-              {divisonSelected && (
+              {divisionSelected && (
                 <div className="mb-4">
                   <label className="form-label text-lg font-semibold">Select Batch</label>
                   <Controller
@@ -290,12 +334,22 @@ export const ManageSurveys = () => {
                           caret
                           className="w-full text-left bg-white text-gray-700 border-none rounded-md hover:text-yellow-500"
                         >
-                          {field.value || 'Select Batch'}
+                          {field.value?.name || 'Select Batch'}
                         </CDropdownToggle>
                         <CDropdownMenu className="w-full">
-                          <CDropdownItem onClick={() => field.onChange('A1')}>A1</CDropdownItem>
-                          <CDropdownItem onClick={() => field.onChange('B1')}>B1</CDropdownItem>
-                          <CDropdownItem onClick={() => field.onChange('C1')}>C1</CDropdownItem>
+                          {batches &&
+                            batches.length > 0 &&
+                            batches.map((b, index) => (
+                              <CDropdownItem
+                                onClick={() => {
+                                  setValue('batch', { name: b.batch_name, slug: b.slug })
+                                  setDivisionSelected(true)
+                                }}
+                                key={index}
+                              >
+                                {b.batch_name}
+                              </CDropdownItem>
+                            ))}
                         </CDropdownMenu>
                       </CDropdown>
                     )}
