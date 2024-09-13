@@ -102,6 +102,12 @@ const _nav = {
       name: 'Dashboard',
       to: '/studentdashboard',
       icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
+      name: 'Surveys',
+      to: '/surveys',
+      icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
     }, 
     {
       component: CNavItem,
