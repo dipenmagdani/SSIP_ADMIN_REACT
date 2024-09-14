@@ -124,9 +124,9 @@ const ViewMaterials = () => {
 
   return (
     <div>
-      <COffcanvasBody>
+      <COffcanvasBody className="rounded-lg shadow-2xl shadow-gray-800/30">
         <CCard className="shadow-lg rounded-lg border border-gray-200">
-          <CCardHeader className="bg-[#c2bcf4] text-purple-900 text-2xl py-4 rounded-t-lg">
+          <CCardHeader className="bg-black/40 text-white text-2xl py-4 rounded-t-lg">
             View Materials
           </CCardHeader>
           <CCardBody className="p-6">
@@ -136,15 +136,15 @@ const ViewMaterials = () => {
                 <label className="form-label text-lg font-semibold">Select Subject</label>
                 <select
                   {...register('subject', { required: 'Subject is required' })}
-                  className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50 w-full border-gray-300 rounded-md"
+                  className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50 w-full border-gray-300 rounded-md cursor-pointer"
                   onChange={handleChange}
                 >
-                  <option value="" selected disabled hidden className="text-gray-200">
+                  <option value="" selected disabled hidden className="text-gray-200 ">
                     Choose Subject
                   </option>
 
                   {subjects.map((subject, index) => (
-                    <option key={index} value={subject.slug}>
+                    <option key={index} value={subject.slug} className="cursor-pointer  ">
                       {subject.subject_name}
                     </option>
                   ))}
@@ -155,104 +155,105 @@ const ViewMaterials = () => {
               </div>
             </form>
           </CCardBody>
-        </CCard>
-        <CRow className="mt-2 w-full">
           <CCol xs>
-            <CCard className="mb-4">
-              <CCardHeader className="cursor-pointer">
-                <div className="d-flex flex-wrap justify-between">
-                  <div>
-                    <strong>{selectedSubjectName}</strong>
-                  </div>
-                </div>
-              </CCardHeader>
-              <CCardBody className="transition ease-in-out duration-150">
-                <CTable align="middle" className="mb-0 border text-center" hover responsive>
-                  <CTableHead color="light">
-                    <CTableRow>
-                      <CTableHeaderCell>Sr.No</CTableHeaderCell>
+            {selectedSubject && (
+              <CCard className="mb-4 border-none">
+                <CCardBody className="transition ease-in-out duration-150">
+                  <CTable align="middle" className="mb-0 border text-center" hover responsive>
+                    <CTableHead color="light">
+                      <CTableRow>
+                        <CTableHeaderCell>Sr.No</CTableHeaderCell>
+                        <CTableHeaderCell>Title</CTableHeaderCell>
+                        <CTableHeaderCell>Link</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      {files.length > 0 ? (
+                        files.length > 0 &&
+                        files.map((file, index) => (
+                          <CTableRow v-for="item in tableItems" key={index}>
+                            <CTableDataCell>
+                              <div className="text-center">{index + 1}</div>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div className="text-center">{file.title}</div>
+                            </CTableDataCell>
 
-                      <CTableHeaderCell>Title</CTableHeaderCell>
-                      <CTableHeaderCell>Link</CTableHeaderCell>
-                    </CTableRow>
-                  </CTableHead>
-                  <CTableBody>
-                    {files.length > 0 &&
-                      files.map((file, index) => (
-                        <CTableRow v-for="item in tableItems" key={index}>
-                          <CTableDataCell>
-                            <div className="text-center">{index + 1}</div>
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            <div className="text-center">{file.title}</div>
-                          </CTableDataCell>
-
-                          <CTableDataCell>
-                            <div className="text-center">
-                              <CCardHeader
-                                className="cursor-pointer rounded-lg border"
-                                onClick={() => toggleDropdownLinks(index)}
-                              >
-                                <div className="d-flex flex-wrap justify-between">
-                                  <div>
-                                    <strong>Links</strong>
+                            <CTableDataCell>
+                              <div className="text-center">
+                                <CCardHeader
+                                  className="cursor-pointer rounded-lg border"
+                                  onClick={() => toggleDropdownLinks(index)}
+                                >
+                                  <div className="d-flex flex-wrap justify-between">
+                                    <div>
+                                      <strong>Links</strong>
+                                    </div>
+                                    {openDropdowns[index] ? (
+                                      <CIcon
+                                        icon={cilArrowCircleTop}
+                                        size="xl"
+                                        className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
+                                      />
+                                    ) : (
+                                      <CIcon
+                                        icon={cilArrowCircleBottom}
+                                        size="xl"
+                                        className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
+                                      />
+                                    )}
                                   </div>
-                                  {openDropdowns[index] ? (
-                                    <CIcon
-                                      icon={cilArrowCircleTop}
-                                      size="xl"
-                                      className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                                    />
-                                  ) : (
-                                    <CIcon
-                                      icon={cilArrowCircleBottom}
-                                      size="xl"
-                                      className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                                    />
-                                  )}
-                                </div>
-                              </CCardHeader>
+                                </CCardHeader>
 
-                              {openDropdowns[index] && (
-                                <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                                  <CTable
-                                    align="middle"
-                                    className="mb-0 border text-center"
-                                    hover
-                                    responsive
-                                  >
-                                    <CTableBody className="w-20">
-                                      {file?.links?.map((link, linkIndex) => (
-                                        <CTableRow key={linkIndex}>
-                                          <CTableDataCell>
-                                            <a
-                                              href={link.link}
-                                              target="_blank"
-                                              className="text-primary"
-                                              rel="noopener noreferrer"
-                                            >
-                                              {link?.filename?.length > 10
-                                                ? link?.filename?.slice(0, 10) + '...'
-                                                : link?.filename}
-                                            </a>
-                                          </CTableDataCell>
-                                        </CTableRow>
-                                      ))}
-                                    </CTableBody>
-                                  </CTable>
-                                </div>
-                              )}
-                            </div>
-                          </CTableDataCell>
-                        </CTableRow>
-                      ))}
-                    <CTableRow v-for="item in tableItems"></CTableRow>
-                  </CTableBody>
-                </CTable>
-              </CCardBody>
-            </CCard>
+                                {openDropdowns[index] && (
+                                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                                    <CTable
+                                      align="middle"
+                                      className="mb-0 border text-center"
+                                      hover
+                                      responsive
+                                    >
+                                      <CTableBody className="w-20">
+                                        {file?.links?.map((link, linkIndex) => (
+                                          <CTableRow key={linkIndex}>
+                                            <CTableDataCell>
+                                              <a
+                                                href={link.link}
+                                                target="_blank"
+                                                className="text-primary"
+                                                rel="noopener noreferrer"
+                                              >
+                                                {link?.filename?.length > 10
+                                                  ? link?.filename?.slice(0, 10) + '...'
+                                                  : link?.filename}
+                                              </a>
+                                            </CTableDataCell>
+                                          </CTableRow>
+                                        ))}
+                                      </CTableBody>
+                                    </CTable>
+                                  </div>
+                                )}
+                              </div>
+                            </CTableDataCell>
+                          </CTableRow>
+                        ))
+                      ) : (
+                        <CTableDataCell colSpan="3">
+                          <div className="text-center">
+                            No Materials found for{' '}
+                            <span className="text-red-400 font-bold">{selectedSubjectName}</span>
+                          </div>
+                        </CTableDataCell>
+                      )}
+                      <CTableRow v-for="item in tableItems"></CTableRow>
+                    </CTableBody>
+                  </CTable>
+                </CCardBody>
+              </CCard>
+            )}
           </CCol>
-        </CRow>
+        </CCard>
       </COffcanvasBody>
     </div>
   )
