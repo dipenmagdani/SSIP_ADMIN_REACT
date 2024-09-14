@@ -36,16 +36,16 @@ const UploadMaterials = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenLinks, setIsOpenLinks] = useState(false)
   const [openDropdowns, setOpenDropdowns] = useState({})
+  const [expired, setExpired] = useState()
 
   const CLIENT_ID = '844209905502-hg3oiak3hj9e0n9apgfap2q24lrd41vj.apps.googleusercontent.com'
   const API_KEY = 'AIzaSyDHKDicnezuQryxOPs8WhIWkZaHDRAvedQ'
 
   const {
     handleSubmit,
-    control,
-    setValue,
-    watch,
+
     register,
+    reset,
     formState: { errors },
   } = useForm()
 
@@ -97,7 +97,9 @@ const UploadMaterials = () => {
         Swal('Oops!', resObject.errorMessage.message, 'error')
       }
     })
-    console.log(formData)
+
+    reset()
+    setUploadedFiles([])
   }
 
   const handleSubject = async () => {
@@ -161,12 +163,9 @@ const UploadMaterials = () => {
   }, [])
 
   useEffect(() => {
-    console.log(authResponse)
-  }, [])
-  useEffect(() => {
     if (authResponse) {
       const token = authResponse.access_token
-
+      setExpired(authResponse.expires_in)
       localStorage.setItem('authToken', token)
       setAuthToken(token)
       setIsAuthenticated(true)
@@ -180,47 +179,28 @@ const UploadMaterials = () => {
   }, [authToken])
 
   const handlePickerOpen = () => {
-    if (!isAuthenticated) {
-      openPicker({
-        clientId: CLIENT_ID,
-        developerKey: API_KEY,
-        viewId: 'DOCS',
-        showUploadView: true,
-        showUploadFolders: true,
-        supportDrives: true,
-        multiselect: true,
-        customScopes: ['https://www.googleapis.com/auth/drive'],
-        // callbackFunction: (data) => {
-        //   if (data.action === 'loaded') {
-        //     console.log('Google Drive Picker loaded')
-        //   }
-        // },
-      })
-    } else {
-      // If already authenticated, open the picker for file upload
-      openPicker({
-        clientId: CLIENT_ID,
-        developerKey: API_KEY,
-        viewId: 'DOCS',
-        token: authToken,
-        showUploadView: true,
-        showUploadFolders: true,
-        supportDrives: true,
-        multiselect: true,
-        customScopes: ['https://www.googleapis.com/auth/drive'],
-        callbackFunction: (data) => {
-          if (data.action === 'cancel') {
-            console.log('User clicked cancel/close button')
-          } else if (data.docs && data.docs.length > 0) {
-            setUploadedFiles((files) => [...files, ...data.docs])
-            // console.log(data)
-            data.docs.forEach((file) => {
-              shareFile(file.id)
-            })
-          }
-        },
-      })
-    }
+    openPicker({
+      clientId: CLIENT_ID,
+      developerKey: API_KEY,
+      viewId: 'DOCS',
+      token: authToken,
+      showUploadView: true,
+      showUploadFolders: true,
+      supportDrives: true,
+      multiselect: true,
+      customScopes: ['https://www.googleapis.com/auth/drive'],
+      callbackFunction: (data) => {
+        if (data.action === 'cancel') {
+          console.log('User clicked cancel/close button')
+        } else if (data.docs && data.docs.length > 0) {
+          setUploadedFiles((files) => [...files, ...data.docs])
+          // console.log(data)
+          data.docs.forEach((file) => {
+            shareFile(file.id)
+          })
+        }
+      },
+    })
   }
 
   const shareFile = async (fileId) => {
@@ -259,49 +239,48 @@ const UploadMaterials = () => {
   useEffect(() => {
     console.log(fileHistory)
   }, [])
-  // useEffect(() => {
-  //   console.log(authToken)
-  // }, [authToken])
+
   return (
-    <div className="card w-full p-4 mx-auto" data-coreui-backdrop="static">
+    <div className="card w-full p-2 sm:p-4 mx-auto" data-coreui-backdrop="static">
       <COffcanvasBody>
         {authToken && (
-          <div className="mb-3 flex items-end justify-end">
+          <div className="mb-3 flex justify-end ">
             <button
               type="button"
-              className="btn btn-outline-dark bg-black text-white hover:bg-yellow-600 focus:ring focus:ring-yellow-500 rounded-md px-4 py-2"
+              className="btn bg-sky-600 text-white hover:bg-gray-400 focus:ring focus:ring-yellow-500 rounded-md px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base"
               onClick={handleLogout}
             >
-              <div className="flex items-center gap-2">
-                <CIcon icon={cilAccountLogout} size="lg" />
-                Logout
+              <div className="flex items-center justify-center gap-2 sm:gap-2">
+                <CIcon icon={cilAccountLogout} size="sm" />
+                <span className="hidden sm:inline">Logout</span>
               </div>
             </button>
           </div>
         )}
         <CCard className="shadow-lg rounded-lg border border-gray-200">
-          <CCardHeader className="bg-[#c2bcf4] text-purple-900 text-2xl py-4 rounded-t-lg">
+          <CCardHeader className="bg-[#c2bcf4] text-purple-900 text-lg sm:text-2xl py-2 sm:py-4 rounded-t-lg">
             Upload Materials
           </CCardHeader>
-          <CCardBody className="p-6">
+          <CCardBody className="p-3 sm:p-6">
             {isAuthenticated ? (
               <form
-                className="space-y-4"
+                className="space-y-2 sm:space-y-4"
                 onSubmit={handleSubmit(handleFormSubmit)}
                 autoComplete="off"
               >
-                <div className="mb-4">
-                  <label className="form-label text-lg font-semibold">Title</label>
+                <div className="mb-2 sm:mb-4">
+                  <label className="form-label text-base sm:text-lg font-semibold">Title</label>
                   <input
                     type="text"
-                    className="form-control border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500"
+                    className="form-control border-gray-300 shadow-sm focus:border-yellow-500 focus:ring focus:ring-yellow-500 w-full"
                     required
                     {...register('material_title')}
                   />
                 </div>
-                {/* Select Subject */}
-                <div className="mb-4">
-                  <label className="form-label text-lg font-semibold">Select Subject</label>
+                <div className="mb-2 sm:mb-4">
+                  <label className="form-label text-base sm:text-lg font-semibold">
+                    Select Subject
+                  </label>
                   <select
                     {...register('subject', { required: 'Branch is required' })}
                     className="form-control shadow-sm focus:ring focus:ring-yellow-500 focus:ring-opacity-50 w-full border-gray-300 rounded-md"
@@ -309,7 +288,6 @@ const UploadMaterials = () => {
                     <option value="" selected disabled hidden className="text-gray-200">
                       Choose Subject
                     </option>
-
                     {subjects.map((subject, index) => (
                       <option key={index} value={subject.slug}>
                         {subject.subject_name}
@@ -317,32 +295,34 @@ const UploadMaterials = () => {
                     ))}
                   </select>
                   {errors.subject && (
-                    <p className="text-red-500 mt-1 text-sm">{errors.subject.message}</p>
+                    <p className="text-red-500 mt-1 text-xs sm:text-sm">{errors.subject.message}</p>
                   )}
                 </div>
-                <div className="mb-4 ">
+                <div className="mb-2 sm:mb-4">
                   <button
                     type="button"
-                    className="btn btn-outline-dark bg-blue-500 text-white hover:bg-black flex justify-center items-center gap-2"
+                    className="btn btn-outline-dark bg-blue-500 text-white hover:bg-black flex justify-center items-center gap-1 sm:gap-2 w-full sm:w-auto px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base"
                     onClick={handlePickerOpen}
                   >
-                    <CIcon icon={cilCloudUpload} size="xl" />
+                    <CIcon icon={cilCloudUpload} size="sm" />
                     <span>Select Files</span>
                   </button>
                 </div>
                 {uploadedFiles.length > 0 && (
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                     {uploadedFiles.map((file) => (
-                      <li key={file.id} className="bg-gray-50 p-2 border rounded-md">
+                      <li
+                        key={file.id}
+                        className="bg-gray-50 p-1 sm:p-2 border rounded-md text-xs sm:text-sm"
+                      >
                         <span className="text-blue-600">{file.name}</span>
                       </li>
                     ))}
                   </ul>
                 )}
-                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="btn btn-outline-dark bg-gray-700 text-white rounded-md px-4 py-2 form-control hover:bg-blue-600 focus:ring focus:ring-yellow-500 "
+                  className="btn btn-outline-dark bg-bg-transparent text-black rounded-md px-2 sm:px-4 py-2 sm:py-2 form-control hover:bg-neutral-200 focus:ring focus:ring-yellow-500 w-full text-xs sm:text-base"
                   disabled={uploadedFiles.length === 0}
                 >
                   Upload Files
@@ -351,38 +331,36 @@ const UploadMaterials = () => {
             ) : (
               <button
                 type="button"
-                className={`btn  text-white bg-gray-200/30 hover:bg-gray-500/30 focus:bg-gray-500/50   hover:border-2 hover:border-red-500  rounded-lg px-4 py-2 border form-control `}
+                className="btn text-white bg-gray-200/30 hover:bg-gray-500/30 focus:bg-gray-500/50 hover:border-2 hover:border-red-500 rounded-lg px-2 sm:px-4 py-1 sm:py-2 border form-control w-full text-xs sm:text-base"
                 onClick={handlePickerOpen}
               >
-                <div className="flex items-center gap-2 justify-center">
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      x="0px"
-                      y="0px"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 48 48"
-                    >
-                      <path
-                        fill="#fbc02d"
-                        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                      ></path>
-                      <path
-                        fill="#e53935"
-                        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                      ></path>
-                      <path
-                        fill="#4caf50"
-                        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                      ></path>
-                      <path
-                        fill="#1565c0"
-                        d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div className="text-lg text-black font-bold">Login with Google</div>
+                <div className="flex items-center gap-1 sm:gap-2 justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#fbc02d"
+                      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                    ></path>
+                    <path
+                      fill="#e53935"
+                      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                    ></path>
+                    <path
+                      fill="#4caf50"
+                      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                    ></path>
+                    <path
+                      fill="#1565c0"
+                      d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                    ></path>
+                  </svg>
+                  <div className="text-sm sm:text-lg text-black font-bold">Login with Google</div>
                 </div>
               </button>
             )}
@@ -390,92 +368,76 @@ const UploadMaterials = () => {
         </CCard>
       </COffcanvasBody>
 
-      {/* {File History} */}
-      <COffcanvasBody className="mt-4 flex justify-center">
-        <CRow className="mt-2 w-full">
+      <COffcanvasBody className="mt-2 sm:mt-4 flex justify-center">
+        <CRow className="mt-1 sm:mt-2 w-full">
           <CCol xs>
-            <CCard className="mb-4">
+            <CCard className="mb-2 sm:mb-4">
               <CCardHeader onClick={toggleDropdown} className="cursor-pointer">
-                <div className="d-flex flex-wrap justify-between">
+                <div className="flex flex-wrap justify-between items-center">
                   <div>
-                    <strong>File History</strong>
+                    <strong className="text-sm sm:text-base">File History</strong>
                   </div>
-                  {isOpen ? (
-                    <CIcon
-                      icon={cilArrowCircleTop}
-                      size="xl"
-                      className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                    />
-                  ) : (
-                    <CIcon
-                      icon={cilArrowCircleBottom}
-                      size="xl"
-                      className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                    />
-                  )}
+                  <CIcon
+                    icon={isOpen ? cilArrowCircleTop : cilArrowCircleBottom}
+                    size="lg"
+                    className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
+                  />
                 </div>
               </CCardHeader>
               {isOpen && (
-                <CCardBody className="transition ease-in-out duration-150">
-                  <CTable align="middle" className="mb-0 border text-center" hover responsive>
-                    <CTableHead color="light">
-                      <CTableRow>
-                        <CTableHeaderCell>Sr.No</CTableHeaderCell>
-
-                        <CTableHeaderCell>File Name</CTableHeaderCell>
-                        <CTableHeaderCell>Subject</CTableHeaderCell>
-                        <CTableHeaderCell>Link</CTableHeaderCell>
-                      </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      {fileHistory &&
-                        fileHistory.length > 0 &&
-                        fileHistory.map((item, index) => (
-                          <CTableRow v-for="item in tableItems" key={index}>
-                            <CTableDataCell>
-                              <div className="text-center">{index + 1}</div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="text-center">{item.title}</div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="text-center">{item?.subject?.subject_name}</div>
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              <div className="text-center">
+                <CCardBody className="transition ease-in-out duration-150 p-1 sm:p-3">
+                  <div className="overflow-x-auto">
+                    <CTable
+                      align="middle"
+                      className="mb-0 border text-center text-xs sm:text-sm"
+                      hover
+                      responsive
+                    >
+                      <CTableHead color="light">
+                        <CTableRow>
+                          <CTableHeaderCell>Sr.No</CTableHeaderCell>
+                          <CTableHeaderCell>File Name</CTableHeaderCell>
+                          <CTableHeaderCell>Subject</CTableHeaderCell>
+                          <CTableHeaderCell>Link</CTableHeaderCell>
+                        </CTableRow>
+                      </CTableHead>
+                      <CTableBody>
+                        {fileHistory &&
+                          fileHistory.length > 0 &&
+                          fileHistory.map((item, index) => (
+                            <CTableRow v-for="item in tableItems" key={index}>
+                              <CTableDataCell>{index + 1}</CTableDataCell>
+                              <CTableDataCell>{item.title}</CTableDataCell>
+                              <CTableDataCell>{item?.subject?.subject_name}</CTableDataCell>
+                              <CTableDataCell>
                                 <CCardHeader
                                   onClick={() => toggleDropdownLinks(index)}
-                                  className="cursor-pointer rounded-lg border"
+                                  className="cursor-pointer rounded-lg border p-1 sm:p-2"
                                 >
-                                  <div className="d-flex flex-wrap justify-between">
+                                  <div className="flex flex-wrap justify-between items-center">
                                     <div>
-                                      <strong>Links</strong>
+                                      <strong className="text-xs sm:text-sm">Links</strong>
                                     </div>
-                                    {openDropdowns[index] ? (
-                                      <CIcon
-                                        icon={cilArrowCircleTop}
-                                        size="xl"
-                                        className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                                      />
-                                    ) : (
-                                      <CIcon
-                                        icon={cilArrowCircleBottom}
-                                        size="xl"
-                                        className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
-                                      />
-                                    )}
+                                    <CIcon
+                                      icon={
+                                        openDropdowns[index]
+                                          ? cilArrowCircleTop
+                                          : cilArrowCircleBottom
+                                      }
+                                      size="lg"
+                                      className="hover:scale-125 ease-in-out transition-all duration-150 cursor-pointer"
+                                    />
                                   </div>
                                 </CCardHeader>
-
                                 {openDropdowns[index] && (
-                                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                                  <div className="overflow-x-auto whitespace-nowrap">
                                     <CTable
                                       align="middle"
-                                      className="mb-0 border text-center"
+                                      className="mb-0 border text-center text-xs"
                                       hover
                                       responsive
                                     >
-                                      <CTableBody className="w-20">
+                                      <CTableBody>
                                         {item?.links?.map((link, linkIndex) => (
                                           <CTableRow key={linkIndex}>
                                             <CTableDataCell>
@@ -496,13 +458,12 @@ const UploadMaterials = () => {
                                     </CTable>
                                   </div>
                                 )}
-                              </div>
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))}
-                      <CTableRow v-for="item in tableItems"></CTableRow>
-                    </CTableBody>
-                  </CTable>
+                              </CTableDataCell>
+                            </CTableRow>
+                          ))}
+                      </CTableBody>
+                    </CTable>
+                  </div>
                 </CCardBody>
               )}
             </CCard>
