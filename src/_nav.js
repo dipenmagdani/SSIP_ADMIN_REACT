@@ -11,6 +11,7 @@ import {
   cilSchool,
   cilClock,
   cilCloudUpload,
+  cilFolderOpen,
   //cilSpeedometer,
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react'
@@ -109,6 +110,12 @@ const _nav = {
       name: 'Surveys',
       to: '/surveys',
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
+      name: 'Materials',
+      to: '/view-materials',
+      icon: <CIcon icon={cilFolderOpen} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,

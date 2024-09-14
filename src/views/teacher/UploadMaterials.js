@@ -170,6 +170,8 @@ const UploadMaterials = () => {
       localStorage.setItem('authToken', token)
       setAuthToken(token)
       setIsAuthenticated(true)
+
+      window.location.reload()
     }
   }, [authResponse])
 
