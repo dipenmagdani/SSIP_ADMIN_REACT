@@ -9,19 +9,15 @@ import {
   cilPeople,
   cilLibraryBuilding,
   cilSchool,
-  cilClock
+  cilClock,
+  cilCloudUpload,
   //cilSpeedometer,
 } from '@coreui/icons'
 import { CNavItem, CNavTitle } from '@coreui/react'
 import { useContext } from 'react'
 
-
-
-
-
-
 const _nav = {
-  admin_role:[
+  admin_role: [
     {
       component: CNavTitle,
       name: 'ADMNISTRATION',
@@ -35,7 +31,7 @@ const _nav = {
     {
       component: CNavItem,
       name: 'Subject',
-      to: '/subject',    
+      to: '/subject',
       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     },
     {
@@ -65,12 +61,11 @@ const _nav = {
     {
       component: CNavItem,
       name: 'Logout',
-      to: '/logout',    
+      to: '/logout',
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
-    },  
-      
+    },
   ],
-  teacher_role:[
+  teacher_role: [
     {
       component: CNavItem,
       name: 'Dashboard',
@@ -80,23 +75,29 @@ const _nav = {
     {
       component: CNavItem,
       name: 'LectureHistory',
-      to: '/teacher/lectures/history',    
+      to: '/teacher/lectures/history',
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
       name: 'Additional Features',
-      to: '/teacher/lectures/additional-features',    
+      to: '/teacher/lectures/additional-features',
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
+      name: 'Upload Materials',
+      to: '/teacher/upload-materials',
+      icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
       name: 'Logout',
-      to: '/logout',    
+      to: '/logout',
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
     },
   ],
-  student_role:[
+  student_role: [
     {
       component: CNavItem,
       name: 'Dashboard',
@@ -108,14 +109,14 @@ const _nav = {
       name: 'Surveys',
       to: '/surveys',
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
-    }, 
+    },
     {
       component: CNavItem,
       name: 'Logout',
-      to: '/logout',    
+      to: '/logout',
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
     },
-  ]
+  ],
 }
 
 export default _nav
