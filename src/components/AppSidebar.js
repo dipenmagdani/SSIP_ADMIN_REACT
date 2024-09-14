@@ -40,6 +40,11 @@ const AppSidebar = () => {
       <img className="p-3" src={smartrollicon}></img>
       <CSidebarNav>
         <SimpleBar>
+        {profileDetails.obj.profile.role === "superadmin" && (
+            <AppSidebarNav
+              items={navigation.superadmin_role}
+            />
+          )}
           {profileDetails.obj.profile.role === "admin" && (
             <AppSidebarNav
               items={navigation.admin_role}

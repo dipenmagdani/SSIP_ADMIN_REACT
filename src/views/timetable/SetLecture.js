@@ -1,4 +1,4 @@
-import React, { useRef,useEffect} from 'react'
+import React, { useRef,useEffect, useState} from 'react'
 import {
   COffcanvas,  
   COffcanvasBody,  
@@ -12,16 +12,40 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_
   const [StoredTokens,CallAPI] = useAPI()
   // console.log(lectureConfigs)
   const lectureForm = useRef()
+  const [selectedSubject,setSelectedSubject] = useState('')
+  const [batches,setBatches] = useState([])
+  const [selectedBatches,setSelectedBatches] = useState([])
+  const headers = {
+    "Content-Type":"application/json",
+    'ngrok-skip-browser-warning':true
+  }
+  const axiosInstance = axios.create()
+
+  const load_batches_from_subject = async (subject_slug) => {
+    let endpoint = `/manage/get_batches_from_subject/${subject_slug}`;let method='get';
+    let response_obj = await CallAPI(StoredTokens,axiosInstance,endpoint,method,headers,null,null)
+    if (response_obj.error) {
+      alert(res.errorMessage.message)
+    } else {
+      let batches = response_obj.response.data.data
+      setBatches(batches)
+    }
+  }
+
+  useEffect(() => {
+    if(selectedSubject !== ''){
+      load_batches_from_subject(selectedSubject)
+    }else{
+      setBatches([])
+    }
+  }, [selectedSubject])
+  
+
   const { register, handleSubmit } = useForm();
   const handleFormSubmit = async (data) => {
-    if(data.start_time && data.end_time && data.teacher && data.subject && data.batches && data.classroom && data.type){
-      const axiosInstance = axios.create()
+    if(data.start_time && data.end_time && data.teacher && data.subject && data.batches.length > 0 && data.classroom && data.type){
       const body = data    
       body.schedule_slug = sechedule.slug
-      const headers = {
-        "Content-Type":"application/json",
-        'ngrok-skip-browser-warning':true
-      }
       const response_obj = await CallAPI(StoredTokens,axiosInstance,"/manage/add_lecture_to_schedule/","post",headers,body,null)
       if(response_obj.error === false){
         const response = response_obj.response
@@ -106,7 +130,7 @@ useEffect(() => {
             </div>
             <div className="mb-3">
               <label className="form-label">Select Subject</label>
-              <select className="form-select" aria-label="Default select example" {...register("subject")}>
+              <select className="form-select" aria-label="Default select example" {...register("subject")} onChange={(e) => {setSelectedSubject(e.target.value)}}>
                 <option value="">....</option>
                 {lectureConfigs.subjects &&
                   lectureConfigs.subjects.map((item, index) => (
@@ -116,6 +140,17 @@ useEffect(() => {
                   ))}
               </select>
             </div>
+            {batches.length > 0 && <div className="mb-3">
+              <label className="form-label">Select Batch</label>
+              <select multiple className="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
+                {batches.map((item, index) => (
+                    <option key={index} value={item.slug}>
+                      {item.batch_name}
+                  </option>
+                  ))}
+              </select>
+            </div>     }
+                   
             <div className="mb-3">
               <label className="form-label">Select Teacher</label>
               <select className="form-select" aria-label="Default select example" {...register("teacher")}>
@@ -128,17 +163,6 @@ useEffect(() => {
                   ))}
               </select>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Select Batch</label>
-              <select multiple className="form-select" size="3" aria-label="size 3 select example" {...register("batches")}> 
-                {lectureConfigs.batches &&
-                  lectureConfigs.batches.map((item, index) => (
-                    <option key={index} value={item.slug}>
-                      {item.batch_name}
-                  </option>
-                  ))}
-              </select>
-            </div>            
               <button type="submit" className="form-control btn-outline-success btn mb-3">
                 Submit
               </button>                        

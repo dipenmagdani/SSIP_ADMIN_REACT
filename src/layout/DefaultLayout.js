@@ -53,9 +53,10 @@ const checkAccessTokenAuthenticity = async (accessToken) => {
 
   axios.get(`${base_url}/check_token_authenticity/`,{headers:headers})
   .then((response)=>{
-    if(response.data.data === true){
+    if(response.data.isAuthenticated === true){
       const decoded = jwtDecode(accessToken); 
       ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
+      ctxDispatch({ type: 'NOTIFICATIONS', payload: response.data.data.Notifications});
       setAccessTokenValid(true)
     }    
   })

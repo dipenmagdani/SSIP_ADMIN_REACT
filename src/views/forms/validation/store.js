@@ -31,6 +31,8 @@ function reducer(state, action) {
       return { ...state,refreshToken: action.payload}
     case 'SET_ACCESS_TOKEN_ACTIVE':
         return { ...state,accessTokenActive: action.payload}
+    case 'NOTIFICATIONS':
+          return { ...state, notifications: action.payload };
     case 'USER_SIGNOUT':
       return {
         ...state,

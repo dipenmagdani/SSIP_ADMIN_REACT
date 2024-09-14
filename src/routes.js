@@ -18,12 +18,25 @@ const Logout = React.lazy(() => import('./views/pages/logout/Logout'))
 const FormControl = React.lazy(() => import('./views/forms/form-control/FormControl'))
 const InputGroup = React.lazy(() => import('./views/forms/input-group/InputGroup'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
+
+// Teacher
 const Teacher = React.lazy(() => import('./views/teacher/Teacher'))
 const Breadcrumbnav = React.lazy(() => import('./views/breadcrum/Breadcrumbnav'))
 const TeacherSidebar = React.lazy(() => import('./views/teacher/TeacherSidebar'))
 const ManageSurveys = React.lazy(() => import('./views/teacher/surveys/ManageSurveys'))
 const UploadMaterials = React.lazy(() => import('./views/teacher/UploadMaterials'))
 const ViewMaterials = React.lazy(() => import('./views/student_controller/ViewMaterials'))
+const UploadResult = React.lazy(() => import('./views/teacher/results/UploadResult'))
+
+// Superadmin
+const SuperAdminDashboard = React.lazy(() => import('./views/superadmin/SuperAdminDashboard'))
+const Events = React.lazy(() => import('./views/superadmin/Events'))
+
+// Student
+const Results = React.lazy(() => import('./views/student_controller/exam_results/Results'))
+
+// For All Users
+const OngoingEvents = React.lazy(() => import('./views/alllUsers/OngoingEvents'))
 
 // Buttons
 
@@ -54,6 +67,11 @@ const routes = [
   { path: '/teacher/upload-materials', name: 'UploadMaterials', element: UploadMaterials },
 
   { path: '/teacher/lectures/history', name: 'LectureHistory', element: LectureHistory },
+  { path: '/upload-results', name: 'UploadResult', element: UploadResult },
+  { path: '/superadmin', name: 'SuperAdminDashboard', element: SuperAdminDashboard },
+  { path: '/superadmin/events', name: 'Events', element: Events },
+  { path: '/ongoing-events', name: 'ongoing-events', element: OngoingEvents },
+  { path: '/exam-results', name: 'exam-results', element: Results },
 
   {
     path: '/teacher/lectures/additional-features',

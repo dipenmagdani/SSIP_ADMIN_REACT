@@ -18,11 +18,29 @@ import { CNavItem, CNavTitle } from '@coreui/react'
 import { useContext } from 'react'
 
 const _nav = {
-  admin_role: [
+  superadmin_role:[
     {
       component: CNavTitle,
       name: 'ADMNISTRATION',
     },
+    {
+      component: CNavItem,
+      name: 'Dashboard',
+      to: '/superadmin',
+      icon: <CIcon icon={cilLibraryBuilding} customClassName="nav-icon" />,
+    },{
+      component: CNavItem,
+      name: 'Manage Events',
+      to: '/superadmin/events',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    },{
+      component: CNavItem,
+      name: 'Logout',
+      to: '/logout',    
+      icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
+    }
+  ],
+  admin_role:[    
     {
       component: CNavItem,
       name: 'Dashboard',
@@ -61,6 +79,12 @@ const _nav = {
     },
     {
       component: CNavItem,
+      name: 'Ongoing Events',
+      to: '/ongoing-events',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
       name: 'Logout',
       to: '/logout',
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
@@ -93,6 +117,18 @@ const _nav = {
     },
     {
       component: CNavItem,
+      name: 'Ongoing Events',
+      to: '/ongoing-events',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
+      name: 'Upload Results',
+      to: '/upload-results',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
       name: 'Logout',
       to: '/logout',
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
@@ -110,12 +146,18 @@ const _nav = {
       name: 'Surveys',
       to: '/surveys',
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
+    }, 
+    {
+      component: CNavItem,
+      name: 'Ongoing Events',
+      to: '/ongoing-events',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
-      name: 'Materials',
-      to: '/view-materials',
-      icon: <CIcon icon={cilFolderOpen} customClassName="nav-icon" />,
+      name: 'Exam Results',
+      to: '/exam-results',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
     },
     {
       component: CNavItem,
