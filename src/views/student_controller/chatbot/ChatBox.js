@@ -95,6 +95,7 @@ const ChatBox = ({ visible, setVisible }) => {
       if (!response_obj.error) {
         const data = response_obj.response?.data?.data
         console.log(data)
+        console.log(atob(data?.pie_chart_base64))
         setSelectedSubject(data)
         setMessages((prev) => [...prev, { type: 'bot', content: 'Here is your attendance report' }])
         setError(null)
@@ -253,6 +254,9 @@ const ChatBox = ({ visible, setVisible }) => {
               <div className="flex items-center justify-center mb-4 flex-col">
                 <h3 className="text-lg font-semibold">{profileDetails?.obj?.profile?.name}</h3>
               </div>
+              {/* <div className="grid grid-cols-2 gap-4">
+                <img src={atob(selectedSubject?.pie_chart_base64)} alt="pie chart" />
+              </div> */}
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">{selectedSubject.subject_name}</h3>
                 <div
