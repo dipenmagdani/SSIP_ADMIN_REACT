@@ -17,7 +17,9 @@ const AppFooter = () => {
          
         </a> */}
 
-        {profileDetails.obj.profile.role === 'student' && <ChatButton setVisible={setVisible} />}
+        {profileDetails.obj.profile.role === 'student' && (
+          <ChatButton setVisible={setVisible} visible={visible} />
+        )}
         <ChatBox visible={visible} setVisible={setVisible} />
       </div>
     </CFooter>

@@ -1,16 +1,28 @@
 import React from 'react'
-import { MessageCircle } from 'lucide-react'
 
-function ChatButton({ setVisible }) {
+function ChatButton({ setVisible, visible }) {
   return (
-    <button
-      className="fixed bottom-4 right-4 md:bottom-8 md:right-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 md:p-4 shadow-lg transition-all duration-300 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 z-50"
-      onClick={() => setVisible((prev) => !prev)}
-      aria-label="Open chat"
-    >
-      <MessageCircle className="w-6 h-6 md:w-8 md:h-8" />
-      <span className="sr-only">Open chat</span>
-    </button>
+    <>
+      <div className="fixed bottom-4 right-4 md:bottom-2 md:right-8 z-50 ">
+        <div className="relative ">
+          {!visible && (
+            <div>
+              <div className="absolute left-12 inset-0 z-50 border-4 border-green-400 w-3 h-3 blur-sm animate-ping rounded-full  opacity-100  transition-all duration-1000 ease-in-out"></div>
+              <div className="absolute z-50 left-12 inset-0 bg-green-300 w-4 h-4 rounded-full opacity-70 transition-all duration-1000 ease-in-out animate-pulse"></div>
+            </div>
+          )}
+          <button
+            className={`relative bg-gray-900 transition-all duration-300 ease-linear hover:bg-blue-950 text-white rounded-full p-3 md:p-4 shadow-lg  focus:outline-none focus:ring-2 focus:ring-blue-300 border-2 border-zinc-400
+              ${visible && 'transition-all duration-300 ease-in-out scale-110 rotate-12'}
+              `}
+            onClick={() => setVisible((prev) => !prev)}
+            aria-label="Open chat"
+          >
+            <img src="./images/chat_icon.png" className="w-6 h-6 md:w-7 md:h-7 " alt="Chat icon" />
+          </button>
+        </div>
+      </div>
+    </>
   )
 }
 
